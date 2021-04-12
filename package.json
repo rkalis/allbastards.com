@@ -49,6 +49,7 @@
     "autoprefixer": "^9",
     "postcss": "^7",
     "sharp": "^0.28.1",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "webp-converter": "^2.3.3"
   }
 }

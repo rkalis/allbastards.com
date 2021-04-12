@@ -5,19 +5,20 @@ import './App.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 function App() {
+  const initialLoad = 500;
   const loadCount = 100;
 
-  const [indices, setIndices] = useState(range(loadCount));
+  const [indices, setIndices] = useState(range(initialLoad));
 
   const nextIndices = () => {
     setIndices(range(indices.length + loadCount).slice(0, HIGHEST_BASTARD_ID + 1));
   }
 
   return (
-    <div className="container mx-auto">
-      <header className="flex justify-center w-full bg-white font-charriot text-8xl p-2">ALL BASTARDS</header>
+    <div className="container mx-auto px-8">
+      <header className="flex justify-center w-full font-charriot text-8xl p-2">ALL BASTARDS</header>
       <InfiniteScroll
-        className="grid grid-cols-10 gap-4 wx-auto px-10"
+        className="flex flex-row flex-wrap justify-center"
         dataLength={indices.length}
         next={nextIndices}
         hasMore={indices.length < HIGHEST_BASTARD_ID + 1}
@@ -25,9 +26,9 @@ function App() {
       >
         {
           indices.map(index => (
-            <div key={index}>
+            <div key={index} className="p-1">
               <a href={`${OPENSEA_BASE}/${index}`}>
-                <img alt={`Bastard ${index}`} className="bastard-image" src={`${IMAGE_BASE}/${index}.png`}></img>
+                <img width="100px" src={`${IMAGE_BASE}/${index}.webp`} className="bastard-image" alt={`Bastard ${index}`} />
               </a>
             </div>
           ))
