@@ -15,3 +15,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Charriot Deluxe';
+  src: local('Charriot Deluxe'), url(./fonts/CharriotDeluxe.ttf);
+}
