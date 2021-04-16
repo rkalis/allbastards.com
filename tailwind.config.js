@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
+    fontSize: {
+      'header': '7vw'
+    },
     fontFamily: {
       charriot: ['Charriot Deluxe']
     }

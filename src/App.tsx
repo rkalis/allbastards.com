@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="container mx-auto px-8">
-      <header className="flex justify-center w-full font-charriot text-8xl p-2">ALL BASTARDS</header>
+      <header className="flex justify-center w-full font-charriot text-header p-2">ALL BASTARDS</header>
       <InfiniteScroll
         className="flex flex-row flex-wrap justify-center"
         dataLength={indices.length}
