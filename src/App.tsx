@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { range } from './utils';
-import { HIGHEST_BASTARD_ID, OPENSEA_BASE, IMAGE_BASE } from './utils/constants';
+import { HIGHEST_BASTARD_ID, OPENSEA_BASE, IMAGE_BASE, PLACEHOLDER_IMAGE } from './utils/constants';
 import './App.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 function App() {
   const initialLoad = 500;
@@ -23,12 +24,20 @@ function App() {
         next={nextIndices}
         hasMore={indices.length < HIGHEST_BASTARD_ID + 1}
         loader={<div className="content-center">Loading...</div>}
+        scrollThreshold="300px"
       >
         {
           indices.map(index => (
-            <div key={index} className="p-1">
+            <div key={index} className="px-1">
               <a href={`${OPENSEA_BASE}/${index}`}>
-                <img width="100px" src={`${IMAGE_BASE}/${index}.webp`} className="bastard-image" alt={`Bastard ${index}`} />
+                <LazyLoadImage
+                  width="100px"
+                  height="100px"
+                  src={`${IMAGE_BASE}/${index}.webp`}
+                  placeholderSrc={PLACEHOLDER_IMAGE}
+                  className="bastard-image"
+                  alt={`Bastard ${index}`}
+                />
               </a>
             </div>
           ))
