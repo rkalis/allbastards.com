@@ -15,18 +15,16 @@ function Bastard({ index }: Props) {
 
   const [windowWidth, windowHeight] = useWindowSize();
 
-  const isPastHalfX = () => (mouse.clientX ?? 0) > windowWidth / 2;
-  const isPastHalfY = () => (mouse.clientY ?? 0) > windowHeight / 2;
+  const mouseX = mouse.clientX ?? 0;
+  const mouseY = mouse.clientY ?? 0;
+
+  const isPastHalfX = mouseX > windowWidth / 2;
+  const isPastHalfY = mouseY > windowHeight / 2;
 
   const MOUSE_OFFSET = 10;
 
-  const hoverX = isPastHalfX()
-    ? (mouse.clientX ?? 0) - IMAGE_SIZE_LARGE - MOUSE_OFFSET
-    : (mouse.clientX ?? 0) + MOUSE_OFFSET;
-
-  const hoverY = isPastHalfY()
-    ? (mouse.clientY ?? 0) - IMAGE_SIZE_LARGE - MOUSE_OFFSET
-    : (mouse.clientY ?? 0) + MOUSE_OFFSET;
+  const hoverX = isPastHalfX ? mouseX - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseX + MOUSE_OFFSET;
+  const hoverY = isPastHalfY ? mouseY - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseY + MOUSE_OFFSET;
 
   return (
     <div key={index} className="px-1">
@@ -37,6 +35,7 @@ function Bastard({ index }: Props) {
           src={`${IMAGE_BASE}/${index}.webp`}
           placeholderSrc={PLACEHOLDER_IMAGE}
           alt={`Bastard ${index}`}
+          title={`Bastard ${index}`}
         />
       </a>
 
