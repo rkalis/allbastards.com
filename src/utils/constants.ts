@@ -4,6 +4,8 @@ export const IMAGE_BASE = '/img/full/';
 export const THUMBNAIL_BASE = '/img/thumb/';
 export const PLACEHOLDER_IMAGE = '/img/loading.gif'
 
+export const IMAGE_SIZE_SMALL = 100;
+export const IMAGE_SIZE_LARGE = 480;
 
 export enum HypeType {
   CALM = 'CALM AF (STILL)',
