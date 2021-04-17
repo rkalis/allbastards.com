@@ -9,3 +9,13 @@ cd allbastards.com
 yarn
 yarn start
 ```
+
+## Feature Backlog
+- Display Bastard index in a way
+  - Show index on hover?
+  - Show running index on the side?
+- Jump ahead in increments of 1000
+- Shuffle bastards
+- Filter on traits
+  - Maybe based on the spreadsheet if possible?
+- Filter on owned bastards
