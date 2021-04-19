@@ -1,7 +1,8 @@
 import webp from 'webp-converter';
 import path from 'path';
 import fs from 'fs';
-import { HIGHEST_BASTARD_ID, HypeType } from '../src/utils/constants';
+import { HIGHEST_BASTARD_ID } from '../src/utils/constants';
+import { HypeType } from '../src/utils/interfaces';
 import { range } from '../src/utils';
 
 export const isHyped = (index: number) => {

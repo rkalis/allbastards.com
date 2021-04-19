@@ -7,7 +7,6 @@ export const PLACEHOLDER_IMAGE = '/img/loading.gif'
 export const IMAGE_SIZE_SMALL = 100;
 export const IMAGE_SIZE_LARGE = 480;
 
-export enum HypeType {
-  CALM = 'CALM AF (STILL)',
-  HYPED = 'HYPED AF (ANIMATED)'
-}
+export const DEFAULT_SETTINGS = {
+  colourfulBackground: true
+};
