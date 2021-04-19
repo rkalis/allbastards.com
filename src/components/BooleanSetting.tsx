@@ -6,9 +6,11 @@ interface Props {
   update: (value: boolean) => void;
 }
 
+// The UI code in this component has been taken from https://headlessui.dev/react/switch and amended
+
 function BooleanSetting({ label, value, update }: Props) {
   return (
-    <div className="p-2 grid grid-cols-5 border-2">
+    <div className="py-1 px-2 my-1 grid grid-cols-5 border-2">
       <div className="col-span-4 text-xl font-charriot font-bold">{label}</div>
       <div className="inline-flex justify-end">
         <Switch checked={value} onChange={update} className={`${value ? "bg-blue-500" : "bg-gray-200"} relative inline-flex items-center h-6 border-2 border-black w-11 focus:outline-none`}>
