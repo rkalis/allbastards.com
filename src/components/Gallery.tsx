@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { range } from './utils';
-import { HIGHEST_BASTARD_ID } from './utils/constants';
-import './App.css';
+import { range } from '../utils';
+import { HIGHEST_BASTARD_ID } from '../utils/constants';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Bastard from './Bastard';
 import { trackWindowScroll } from 'react-lazy-load-image-component';
@@ -23,16 +22,18 @@ function Gallery({ scrollPosition, filteredIndices }: Props) {
   }
 
   return (
-    <InfiniteScroll
-      className="flex flex-row flex-wrap justify-center"
-      dataLength={indices.length}
-      next={nextIndices}
-      hasMore={indices.length < HIGHEST_BASTARD_ID + 1}
-      loader={<div className="content-center">Loading...</div>}
-      scrollThreshold="300px"
-    >
-      {indices.map(index => (<Bastard index={index} scrollPosition={scrollPosition} />))}
-    </InfiniteScroll>
+    <div className="container mx-auto px-8">
+      <InfiniteScroll
+        className="flex flex-row flex-wrap justify-center"
+        dataLength={indices.length}
+        next={nextIndices}
+        hasMore={indices.length < HIGHEST_BASTARD_ID + 1}
+        loader={<div className="content-center">Loading...</div>}
+        scrollThreshold="300px"
+      >
+        {indices.map(index => (<Bastard index={index} scrollPosition={scrollPosition} />))}
+      </InfiniteScroll>
+    </div>
   );
 }
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import { OPENSEA_BASE, IMAGE_BASE, PLACEHOLDER_IMAGE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE } from './utils/constants';
-import './App.css';
+import { OPENSEA_BASE, IMAGE_BASE, PLACEHOLDER_IMAGE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE } from '../utils/constants';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useMouse from '@react-hook/mouse-position';
 import { useWindowSize } from '@react-hook/window-size';
