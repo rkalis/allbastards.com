@@ -4,24 +4,27 @@ import './App.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useMouse from '@react-hook/mouse-position';
 import { useWindowSize } from '@react-hook/window-size';
+import useHover from '@react-hook/hover';
 
 interface Props {
   index: number;
+  scrollPosition: { x: number, y: number };
 }
 
-function Bastard({ index }: Props) {
+function Bastard({ index, scrollPosition }: Props) {
   const target = React.useRef(null);
-  const mouse = useMouse(target)
+  const mouse = useMouse(target);
+  const isHovering = useHover(target);
 
   const [windowWidth, windowHeight] = useWindowSize();
+
+  const MOUSE_OFFSET = 10;
 
   const mouseX = mouse.clientX ?? 0;
   const mouseY = mouse.clientY ?? 0;
 
   const isPastHalfX = mouseX > windowWidth / 2;
   const isPastHalfY = mouseY > windowHeight / 2;
-
-  const MOUSE_OFFSET = 10;
 
   const hoverX = isPastHalfX ? mouseX - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseX + MOUSE_OFFSET;
   const hoverY = isPastHalfY ? mouseY - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseY + MOUSE_OFFSET;
@@ -36,10 +39,11 @@ function Bastard({ index }: Props) {
           placeholderSrc={PLACEHOLDER_IMAGE}
           alt={`Bastard ${index}`}
           title={`Bastard ${index}`}
+          scrollPosition={scrollPosition}
         />
       </a>
 
-      {mouse.isOver &&
+      {isHovering &&
         <img
           width={`${IMAGE_SIZE_LARGE}px`}
           height={`${IMAGE_SIZE_LARGE}px`}

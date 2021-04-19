@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.1",
+    "@react-hook/hover": "^4.0.0",
     "@react-hook/mouse-position": "^4.1.0",
     "@react-hook/window-size": "^3.0.7",
     "@testing-library/jest-dom": "^5.11.4",
