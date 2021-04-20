@@ -31,7 +31,7 @@ function Gallery({ scrollPosition, filteredIndices, settings }: Props) {
         loader={<div className="content-center">Loading...</div>}
         scrollThreshold="300px"
       >
-        {indices.map(index => (<Bastard index={index} scrollPosition={scrollPosition} />))}
+        {indices.map(index => (<Bastard index={index} scrollPosition={scrollPosition} settings={settings} />))}
       </InfiniteScroll>
     </div>
   );

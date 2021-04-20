@@ -4,13 +4,15 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useMouse from '@react-hook/mouse-position';
 import { useWindowSize } from '@react-hook/window-size';
 import useHover from '@react-hook/hover';
+import { ISettings } from '../utils/interfaces';
 
 interface Props {
   index: number;
   scrollPosition: { x: number, y: number };
+  settings: ISettings;
 }
 
-function Bastard({ index, scrollPosition }: Props) {
+function Bastard({ index, scrollPosition, settings }: Props) {
   const target = React.useRef(null);
   const mouse = useMouse(target);
   const isHovering = useHover(target);
@@ -29,7 +31,7 @@ function Bastard({ index, scrollPosition }: Props) {
   const hoverY = isPastHalfY ? mouseY - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseY + MOUSE_OFFSET;
 
   return (
-    <div key={index} className="px-1">
+    <div key={index} className="px-1 relative">
       <a href={`${OPENSEA_BASE}/${index}`} ref={target}>
         <LazyLoadImage
           width={`${IMAGE_SIZE_SMALL}px`}
@@ -37,20 +39,34 @@ function Bastard({ index, scrollPosition }: Props) {
           src={`${IMAGE_BASE}/${index}.webp`}
           placeholderSrc={PLACEHOLDER_IMAGE}
           alt={`Bastard ${index}`}
-          title={`Bastard ${index}`}
           scrollPosition={scrollPosition}
+          className="absolute inset-0 z-0"
         />
+
+        {settings.displayNumbers &&
+          <div
+            className="absolute inset-0 z-1 mx-1 text-2xl text-white font-charriot"
+            style={{ WebkitTextStroke: "1px black" }}
+          >{index}</div>
+        }
       </a>
 
-      {isHovering &&
-        <img
-          width={`${IMAGE_SIZE_LARGE}px`}
-          height={`${IMAGE_SIZE_LARGE}px`}
-          src={`${IMAGE_BASE}/${index}.webp`}
-          className="fixed"
-          alt={`Bastard ${index}`}
-          style={{ left: hoverX, top: hoverY }}
-        />
+      {mouse.isOver && isHovering &&
+        <div>
+          <img
+            width={`${IMAGE_SIZE_LARGE}px`}
+            height={`${IMAGE_SIZE_LARGE}px`}
+            src={`${IMAGE_BASE}/${index}.webp`}
+            className="fixed z-10"
+            alt={`Bastard ${index}`}
+            style={{ left: hoverX, top: hoverY }}
+          />
+
+          <div
+            className="fixed z-20 mx-2 text-6xl text-white font-charriot"
+            style={{ WebkitTextStroke: "2px black", left: hoverX, top: hoverY }}
+          >{index}</div>
+        </div>
       }
     </div>
   );

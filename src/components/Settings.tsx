@@ -68,6 +68,11 @@ function Settings({ settings, setSettings }: Props) {
                         value={settings.colourfulBackground}
                         update={(value: boolean) => setSettings({ ...settings, colourfulBackground: value })}
                       />
+                      <BooleanSetting
+                        label="ALWAYS SHOW NUMBERS"
+                        value={settings.displayNumbers}
+                        update={(value: boolean) => setSettings({ ...settings, displayNumbers: value })}
+                      />
                     </div>
                   </div>
                 </div>
