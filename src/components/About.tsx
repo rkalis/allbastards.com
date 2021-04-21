@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
-import { useState } from "react";
 import Modal from './Modal';
 import Link from './Link';
 
@@ -8,9 +8,11 @@ function About() {
 
   return (
     <div className="flex justify-center align-middle items-center">
-      <button type="button"
+      <button
+        type="button"
         className="inline-flex justify-center text-sm font-medium"
-        onClick={() => setIsOpen(true)}>
+        onClick={() => setIsOpen(true)}
+      >
         <QuestionMarkCircleIcon className="w-5 h-5 sm:w-10 sm:h-10" />
       </button>
 

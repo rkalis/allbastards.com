@@ -5,5 +5,5 @@ export interface ISettings {
 
 export enum HypeType {
   CALM = 'CALM AF (STILL)',
-  HYPED = 'HYPED AF (ANIMATED)'
+  HYPED = 'HYPED AF (ANIMATED)',
 }

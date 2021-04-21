@@ -11,12 +11,12 @@ interface Props {
 }
 
 function Header({ settings, setSettings }: Props) {
-  const [ref, { x, y, width, height }] = useDimensions()
+  const [ref, { x, y, width, height }] = useDimensions();
 
   return (
     <>
       <header className={`grid grid-cols-5 sticky inset-0 z-20 p-2 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
-        <div className="bg-white absolute"></div>
+        <div className="bg-white absolute" />
         <div className="flex justify-center align-middle items-center gap-2">
           <About />
           <Settings settings={settings} setSettings={setSettings} />
@@ -24,7 +24,7 @@ function Header({ settings, setSettings }: Props) {
         <div className="col-span-3 flex justify-center items-center font-charriot text-header">
           ALL BASTARDS
         </div>
-        <div></div>
+        <div />
       </header>
       {settings.colourfulBackground && <HeaderBackground x={x} y={y} width={width} height={height} />}
     </>

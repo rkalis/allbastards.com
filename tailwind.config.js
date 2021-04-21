@@ -4,18 +4,18 @@ module.exports = {
   theme: {
     extend: {
       fontSize: {
-        'header': ['7vw', '6vw'],
-        'footer': ['3vw'],
+        header: ['7vw', '6vw'],
+        footer: ['3vw'],
         'footer-md': ['2.5vw'],
         'footer-lg': ['1.5vw'],
       },
       fontFamily: {
-        charriot: ['Charriot Deluxe']
-      }
-    }
+        charriot: ['Charriot Deluxe'],
+      },
+    },
   },
   variants: {
     extend: {},
   },
   plugins: [],
-}
+};

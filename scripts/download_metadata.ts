@@ -9,10 +9,10 @@ const downloadBastard = async (index: number) => {
 
   const { data } = await axios.get(`https://bastardganpunks.club/api/${index}`);
 
-  fs.writeFileSync(path.join(__dirname, '..', 'src', 'utils', 'metadata', `${index}.json`), JSON.stringify(data));
+  fs.writeFileSync(path.join(__dirname, '..', 'public', 'metadata', `${index}.json`), JSON.stringify(data));
 
   return data;
-}
+};
 
 const downloadBastards = async (count: number, start = 1) => {
   const indexes = range(count, start);
@@ -22,13 +22,15 @@ const downloadBastards = async (count: number, start = 1) => {
       try {
         await downloadBastard(index);
         break;
-      } catch {}
+      } catch {
+        // ignored
+      }
     }
   }
-}
+};
 
-const LAST = fs.readdirSync(path.join(__dirname, '..', 'src', 'utils', 'metadata'))
-  .map(name => Number.parseInt(name.replace(/\.json/, '')))
+const LAST = fs.readdirSync(path.join(__dirname, '..', 'public', 'metadata'))
+  .map((name) => Number.parseInt(name.replace(/\.json/, ''), 10))
   .sort((a, b) => a - b)
   .pop();
 

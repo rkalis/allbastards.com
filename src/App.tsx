@@ -1,4 +1,4 @@
-import './App.css';
+import createPersistedState from 'use-persisted-state';
 import Gallery from './components/Gallery';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -6,7 +6,6 @@ import Background from './components/p5/Background';
 import { range } from './utils';
 import { DEFAULT_SETTINGS, HIGHEST_BASTARD_ID } from './utils/constants';
 import { ISettings } from './utils/interfaces';
-import createPersistedState from 'use-persisted-state';
 
 const useSettingsState = createPersistedState('allbastards-settings');
 

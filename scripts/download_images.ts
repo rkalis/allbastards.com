@@ -18,7 +18,7 @@ const downloadBastard = async (index: number) => {
       .on('finish', () => resolve())
       .on('error', (error: any) => reject(error));
   });
-}
+};
 
 const downloadBastards = async (count: number, start = 1) => {
   const indexes = range(count, start);
@@ -28,14 +28,16 @@ const downloadBastards = async (count: number, start = 1) => {
       try {
         await downloadBastard(index);
         break;
-      } catch {}
+      } catch {
+        // ignored
+      }
     }
   }
-}
+};
 
 const LAST = fs.readdirSync(path.join(__dirname, '..', 'public', 'img', 'full'))
-  .filter(name => name.endsWith('.png'))
-  .map(name => Number.parseInt(name.replace(/\.png/, '')))
+  .filter((name) => name.endsWith('.png'))
+  .map((name) => Number.parseInt(name.replace(/\.png/, ''), 10))
   .sort((a, b) => a - b)
   .pop();
 

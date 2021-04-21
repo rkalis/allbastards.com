@@ -22,7 +22,11 @@
     "isolatedModules": true
   },
   "include": [
-    "src",
-    "scripts"
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.jsx",
+    "src/**/*.tsx",
+    "scripts/**/*.ts",
+    "**.js"
   ]
 }

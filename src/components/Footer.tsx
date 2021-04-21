@@ -9,7 +9,7 @@ interface Props {
 }
 
 function Footer({ settings }: Props) {
-  const [ref, { x, y, width, height }] = useDimensions()
+  const [ref, { x, y, width, height }] = useDimensions();
 
   return (
     <>
@@ -17,7 +17,10 @@ function Footer({ settings }: Props) {
         <div className="font-charriot text-footer md:text-footer-md lg:text-footer-lg">
           <div className="grid grid-cols-1">
             <div className="flex justify-center items-center">
-              <div>WEBSITE CREATED BY <Link to="https://kalis.me" text="ROSCO KALIS" /> (<Link to="https://github.com/rkalis/allbastards.com" text="SOURCE CODE" inverted />)</div>
+              <div>
+                WEBSITE CREATED BY <Link to="https://kalis.me" text="ROSCO KALIS" />
+                (<Link to="https://github.com/rkalis/allbastards.com" text="SOURCE CODE" inverted />)
+              </div>
             </div>
           </div>
         </div>

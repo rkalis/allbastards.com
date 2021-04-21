@@ -1,4 +1,5 @@
 import UpdatableSketch from './UpdatableSketch';
+
 type P5 = import('p5');
 
 let uniformsShader: any;
@@ -17,18 +18,18 @@ function HeaderBackground({ x, y, width, height }: Props) {
     uniformsShader = p5.loadShader('/uniform.vert', '/uniform.frag');
   };
 
-  function setup(p5: P5, canvasParentRef: Element) {
+  const setup = (p5: P5, canvasParentRef: Element) => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight, p5.WEBGL).parent(canvasParentRef);
     p5.noStroke();
     p5.pixelDensity(1);
   };
 
-  function draw(p5: P5) {
-    p5.resizeCanvas(width, height);
+  const draw = (p5: P5) => {
+    p5.resizeCanvas(width, height, true);
     p5.shader(uniformsShader);
 
-    let mx = p5.map(p5.winMouseX, 0, p5.windowWidth, 0, 1);
-    let my = p5.map(p5.winMouseY, 0, p5.windowHeight, 0, 1);
+    const mx = p5.map(p5.winMouseX, 0, p5.windowWidth, 0, 1);
+    const my = p5.map(p5.winMouseY, 0, p5.windowHeight, 0, 1);
 
     uniformsShader.setUniform('mouse', [mx, my]);
 
@@ -37,13 +38,13 @@ function HeaderBackground({ x, y, width, height }: Props) {
 
   return (
     <>
-      <div className="fixed bg-white" style={{ zIndex: 10, top: y, left: x, width, height }}></div>
+      <div className="fixed bg-white" style={{ zIndex: 10, top: y, left: x, width, height }} />
       <UpdatableSketch
         preload={preload} setup={setup} draw={draw}
         style={{ zIndex: 10, position: 'fixed', top: y, left: x }}
       />
     </>
-  )
+  );
 }
 
 export default HeaderBackground;

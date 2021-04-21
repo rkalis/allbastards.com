@@ -1,6 +1,5 @@
 import { CogIcon } from '@heroicons/react/outline';
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { useState } from 'react';
 import { ISettings } from '../utils/interfaces';
 import BooleanSetting from './BooleanSetting';
 import Modal from './Modal';
@@ -15,9 +14,11 @@ function Settings({ settings, setSettings }: Props) {
 
   return (
     <div className="flex justify-center align-middle items-center">
-      <button type="button"
+      <button
+        type="button"
         className="inline-flex justify-center text-sm font-medium"
-        onClick={() => setIsOpen(true)}>
+        onClick={() => setIsOpen(true)}
+      >
         <CogIcon className="w-5 h-5 sm:w-10 sm:h-10" />
       </button>
 

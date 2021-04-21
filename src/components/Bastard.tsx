@@ -1,9 +1,9 @@
 import React from 'react';
-import { OPENSEA_BASE, IMAGE_BASE, PLACEHOLDER_IMAGE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE } from '../utils/constants';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useMouse from '@react-hook/mouse-position';
 import { useWindowSize } from '@react-hook/window-size';
 import useHover from '@react-hook/hover';
+import { OPENSEA_BASE, IMAGE_BASE, PLACEHOLDER_IMAGE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE } from '../utils/constants';
 import { ISettings } from '../utils/interfaces';
 
 interface Props {
@@ -43,15 +43,19 @@ function Bastard({ index, scrollPosition, settings }: Props) {
           className="absolute inset-0 z-0"
         />
 
-        {settings.displayNumbers &&
+        {
+          settings.displayNumbers &&
           <div
             className="absolute inset-0 z-1 mx-1 text-2xl text-white font-charriot"
-            style={{ WebkitTextStroke: "1px black" }}
-          >{index}</div>
+            style={{ WebkitTextStroke: '1px black' }}
+          >
+            {index}
+          </div>
         }
       </a>
 
-      {mouse.isOver && isHovering &&
+      {
+        mouse.isOver && isHovering &&
         <div>
           <img
             width={`${IMAGE_SIZE_LARGE}px`}
@@ -64,8 +68,10 @@ function Bastard({ index, scrollPosition, settings }: Props) {
 
           <div
             className="fixed z-30 mx-2 text-6xl text-white font-charriot"
-            style={{ WebkitTextStroke: "2px black", left: hoverX, top: hoverY }}
-          >{index}</div>
+            style={{ WebkitTextStroke: '2px black', left: hoverX, top: hoverY }}
+          >
+            {index}
+          </div>
         </div>
       }
     </div>

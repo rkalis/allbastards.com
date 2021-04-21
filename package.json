@@ -28,7 +28,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -57,7 +57,16 @@
     "@types/react-lazy-load-image-component": "^1.5.1",
     "@types/sharp": "^0.28.0",
     "@types/use-persisted-state": "^0.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "autoprefixer": "^9",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "postcss": "^7",
     "sharp": "^0.28.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",

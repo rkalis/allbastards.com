@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { HIGHEST_BASTARD_ID } from '../utils/constants';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Bastard from './Bastard';
 import { trackWindowScroll } from 'react-lazy-load-image-component';
+import { HIGHEST_BASTARD_ID } from '../utils/constants';
+import Bastard from './Bastard';
 import { ISettings } from '../utils/interfaces';
 
 interface Props {
@@ -19,7 +19,7 @@ function Gallery({ scrollPosition, filteredIndices, settings }: Props) {
 
   const nextIndices = () => {
     setIndices(filteredIndices.slice(0, indices.length + loadCount));
-  }
+  };
 
   return (
     <div className="container mx-auto px-8">
@@ -31,7 +31,7 @@ function Gallery({ scrollPosition, filteredIndices, settings }: Props) {
         loader={<div className="content-center">Loading...</div>}
         scrollThreshold="300px"
       >
-        {indices.map(index => (<Bastard index={index} scrollPosition={scrollPosition} settings={settings} />))}
+        {indices.map((index) => (<Bastard index={index} scrollPosition={scrollPosition} settings={settings} />))}
       </InfiniteScroll>
     </div>
   );
