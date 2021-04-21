@@ -1,7 +1,7 @@
-import { ISettings } from '../utils/interfaces';
+import { ISettings } from '../../utils/interfaces';
 import Settings from './Settings';
 import About from './About';
-import HeaderBackground from './p5/HeaderBackground';
+import HeaderBackground from '../p5/HeaderBackground';
 
 const useDimensions = require('react-use-dimensions').default;
 

@@ -1,6 +1,6 @@
 import { ISettings } from '../utils/interfaces';
 import FooterBackground from './p5/FooterBackground';
-import Link from './Link';
+import Link from './common/Link';
 
 const useDimensions = require('react-use-dimensions').default;
 

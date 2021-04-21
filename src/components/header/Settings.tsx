@@ -1,8 +1,8 @@
 import { FiSettings } from 'react-icons/fi';
 import { useState } from 'react';
-import { ISettings } from '../utils/interfaces';
-import BooleanSetting from './BooleanSetting';
-import Modal from './Modal';
+import { ISettings } from '../../utils/interfaces';
+import BooleanSetting from '../common/BooleanSetting';
+import Modal from '../common/Modal';
 
 interface Props {
   settings: ISettings;

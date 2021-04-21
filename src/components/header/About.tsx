@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FiHelpCircle } from 'react-icons/fi';
-import Modal from './Modal';
-import Link from './Link';
+import Modal from '../common/Modal';
+import Link from '../common/Link';
 
 function About() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

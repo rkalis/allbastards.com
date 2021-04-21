@@ -1,6 +1,6 @@
 import createPersistedState from 'use-persisted-state';
 import Gallery from './components/Gallery';
-import Header from './components/Header';
+import Header from './components/header/Header';
 import Footer from './components/Footer';
 import Background from './components/p5/Background';
 import { range } from './utils';
