@@ -46,7 +46,12 @@ function Bastard({ index, scrollPosition, settings }: Props) {
 
   return (
     <div key={index} className="px-1 relative">
-      <a href={`${OPENSEA_BASE}/${index}`}>
+      <a
+        href={`${OPENSEA_BASE}/${index}`}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseMove={onMouseMove}
+      >
         <LazyLoadImage
           width={`${IMAGE_SIZE_SMALL}px`}
           height={`${IMAGE_SIZE_SMALL}px`}
@@ -55,9 +60,6 @@ function Bastard({ index, scrollPosition, settings }: Props) {
           alt={`Bastard ${index}`}
           scrollPosition={scrollPosition}
           className="absolute inset-0 z-0"
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-          onMouseMove={onMouseMove}
         />
 
         {
