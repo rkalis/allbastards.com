@@ -1,5 +1,6 @@
 import { ISettings } from '../utils/interfaces';
 import FooterBackground from './p5/FooterBackground';
+import Link from './Link';
 
 const useDimensions = require('react-use-dimensions').default;
 
@@ -12,11 +13,11 @@ function Footer({ settings }: Props) {
 
   return (
     <>
-      <header className={`sticky inset-0 z-20 p-2 ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
+      <header className={`sticky inset-0 z-20 p-2 border-t-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
         <div className="font-charriot text-footer md:text-footer-md lg:text-footer-lg">
           <div className="grid grid-cols-1">
             <div className="flex justify-center items-center">
-              <div>WEBSITE CREATED BY <a className="text-blue-500" href="https://kalis.me">ROSCO KALIS</a> (<a className="text-red-500" href="https://github.com/rkalis/allbastards.com">SOURCE CODE</a>)</div>
+              <div>WEBSITE CREATED BY <Link to="https://kalis.me" text="ROSCO KALIS" /> (<Link to="https://github.com/rkalis/allbastards.com" text="SOURCE CODE" inverted />)</div>
             </div>
           </div>
         </div>
