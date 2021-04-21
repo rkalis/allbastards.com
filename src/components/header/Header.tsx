@@ -2,15 +2,17 @@ import { ISettings } from '../../utils/interfaces';
 import Settings from './Settings';
 import About from './About';
 import HeaderBackground from '../p5/HeaderBackground';
+import Shuffle from './Shuffle';
 
 const useDimensions = require('react-use-dimensions').default;
 
 interface Props {
   settings: ISettings;
   setSettings: (settings: ISettings) => void;
+  shuffle: () => void;
 }
 
-function Header({ settings, setSettings }: Props) {
+function Header({ settings, setSettings, shuffle }: Props) {
   const [ref, { x, y, width, height }] = useDimensions();
 
   return (
@@ -20,6 +22,7 @@ function Header({ settings, setSettings }: Props) {
         <div className="flex justify-center align-middle items-center gap-2">
           <About />
           <Settings settings={settings} setSettings={setSettings} />
+          <Shuffle shuffle={shuffle} />
         </div>
         <div className="col-span-3 flex justify-center items-center font-charriot text-header">
           ALL BASTARDS

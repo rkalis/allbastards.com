@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { trackWindowScroll } from 'react-lazy-load-image-component';
 import { HIGHEST_BASTARD_ID } from '../utils/constants';
@@ -16,6 +16,11 @@ function Gallery({ scrollPosition, filteredIndices, settings }: Props) {
   const loadCount = 100;
 
   const [indices, setIndices] = useState(filteredIndices.slice(0, initialLoad));
+
+  useEffect(() => {
+    setIndices(filteredIndices.slice(0, initialLoad));
+    console.log(filteredIndices);
+  }, [filteredIndices]);
 
   const nextIndices = () => {
     setIndices(filteredIndices.slice(0, indices.length + loadCount));
