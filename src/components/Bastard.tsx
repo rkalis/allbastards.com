@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useMouse from '@react-hook/mouse-position';
 import { useWindowSize } from '@react-hook/window-size';
@@ -16,6 +16,7 @@ function Bastard({ index, scrollPosition, settings }: Props) {
   const target = React.useRef(null);
   const mouse = useMouse(target);
   const isHovering = useHover(target);
+  const [secondaryIsHovering, setSecondaryIsHovering] = useState<boolean>(false);
 
   const [windowWidth, windowHeight] = useWindowSize();
 
@@ -30,6 +31,9 @@ function Bastard({ index, scrollPosition, settings }: Props) {
   const hoverX = isPastHalfX ? mouseX - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseX + MOUSE_OFFSET;
   const hoverY = isPastHalfY ? mouseY - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseY + MOUSE_OFFSET;
 
+  // Check the mouse hovering in 4 different ways to (hopefully) eliminate false positives
+  const shouldDisplayHoverImage = mouse.isOver && mouse.clientX && mouse.clientY && isHovering && secondaryIsHovering;
+
   return (
     <div key={index} className="px-1 relative">
       <a href={`${OPENSEA_BASE}/${index}`} ref={target}>
@@ -41,6 +45,8 @@ function Bastard({ index, scrollPosition, settings }: Props) {
           alt={`Bastard ${index}`}
           scrollPosition={scrollPosition}
           className="absolute inset-0 z-0"
+          onMouseEnter={() => setSecondaryIsHovering(true)}
+          onMouseLeave={() => setSecondaryIsHovering(false)}
         />
 
         {
@@ -55,7 +61,7 @@ function Bastard({ index, scrollPosition, settings }: Props) {
       </a>
 
       {
-        mouse.isOver && isHovering &&
+        shouldDisplayHoverImage &&
         <div>
           <img
             width={`${IMAGE_SIZE_LARGE}px`}
