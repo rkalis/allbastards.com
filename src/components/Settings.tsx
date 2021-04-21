@@ -1,4 +1,4 @@
-import { CogIcon } from '@heroicons/react/outline';
+import { FiSettings } from 'react-icons/fi';
 import { useState } from 'react';
 import { ISettings } from '../utils/interfaces';
 import BooleanSetting from './BooleanSetting';
@@ -16,10 +16,10 @@ function Settings({ settings, setSettings }: Props) {
     <div className="flex justify-center align-middle items-center">
       <button
         type="button"
-        className="inline-flex justify-center text-sm font-medium"
+        className="inline-flex justify-center text-xl sm:text-4xl font-medium"
         onClick={() => setIsOpen(true)}
       >
-        <CogIcon className="w-5 h-5 sm:w-10 sm:h-10" />
+        <FiSettings />
       </button>
 
       <Modal title="SETTINGS" isOpen={isOpen} setIsOpen={setIsOpen}>

@@ -18,8 +18,7 @@ function Footer({ settings }: Props) {
           <div className="grid grid-cols-1">
             <div className="flex justify-center items-center">
               <div>
-                WEBSITE CREATED BY <Link to="https://kalis.me" text="ROSCO KALIS" />
-                (<Link to="https://github.com/rkalis/allbastards.com" text="SOURCE CODE" inverted />)
+                WEBSITE CREATED BY <Link to="https://kalis.me" text="ROSCO KALIS" /> (<Link to="https://github.com/rkalis/allbastards.com" text="SOURCE CODE" inverted />)
               </div>
             </div>
           </div>
