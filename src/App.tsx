@@ -1,7 +1,8 @@
 import './App.css';
 import Gallery from './components/Gallery';
 import Header from './components/Header';
-import Background from './components/Background';
+import Footer from './components/Footer';
+import Background from './components/p5/Background';
 import { range } from './utils';
 import { DEFAULT_SETTINGS, HIGHEST_BASTARD_ID } from './utils/constants';
 import { ISettings } from './utils/interfaces';
@@ -18,6 +19,7 @@ function App() {
     <div>
       <Header settings={settings} setSettings={setSettings} />
       <Gallery settings={settings} filteredIndices={filteredIndices} />
+      <Footer settings={settings} />
       {settings.colourfulBackground && <Background />}
     </div>
   );

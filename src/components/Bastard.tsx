@@ -57,13 +57,13 @@ function Bastard({ index, scrollPosition, settings }: Props) {
             width={`${IMAGE_SIZE_LARGE}px`}
             height={`${IMAGE_SIZE_LARGE}px`}
             src={`${IMAGE_BASE}/${index}.webp`}
-            className="fixed z-10"
+            className="fixed z-30"
             alt={`Bastard ${index}`}
             style={{ left: hoverX, top: hoverY }}
           />
 
           <div
-            className="fixed z-20 mx-2 text-6xl text-white font-charriot"
+            className="fixed z-30 mx-2 text-6xl text-white font-charriot"
             style={{ WebkitTextStroke: "2px black", left: hoverX, top: hoverY }}
           >{index}</div>
         </div>

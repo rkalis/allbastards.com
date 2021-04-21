@@ -26,7 +26,7 @@ function Settings({ settings, setSettings }: Props) {
         <Dialog
           as="div"
           static
-          className="fixed z-10 inset-0 overflow-y-auto"
+          className="fixed z-50 inset-0 overflow-y-auto"
           open={isOpen}
           onClose={setIsOpen}
           initialFocus={undefined}
