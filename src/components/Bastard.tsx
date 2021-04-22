@@ -42,7 +42,10 @@ function Bastard({ index, scrollPosition, settings }: Props) {
     setIsHovering(false);
   };
 
-  const onMouseMove = (event: React.MouseEvent) => setMouse({ x: event.clientX, y: event.clientY });
+  const onMouseMove = (event: React.MouseEvent) => {
+    setMouse({ x: event.clientX, y: event.clientY });
+    setIsHovering(true);
+  };
 
   return (
     <div key={index} className="px-1 relative">
