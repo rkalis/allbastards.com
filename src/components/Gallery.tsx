@@ -8,9 +8,11 @@ interface Props {
   scrollPosition: { x: number, y: number };
   indices: number[];
   settings: ISettings;
+  marginTop: number;
+  marginBottom: number;
 }
 
-function Gallery({ scrollPosition, indices, settings }: Props) {
+function Gallery({ scrollPosition, indices, settings, marginTop, marginBottom }: Props) {
   const initialLoad = 500;
   const loadCount = 100;
 
@@ -26,7 +28,7 @@ function Gallery({ scrollPosition, indices, settings }: Props) {
   };
 
   return (
-    <div className="container mx-auto px-8" style={{ paddingTop: 6 }}>
+    <div className="container mx-auto px-8" style={{ paddingTop: 6, marginTop, marginBottom }}>
       <InfiniteScroll
         className="flex flex-row flex-wrap justify-center"
         dataLength={loadedIndices.length}

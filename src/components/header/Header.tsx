@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { ISettings } from '../../utils/interfaces';
 import Settings from './Settings';
 import About from './About';
@@ -12,14 +13,17 @@ interface Props {
   setSettings: (settings: ISettings) => void;
   indices: number[];
   setIndices: (indices: number[]) => void;
+  setMarginTop: (marginTop: number) => void;
 }
 
-function Header({ settings, setSettings, indices, setIndices }: Props) {
+function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Props) {
   const [ref, { x, y, width, height }] = useDimensions();
+
+  useEffect(() => setMarginTop(height), [height]);
 
   return (
     <>
-      <header className={`grid grid-cols-5 sticky inset-0 z-20 p-2 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
+      <header className={`grid grid-cols-5 fixed top-0 left-0 right-0 z-20 p-2 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
         <div className="bg-white absolute" />
         <div className="flex justify-center align-middle items-center gap-2">
           <About />

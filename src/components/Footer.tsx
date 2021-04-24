@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { ISettings } from '../utils/interfaces';
 import FooterBackground from './p5/FooterBackground';
 import Link from './common/Link';
@@ -6,14 +7,17 @@ const useDimensions = require('react-use-dimensions').default;
 
 interface Props {
   settings: ISettings;
+  setMarginBottom: (marginBottom: number) => void;
 }
 
-function Footer({ settings }: Props) {
+function Footer({ settings, setMarginBottom }: Props) {
   const [ref, { x, y, width, height }] = useDimensions();
+
+  useEffect(() => setMarginBottom(height), [height]);
 
   return (
     <>
-      <header className={`sticky inset-0 z-20 p-2 border-t-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
+      <footer className={`fixed left-0 right-0 bottom-0 z-20 p-2 border-t-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
         <div className="font-charriot text-footer md:text-footer-md lg:text-footer-lg">
           <div className="grid grid-cols-1">
             <div className="flex justify-center items-center">
@@ -23,7 +27,7 @@ function Footer({ settings }: Props) {
             </div>
           </div>
         </div>
-      </header>
+      </footer>
       {settings.colourfulBackground && <FooterBackground x={x} y={y} width={width} height={height} />}
     </>
   );

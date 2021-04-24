@@ -14,11 +14,20 @@ function App() {
   const [settings, setSettings] = useSettingsState<ISettings>(DEFAULT_SETTINGS);
   const [indices, setIndices] = useState<number[]>(range(HIGHEST_BASTARD_ID + 1));
 
+  const [marginTop, setMarginTop] = useState<number>(0);
+  const [marginBottom, setMarginBottom] = useState<number>(0);
+
   return (
     <div>
-      <Header settings={settings} setSettings={setSettings} setIndices={setIndices} indices={indices} />
-      <Gallery settings={settings} indices={indices} />
-      <Footer settings={settings} />
+      <Header
+        settings={settings}
+        setSettings={setSettings}
+        indices={indices}
+        setIndices={setIndices}
+        setMarginTop={setMarginTop}
+      />
+      <Gallery settings={settings} indices={indices} marginTop={marginTop} marginBottom={marginBottom} />
+      <Footer settings={settings} setMarginBottom={setMarginBottom} />
       {settings.colourfulBackground && <Background />}
     </div>
   );
