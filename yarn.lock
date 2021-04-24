@@ -9685,6 +9685,11 @@ react-lazy-load-image-component@^1.5.1:
     lodash.debounce "^4.0.8"
     lodash.throttle "^4.1.1"
 
+react-multi-select-component@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-4.0.1.tgz#089ff7ccb953f7c70596e9b15016f5a48bdaa344"
+  integrity sha512-4VcYmc4TvWVQP1tdzE+z6guPPCDzVPqwVdrvLNnOnCuZM9a0sz5RYBKV2SOyywgwRuYvS/YdvUhrp/2J0Llc8g==
+
 react-p5@^1.3.19:
   version "1.3.19"
   resolved "https://registry.yarnpkg.com/react-p5/-/react-p5-1.3.19.tgz#7a66165211678ab3aa109c8f57ff933306776f4b"

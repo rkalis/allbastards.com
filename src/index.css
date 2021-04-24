@@ -20,3 +20,9 @@ code {
   font-family: 'Charriot Deluxe';
   src: local('Charriot Deluxe'), url(./fonts/CharriotDeluxe.ttf);
 }
+
+.rmsc {
+  --rmsc-main: black !important;
+  --rmsc-radius: 0px !important;
+  --rmsc-border: none !important;
+}

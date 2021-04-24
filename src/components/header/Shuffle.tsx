@@ -1,10 +1,16 @@
+import arrayShuffle from 'array-shuffle';
 import { FiShuffle } from 'react-icons/fi';
 
 interface Props {
-  shuffle: () => void;
+  indices: number[];
+  setIndices: (indices: number[]) => void;
 }
 
-function Shuffle({ shuffle }: Props) {
+function Shuffle({ indices, setIndices }: Props) {
+  const shuffle = () => {
+    setIndices(arrayShuffle(indices));
+  };
+
   return (
     <div className="flex justify-center align-middle items-center">
       <button

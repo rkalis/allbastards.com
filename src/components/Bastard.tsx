@@ -48,7 +48,7 @@ function Bastard({ index, scrollPosition, settings }: Props) {
   };
 
   return (
-    <div key={index} className="px-1 relative">
+    <div key={index} className="relative" style={{ paddingLeft: 3, paddingRight: 3 }}>
       <a
         href={`${OPENSEA_BASE}/${index}`}
         onMouseEnter={onMouseEnter}
@@ -68,8 +68,8 @@ function Bastard({ index, scrollPosition, settings }: Props) {
         {
           settings.displayNumbers &&
           <div
-            className="absolute inset-0 z-1 mx-1 text-2xl text-white font-charriot"
-            style={{ WebkitTextStroke: '1px black' }}
+            className="absolute inset-0 z-1 px-1 text-2xl text-white font-charriot"
+            style={{ WebkitTextStroke: '1px black', height: IMAGE_SIZE_SMALL, width: IMAGE_SIZE_SMALL }}
           >
             {index}
           </div>

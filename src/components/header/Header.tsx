@@ -3,16 +3,18 @@ import Settings from './Settings';
 import About from './About';
 import HeaderBackground from '../p5/HeaderBackground';
 import Shuffle from './Shuffle';
+import Filters from './Filters';
 
 const useDimensions = require('react-use-dimensions').default;
 
 interface Props {
   settings: ISettings;
   setSettings: (settings: ISettings) => void;
-  shuffle: () => void;
+  indices: number[];
+  setIndices: (indices: number[]) => void;
 }
 
-function Header({ settings, setSettings, shuffle }: Props) {
+function Header({ settings, setSettings, indices, setIndices }: Props) {
   const [ref, { x, y, width, height }] = useDimensions();
 
   return (
@@ -22,7 +24,8 @@ function Header({ settings, setSettings, shuffle }: Props) {
         <div className="flex justify-center align-middle items-center gap-2">
           <About />
           <Settings settings={settings} setSettings={setSettings} />
-          <Shuffle shuffle={shuffle} />
+          <Filters setIndices={setIndices} />
+          <Shuffle indices={indices} setIndices={setIndices} />
         </div>
         <div className="col-span-3 flex justify-center items-center font-charriot text-header">
           ALL BASTARDS

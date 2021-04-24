@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import arrayShuffle from 'array-shuffle';
 import createPersistedState from 'use-persisted-state';
 import Gallery from './components/Gallery';
 import Header from './components/header/Header';
@@ -13,17 +12,12 @@ const useSettingsState = createPersistedState('allbastards-settings');
 
 function App() {
   const [settings, setSettings] = useSettingsState<ISettings>(DEFAULT_SETTINGS);
-
-  const [filteredIndices, setFilteredIndices] = useState<number[]>(range(HIGHEST_BASTARD_ID + 1));
-
-  const shuffle = () => {
-    setFilteredIndices(arrayShuffle(filteredIndices));
-  };
+  const [indices, setIndices] = useState<number[]>(range(HIGHEST_BASTARD_ID + 1));
 
   return (
     <div>
-      <Header settings={settings} setSettings={setSettings} shuffle={shuffle} />
-      <Gallery settings={settings} filteredIndices={filteredIndices} />
+      <Header settings={settings} setSettings={setSettings} setIndices={setIndices} indices={indices} />
+      <Gallery settings={settings} indices={indices} />
       <Footer settings={settings} />
       {settings.colourfulBackground && <Background />}
     </div>
