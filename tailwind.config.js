@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontSize: {
-        header: ['7vw', '6vw'],
+        header: ['6vw', '5vw'],
         footer: ['3vw'],
         'footer-md': ['2.5vw'],
         'footer-lg': ['1.5vw'],

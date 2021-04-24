@@ -19,7 +19,8 @@ function Filters({ setIndices }: Props) {
   const allFilters = Object.entries(attributesIndex)
     .map(([attribute, attributeIndex]) => {
       const options = Object.entries(attributeIndex)
-        .map(([label, value]) => ({ label, value }));
+        .map(([label, value]) => ({ label: `${label} - ${value.length}`, value }))
+        .sort((a, b) => b.value.length - a.value.length);
 
       return { attribute, options };
     });
