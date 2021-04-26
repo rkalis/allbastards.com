@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import createPersistedState from 'use-persisted-state';
-import Gallery from './components/Gallery';
+import Gallery from './components/gallery/Gallery';
 import Header from './components/header/Header';
 import Footer from './components/Footer';
 import Background from './components/p5/Background';
-import { range } from './utils';
+import { isSafari, range } from './utils';
 import { DEFAULT_SETTINGS, HIGHEST_BASTARD_ID } from './utils/constants';
 import { ISettings } from './utils/interfaces';
 
@@ -16,6 +16,16 @@ function App() {
 
   const [marginTop, setMarginTop] = useState<number>(0);
   const [marginBottom, setMarginBottom] = useState<number>(0);
+
+  if (isSafari()) {
+    return (
+      <div className="flex justify-center">
+        <div>
+          Unfortunately, this website does not work with Safari/iOS. Please use a different browser.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

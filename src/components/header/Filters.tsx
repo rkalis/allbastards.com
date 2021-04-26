@@ -62,6 +62,7 @@ function Filters({ setIndices }: Props) {
       <Modal title="FILTERS" isOpen={isOpen} setIsOpen={setIsOpen}>
         {allFilters.map(({ attribute, options }) => (
           <Filter
+            key={attribute}
             label={attribute}
             options={options}
             selected={activeFilters[attribute] ?? []}

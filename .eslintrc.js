@@ -46,7 +46,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
 
     // I prefer operatrors before linebreaks
-    'operator-linebreak': ['error', 'after'],
+    'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
 
     // I don't care about parentheses around multi-line elements
     'react/jsx-wrap-multilines': 'off',

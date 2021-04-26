@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import LazyLoad from 'react-lazyload';
 import { useWindowSize } from '@react-hook/window-size';
-import { OPENSEA_BASE, IMAGE_BASE, PLACEHOLDER_IMAGE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE } from '../utils/constants';
-import { ISettings } from '../utils/interfaces';
+import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE } from '../../utils/constants';
+import { ISettings } from '../../utils/interfaces';
+import PlaceholderImage from './PlaceholderImage';
 
 interface Props {
   index: number;
-  scrollPosition: { x: number, y: number };
   settings: ISettings;
 }
 
@@ -15,7 +15,7 @@ interface MousePosition {
   y?: number;
 }
 
-function Bastard({ index, scrollPosition, settings }: Props) {
+function Bastard({ index, settings }: Props) {
   const [mouse, setMouse] = useState<MousePosition>({});
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [windowWidth, windowHeight] = useWindowSize();
@@ -48,33 +48,36 @@ function Bastard({ index, scrollPosition, settings }: Props) {
   };
 
   return (
-    <div key={index} className="relative" style={{ paddingLeft: 3, paddingRight: 3 }}>
-      <a
-        href={`${OPENSEA_BASE}/${index}`}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        onMouseMove={onMouseMove}
+    <div className="relative">
+      <LazyLoad
+        height={IMAGE_SIZE_SMALL}
+        offset={300}
+        placeholder={<PlaceholderImage />}
+        once
       >
-        <LazyLoadImage
-          width={`${IMAGE_SIZE_SMALL}px`}
-          height={`${IMAGE_SIZE_SMALL}px`}
-          src={`${IMAGE_BASE}/${index}.webp`}
-          placeholderSrc={PLACEHOLDER_IMAGE}
-          alt={`Bastard ${index}`}
-          scrollPosition={scrollPosition}
-          className="absolute inset-0 z-0"
-        />
-
-        {
-          settings.displayNumbers &&
-          <div
-            className="absolute inset-0 z-1 px-1 text-2xl text-white font-charriot"
-            style={{ WebkitTextStroke: '1px black', height: IMAGE_SIZE_SMALL, width: IMAGE_SIZE_SMALL }}
-          >
-            {index}
-          </div>
-        }
-      </a>
+        <a
+          href={`${OPENSEA_BASE}/${index}`}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          onMouseMove={onMouseMove}
+        >
+          <img
+            width={`${IMAGE_SIZE_SMALL}px`}
+            height={`${IMAGE_SIZE_SMALL}px`}
+            src={`${IMAGE_BASE}/${index}.webp`}
+            alt={`Bastard ${index}`}
+          />
+          {
+            settings.displayNumbers &&
+            <div
+              className="absolute inset-0 z-1 px-1 text-2xl text-white font-charriot"
+              style={{ WebkitTextStroke: '1px black', height: IMAGE_SIZE_SMALL, width: IMAGE_SIZE_SMALL }}
+            >
+              {index}
+            </div>
+          }
+        </a>
+      </LazyLoad>
 
       {
         isHovering &&
