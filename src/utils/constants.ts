@@ -4,6 +4,7 @@ export const OPENSEA_BASE = 'https://opensea.io/assets/0x31385d3520bced94f77aae1
 export const HIGHEST_BASTARD_ID = 8975;
 export const IMAGE_BASE = '/img/full/';
 export const THUMBNAIL_BASE = '/img/thumb/';
+export const METADATA_BASE = '/metadata';
 export const PLACEHOLDER_IMAGE = '/img/loading.gif';
 
 export const IMAGE_SIZE_SMALL = 100;

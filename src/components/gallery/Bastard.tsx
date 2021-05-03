@@ -1,9 +1,11 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import LazyLoad from 'react-lazyload';
 import { useWindowSize } from '@react-hook/window-size';
-import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE } from '../../utils/constants';
+import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE, METADATA_BASE } from '../../utils/constants';
 import { ISettings } from '../../utils/interfaces';
 import PlaceholderImage from './PlaceholderImage';
+import { isSafari } from '../../utils';
 
 interface Props {
   index: number;
@@ -19,16 +21,16 @@ function Bastard({ index, settings }: Props) {
   const [mouse, setMouse] = useState<MousePosition>({});
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [windowWidth, windowHeight] = useWindowSize();
+  const [imageSource, setImageSource] = useState<string>(`${IMAGE_BASE}/${index}.webp`);
 
-  const mouseX = mouse.x ?? 0;
-  const mouseY = mouse.y ?? 0;
+  const useFallbackImageFromIpfs = async () => {
+    const metadataUrl = `${METADATA_BASE}/${index}.json`;
+    const { data: metadata } = await axios.get(metadataUrl);
+    setImageSource(metadata.image);
+  };
 
-  const isPastHalfX = mouseX > windowWidth / 2;
-  const isPastHalfY = mouseY > windowHeight / 2;
-
-  const MOUSE_OFFSET = 10;
-  const hoverImageX = isPastHalfX ? mouseX - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseX + MOUSE_OFFSET;
-  const hoverImageY = isPastHalfY ? mouseY - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseY + MOUSE_OFFSET;
+  // Safari doesn't properly support WebP, so we use the fallback images
+  if (isSafari()) useFallbackImageFromIpfs();
 
   // Track mouse position and hovering status
 
@@ -47,6 +49,18 @@ function Bastard({ index, settings }: Props) {
     setIsHovering(true);
   };
 
+  // Parse mouse hovering data
+
+  const mouseX = mouse.x ?? 0;
+  const mouseY = mouse.y ?? 0;
+
+  const isPastHalfX = mouseX > windowWidth / 2;
+  const isPastHalfY = mouseY > windowHeight / 2;
+
+  const MOUSE_OFFSET = 10;
+  const hoverImageX = isPastHalfX ? mouseX - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseX + MOUSE_OFFSET;
+  const hoverImageY = isPastHalfY ? mouseY - IMAGE_SIZE_LARGE - MOUSE_OFFSET : mouseY + MOUSE_OFFSET;
+
   return (
     <div className="relative">
       <LazyLoad
@@ -64,7 +78,7 @@ function Bastard({ index, settings }: Props) {
           <img
             width={`${IMAGE_SIZE_SMALL}px`}
             height={`${IMAGE_SIZE_SMALL}px`}
-            src={`${IMAGE_BASE}/${index}.webp`}
+            src={imageSource}
             alt={`Bastard ${index}`}
           />
           {
@@ -85,7 +99,7 @@ function Bastard({ index, settings }: Props) {
           <img
             width={`${IMAGE_SIZE_LARGE}px`}
             height={`${IMAGE_SIZE_LARGE}px`}
-            src={`${IMAGE_BASE}/${index}.webp`}
+            src={imageSource}
             className="fixed z-30"
             alt={`Bastard ${index}`}
             style={{ left: hoverImageX, top: hoverImageY }}
