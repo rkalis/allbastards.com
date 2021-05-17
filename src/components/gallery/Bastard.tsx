@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import LazyLoad from 'react-lazyload';
 import { useWindowSize } from '@react-hook/window-size';
-import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE, METADATA_BASE } from '../../utils/constants';
+import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE, METADATA_BASE, OPEANSEA_REFERRAL } from '../../utils/constants';
 import { ISettings } from '../../utils/interfaces';
 import PlaceholderImage from './PlaceholderImage';
 import { isSafari } from '../../utils';
@@ -70,7 +70,7 @@ function Bastard({ index, settings }: Props) {
         once
       >
         <a
-          href={`${OPENSEA_BASE}/${index}`}
+          href={`${OPENSEA_BASE}/${index}?${OPEANSEA_REFERRAL}`}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onMouseMove={onMouseMove}
