@@ -2,12 +2,12 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { range } from '../src/utils';
-import { HIGHEST_BASTARD_ID } from '../src/utils/constants';
+import { BASTARDS_API_BASE, HIGHEST_BASTARD_ID } from '../src/utils/constants';
 
 const downloadBastard = async (index: number) => {
   console.log(`Downloading ${index}`);
 
-  const { data } = await axios.get(`https://bastardganpunks.club/api/${index}`);
+  const { data } = await axios.get(`${BASTARDS_API_BASE}/${index}`);
 
   fs.writeFileSync(path.join(__dirname, '..', 'public', 'metadata', `${index}.json`), JSON.stringify(data));
 
@@ -22,8 +22,8 @@ const downloadBastards = async (count: number, start = 1) => {
       try {
         await downloadBastard(index);
         break;
-      } catch {
-        // ignored
+      } catch (error) {
+        console.error(error);
       }
     }
   }

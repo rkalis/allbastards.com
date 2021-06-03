@@ -2,12 +2,12 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { range } from '../src/utils';
-import { HIGHEST_BASTARD_ID } from '../src/utils/constants';
+import { BASTARDS_API_BASE, HIGHEST_BASTARD_ID } from '../src/utils/constants';
 
 const downloadBastard = async (index: number) => {
   console.log(`Downloading ${index}`);
 
-  const { data } = await axios.get(`https://bastardganpunks.club/api/${index}`);
+  const { data } = await axios.get(`${BASTARDS_API_BASE}/${index}`);
   const { data: stream } = await axios.get(data.image, { responseType: 'stream' });
 
   await new Promise<void>((resolve, reject) => {
@@ -36,8 +36,8 @@ const downloadBastards = async (count: number, start = 1) => {
 };
 
 const LAST = fs.readdirSync(path.join(__dirname, '..', 'public', 'img', 'full'))
-  .filter((name) => name.endsWith('.png'))
-  .map((name) => Number.parseInt(name.replace(/\.png/, ''), 10))
+  .filter((name) => name.endsWith('.png') || name.endsWith('.webp'))
+  .map((name) => Number.parseInt(name.replace(/\.png|\.webp/, ''), 10))
   .sort((a, b) => a - b)
   .pop();
 

@@ -37,8 +37,8 @@ const convertBastards = async (count: number, start = 1) => {
       try {
         await convertBastard(index);
         break;
-      } catch {
-        // ignored
+      } catch (error) {
+        console.error(error);
       }
     }
   }

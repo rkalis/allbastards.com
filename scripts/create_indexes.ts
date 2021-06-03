@@ -7,11 +7,11 @@ const indexBastard = (bastardIndex: number, attributesIndex: any) => {
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const metadata = require(`../public/metadata/${bastardIndex}.json`);
 
-  metadata.attributes.forEach(({ key, value }: any) => {
-    attributesIndex[key] = attributesIndex[key] ?? {};
-    attributesIndex[key][value] = attributesIndex[key][value] ?? [];
+  metadata.attributes.forEach(({ trait_type, value }: any) => {
+    attributesIndex[trait_type] = attributesIndex[trait_type] ?? {};
+    attributesIndex[trait_type][value] = attributesIndex[trait_type][value] ?? [];
 
-    attributesIndex[key][value].push(bastardIndex);
+    attributesIndex[trait_type][value].push(bastardIndex);
   });
 
   return attributesIndex;
