@@ -22,7 +22,7 @@ function Modal({ title, isOpen, setIsOpen, children }: Props) {
         onClose={setIsOpen}
         initialFocus={focusRef}
       >
-        <div className="flex items-center justify-center min-h-screen px-4 text-center sm:block">
+        <div className="flex items-center justify-center min-h-screen px-4 text-center">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
