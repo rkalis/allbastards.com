@@ -1,5 +1,5 @@
 import arrayShuffle from 'array-shuffle';
-import { FiShuffle } from 'react-icons/fi';
+import IconButton from '../common/IconButton';
 
 interface Props {
   indices: number[];
@@ -13,13 +13,7 @@ function Shuffle({ indices, setIndices }: Props) {
 
   return (
     <div className="flex justify-center align-middle items-center">
-      <button
-        type="button"
-        className="inline-flex justify-center text-xl sm:text-4xl font-medium"
-        onClick={shuffle}
-      >
-        <FiShuffle />
-      </button>
+      <IconButton iconName="Shuffle" onClick={shuffle} />
     </div>
   );
 }

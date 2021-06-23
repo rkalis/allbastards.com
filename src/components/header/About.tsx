@@ -1,20 +1,14 @@
 import { useState } from 'react';
-import { FiHelpCircle } from 'react-icons/fi';
 import Modal from '../common/Modal';
 import Link from '../common/Link';
+import IconButton from '../common/IconButton';
 
 function About() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <div className="flex justify-center align-middle items-center">
-      <button
-        type="button"
-        className="inline-flex justify-center text-xl sm:text-4xl font-medium"
-        onClick={() => setIsOpen(true)}
-      >
-        <FiHelpCircle />
-      </button>
+      <IconButton iconName="HelpCircle" onClick={() => setIsOpen(true)} />
 
       <Modal title="ABOUT" isOpen={isOpen} setIsOpen={setIsOpen}>
         <div className="text-lg">

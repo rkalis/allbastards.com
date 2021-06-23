@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { FiFilter } from 'react-icons/fi';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import attributesIndex from '../../utils/attributes-index.json';
 import { FilterOption } from '../../utils/interfaces';
 import { HIGHEST_BASTARD_ID } from '../../utils/constants';
 import { range } from '../../utils';
+import IconButton from '../common/IconButton';
 
 interface Props {
   setIndices: (indices: number[]) => void;
@@ -51,13 +51,7 @@ function Filters({ setIndices }: Props) {
 
   return (
     <div className="flex justify-center align-middle items-center">
-      <button
-        type="button"
-        className="inline-flex justify-center text-xl sm:text-4xl font-medium"
-        onClick={() => setIsOpen(true)}
-      >
-        <FiFilter />
-      </button>
+      <IconButton iconName="Filter" onClick={() => setIsOpen(true)} />
 
       <Modal title="FILTERS" isOpen={isOpen} setIsOpen={setIsOpen}>
         {allFilters.map(({ attribute, options }) => (

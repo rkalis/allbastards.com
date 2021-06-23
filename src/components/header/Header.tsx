@@ -5,6 +5,7 @@ import About from './About';
 import HeaderBackground from '../p5/HeaderBackground';
 import Shuffle from './Shuffle';
 import Filters from './Filters';
+import Sort from './Sort';
 
 const useDimensions = require('react-use-dimensions').default;
 
@@ -32,6 +33,7 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
           <About />
           <Settings settings={settings} setSettings={setSettings} />
           <Filters setIndices={setIndices} />
+          <Sort indices={indices} setIndices={setIndices} />
           <Shuffle indices={indices} setIndices={setIndices} />
         </div>
       </header>

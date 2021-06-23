@@ -1,8 +1,8 @@
-import { FiSettings } from 'react-icons/fi';
 import { useState } from 'react';
 import { ISettings } from '../../utils/interfaces';
 import BooleanSetting from '../common/BooleanSetting';
 import Modal from '../common/Modal';
+import IconButton from '../common/IconButton';
 
 interface Props {
   settings: ISettings;
@@ -14,13 +14,7 @@ function Settings({ settings, setSettings }: Props) {
 
   return (
     <div className="flex justify-center align-middle items-center">
-      <button
-        type="button"
-        className="inline-flex justify-center text-xl sm:text-4xl font-medium"
-        onClick={() => setIsOpen(true)}
-      >
-        <FiSettings />
-      </button>
+      <IconButton iconName="Settings" onClick={() => setIsOpen(true)} />
 
       <Modal title="SETTINGS" isOpen={isOpen} setIsOpen={setIsOpen}>
         <BooleanSetting
