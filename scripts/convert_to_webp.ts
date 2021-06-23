@@ -9,7 +9,7 @@ const webp = require('webp-converter');
 export const isHyped = (index: number) => {
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const metadata = require(`../public/metadata/${index}.json`);
-  const hypeType = metadata.attributes.find((attr: any) => attr.key === 'HYPE TYPE');
+  const hypeType = metadata.attributes.find((attr: any) => attr.trait_type === 'HYPE TYPE');
 
   return hypeType.value === HypeType.HYPED;
 };
