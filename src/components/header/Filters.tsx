@@ -107,7 +107,7 @@ function Filters({ setIndices }: Props) {
         <div className="border-2 p-2 my-2">
           <div className="flex justify-around items-center">
             <span className="text-lg font-bold">CALM AF</span>
-            <RangeSlider min={1} max={3} value={selectedHypeType} update={updateSelectedHypeType} className="w-1/4" />
+            <RangeSlider min={1} max={3} value={selectedHypeType} onChange={updateSelectedHypeType} className="w-1/4" />
             <span className="text-lg font-bold">HYPED AF</span>
           </div>
         </div>
