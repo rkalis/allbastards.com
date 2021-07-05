@@ -12,6 +12,27 @@ export const PLACEHOLDER_IMAGE = '/img/loading.gif';
 export const IMAGE_SIZE_SMALL = 100;
 export const IMAGE_SIZE_LARGE = 480;
 
+export const GENERAL_ATTRIBUTES = [
+  'BASTARDNESS',
+  'SONG WORD COUNT',
+];
+
+export const HYPED_ATTRIBUTES = [
+  'SPEEDOMETER',
+  'NUM OF FRAMES',
+  'HEAD TURNS',
+  'FLOATY HEAD',
+  'BACKGROUND GLITCH LEVEL',
+  'BACKGROUND MOOD',
+];
+
+export const CALM_ATTRIBUTES = [
+  'TYPE',
+  'BACKGROUND',
+  'FACING DIRECTION',
+  'BAD HABIT(S)',
+];
+
 export const DEFAULT_SETTINGS: ISettings = {
   colourfulBackground: true,
   displayNumbers: false,

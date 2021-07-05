@@ -12,8 +12,8 @@ interface Props {
 function Filter({ label, options, selected, update }: Props) {
   return (
     <div className="py-1 px-2 my-1 grid grid-cols-6 border-2">
-      <div className="col-span-3 text-xl font-bold align-middle items-center inline-flex">{label}</div>
-      <div className="col-span-3 inline-flex justify-end">
+      <div className="col-span-3 text-md sm:text-xl font-bold align-middle items-center inline-flex">{label}</div>
+      <div className="col-span-3 inline-flex justify-end items-center">
         <MultiSelect
           options={options}
           value={selected}
