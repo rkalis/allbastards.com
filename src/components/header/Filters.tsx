@@ -38,7 +38,9 @@ function Filters({ setIndices }: Props) {
 
   const updateSelectedHypeType = (value: number) => {
     // Remove all selected filters from the hype type specific categories
-    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => GENERAL_ATTRIBUTES.includes(attribute));
+    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => (
+      !CALM_ATTRIBUTES.includes(attribute) && !HYPED_ATTRIBUTES.includes(attribute)
+    ));
 
     // Apply the HYPE_TYPE filter selection
     const filter = [];
