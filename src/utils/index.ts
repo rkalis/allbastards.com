@@ -4,6 +4,6 @@ export const range = (count: number, start = 0) => [...Array(count).keys()].map(
 // so this can be used as a quick check
 export const isSafari = () => DataView.prototype.setBigUint64 === undefined;
 
-export const filterObjectByKey = (obj: any, filterFunction: (key: any) => boolean) => (
-  Object.fromEntries(Object.entries(obj).filter(([key]) => filterFunction(key)))
+export const filterObjectByKey = <T>(obj: T, filterFunction: (key: any) => boolean): T => (
+  Object.fromEntries(Object.entries(obj).filter(([key]) => filterFunction(key))) as T
 );

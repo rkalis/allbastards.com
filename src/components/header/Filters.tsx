@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import attributesIndex from '../../utils/attributes-index.json';
-import { FilterOption, HypeType } from '../../utils/interfaces';
+import { ActiveFilters, FilterOption, FilterSpecification, HypeType } from '../../utils/interfaces';
 import { CALM_ATTRIBUTES, GENERAL_ATTRIBUTES, HIGHEST_BASTARD_ID, HYPED_ATTRIBUTES } from '../../utils/constants';
 import { filterObjectByKey, range } from '../../utils';
 import IconButton from '../common/IconButton';
 import RangeSlider from '../common/RangeSlider';
+import { getOwnerFilters } from '../../utils/web3';
 
 interface Props {
   setIndices: (indices: number[]) => void;
@@ -14,8 +16,10 @@ interface Props {
 
 function Filters({ setIndices }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [activeFilters, setActiveFilters] = useState<{ [attribute: string]: FilterOption[] }>({});
+  const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
+  const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
+  const { library, account } = useWeb3React();
 
   // Convert the JSON in the attributes-index.json into a format that can be digested by the MultiSelect component
   const allFilters = Object.entries(attributesIndex)
@@ -74,6 +78,20 @@ function Filters({ setIndices }: Props) {
     setIndices(filteredIndices);
   }, [activeFilters]);
 
+  const updateOwnerFilters = async () => {
+    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => attribute !== 'OWNER');
+    setActiveFilters(newActiveFilters);
+    if (library && account) {
+      setOwnerFilters([await getOwnerFilters(library, account)]);
+    } else {
+      setOwnerFilters([]);
+    }
+  };
+
+  useEffect(() => {
+    updateOwnerFilters();
+  }, [account]);
+
   const renderFiltersFor = (filterList: any[]) => (
     filterList.map(({ attribute, options }) => (
       <Filter
@@ -103,7 +121,10 @@ function Filters({ setIndices }: Props) {
       <IconButton iconName="Filter" onClick={() => setIsOpen(true)} />
 
       <Modal title="FILTERS" isOpen={isOpen} setIsOpen={setIsOpen}>
-        <div>{renderFiltersFor(generalFilters)}</div>
+        <div>
+          {renderFiltersFor(generalFilters)}
+          {renderFiltersFor(ownerFilters)}
+        </div>
         <div className="border-2 p-2 my-2">
           <div className="flex justify-around items-center">
             <span className="text-lg font-bold">CALM AF</span>

@@ -9,6 +9,11 @@ export const THUMBNAIL_BASE = '/img/thumb/';
 export const METADATA_BASE = '/metadata';
 export const PLACEHOLDER_IMAGE = '/img/loading.gif';
 
+export const BASTARD_CONTRACT_ADDRESS = '0x31385d3520bCED94f77AaE104b406994D8F2168C';
+export const NFT20_ADDRESS = '0xcCcBF11AC3030ee8CD7a04CFE15a3718df6dD030';
+export const NFTX_V1_ADDRESS = '0xAf93fCce0548D3124A5fC3045adAf1ddE4e8Bf7e';
+export const NFTX_V2_ADDRESS = '0xc3B5284B2c0cfa1871a6ac63B6d6ee43c08BDC79';
+
 export const IMAGE_SIZE_SMALL = 100;
 export const IMAGE_SIZE_LARGE = 480;
 

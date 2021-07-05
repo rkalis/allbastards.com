@@ -6,6 +6,7 @@ import HeaderBackground from '../p5/HeaderBackground';
 import Shuffle from './Shuffle';
 import Filters from './Filters';
 import Sort from './Sort';
+import Wallet from './Wallet';
 
 const useDimensions = require('react-use-dimensions').default;
 
@@ -24,10 +25,16 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
 
   return (
     <>
-      <header className={`flex flex-col fixed top-0 left-0 right-0 z-20 p-2 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
+      <header className={`flex flex-col fixed top-0 left-0 right-0 z-20 py-2 px-4 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
         <div className="bg-white absolute" />
-        <div className="flex justify-center items-center font-charriot text-header">
-          ALL BASTARDS
+        <div className="grid grid-cols-5">
+          <div />
+          <div className="flex justify-center items-center font-charriot text-header col-span-3">
+            ALL BASTARDS
+          </div>
+          <div className="flex justify-end items-center">
+            <Wallet />
+          </div>
         </div>
         <div className="flex justify-center align-middle items-center gap-2">
           <About />
