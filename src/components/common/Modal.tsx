@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useRef } from 'react';
+import { Fragment } from 'react';
+import Button from './Button';
 
 interface Props {
   title: string;
@@ -10,8 +11,6 @@ interface Props {
 
 // The UI code in this component has been taken from https://headlessui.dev/react/dialog and amended
 function Modal({ title, isOpen, setIsOpen, children }: Props) {
-  const focusRef = useRef(null);
-
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
@@ -20,7 +19,6 @@ function Modal({ title, isOpen, setIsOpen, children }: Props) {
         className="fixed z-50 inset-0 overflow-y-auto font-charriot"
         open={isOpen}
         onClose={setIsOpen}
-        initialFocus={focusRef}
       >
         <div className="flex items-start justify-center min-h-screen px-4 text-center pt-40">
           <Transition.Child
@@ -53,14 +51,7 @@ function Modal({ title, isOpen, setIsOpen, children }: Props) {
                 </div>
               </div>
               <div className="bg-gray-100 px-4 py-4 flex">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center border-2 border-black shadow-sm px-4 py-2 bg-blue-500 text-sm text-white font-charriot font-bold hover:bg-red-500 focus:outline-none"
-                  onClick={() => setIsOpen(false)}
-                  ref={focusRef}
-                >
-                  CLOSE
-                </button>
+                <Button onClick={() => setIsOpen(false)} label="CLOSE" className="w-full inline-flex justify-center" />
               </div>
             </div>
           </Transition.Child>
