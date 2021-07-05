@@ -71,6 +71,8 @@ function Bastard({ index, settings }: Props) {
       >
         <a
           href={`${OPENSEA_BASE}/${index}?${OPEANSEA_REFERRAL}`}
+          target="_blank"
+          rel="noreferrer"
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onMouseMove={onMouseMove}
