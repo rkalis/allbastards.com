@@ -7,10 +7,11 @@ interface Props {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   children: React.ReactNode | React.ReactNode[];
+  additionalButtons?: React.ReactNode[];
 }
 
 // The UI code in this component has been taken from https://headlessui.dev/react/dialog and amended
-function Modal({ title, isOpen, setIsOpen, children }: Props) {
+function Modal({ title, isOpen, setIsOpen, children, additionalButtons }: Props) {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
@@ -50,7 +51,8 @@ function Modal({ title, isOpen, setIsOpen, children }: Props) {
                   <div>{children}</div>
                 </div>
               </div>
-              <div className="bg-gray-100 px-4 py-4 flex">
+              <div className="bg-gray-100 px-4 py-4 flex gap-2">
+                {additionalButtons}
                 <Button onClick={() => setIsOpen(false)} label="CLOSE" className="w-full inline-flex justify-center" />
               </div>
             </div>

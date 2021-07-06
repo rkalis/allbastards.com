@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
+import Button from '../common/Button';
 import attributesIndex from '../../utils/attributes-index.json';
 import { ActiveFilters, FilterOption, FilterSpecification, HypeType } from '../../utils/interfaces';
 import { CALM_ATTRIBUTES, GENERAL_ATTRIBUTES, HIGHEST_BASTARD_ID, HYPED_ATTRIBUTES } from '../../utils/constants';
@@ -80,6 +81,11 @@ function Filters({ setIndices }: Props) {
     setIndices(filteredIndices);
   }, [activeFilters]);
 
+  const clearFilters = () => {
+    setActiveFilters({});
+    setSelectedHypeType(2);
+  };
+
   const updateOwnerFilters = async () => {
     const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => attribute !== 'OWNER');
     setActiveFilters(newActiveFilters);
@@ -118,11 +124,15 @@ function Filters({ setIndices }: Props) {
     return <p className="text-lg text-center">Please select CALM AF or HYPED AF for type-specific filters.</p>;
   };
 
+  const clearFiltersButton = (
+    <Button onClick={clearFilters} label="CLEAR ALL" className="w-full inline-flex justify-center" />
+  );
+
   return (
     <div className="flex justify-center align-middle items-center">
       <IconButton iconName="Filter" onClick={() => setIsOpen(true)} />
 
-      <Modal title="FILTERS" isOpen={isOpen} setIsOpen={setIsOpen}>
+      <Modal title="FILTERS" isOpen={isOpen} setIsOpen={setIsOpen} additionalButtons={[clearFiltersButton]}>
         <div>
           {renderFiltersFor(generalFilters)}
           {renderFiltersFor(ownerFilters)}
