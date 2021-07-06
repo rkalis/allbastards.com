@@ -83,8 +83,8 @@ function Filters({ setIndices }: Props) {
   const updateOwnerFilters = async () => {
     const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => attribute !== 'OWNER');
     setActiveFilters(newActiveFilters);
-    if (library && account) {
-      setOwnerFilters([await getOwnerFilters(library, account)]);
+    if (library) {
+      setOwnerFilters([await getOwnerFilters(library, account ?? undefined)]);
     } else {
       setOwnerFilters([]);
     }
@@ -92,7 +92,7 @@ function Filters({ setIndices }: Props) {
 
   useEffect(() => {
     updateOwnerFilters();
-  }, [account]);
+  }, [library, account]);
 
   const renderFiltersFor = (filterList: any[]) => (
     filterList.map(({ attribute, options }) => (

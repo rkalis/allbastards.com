@@ -25,21 +25,28 @@ export const getIndicesOwnedByAddress = async (contract: Contract, address: stri
   return indices;
 };
 
-export const getOwnerFilters = async (provider: providers.Web3Provider, userAddress: string) => {
+export const getOwnerFilters = async (provider: providers.Web3Provider, userAddress?: string) => {
   const bastardContract = new Contract(BASTARD_CONTRACT_ADDRESS, BASTARD_ABI, provider);
 
-  const userIndices = await getIndicesOwnedByAddress(bastardContract, userAddress);
+  const userIndices = userAddress && await getIndicesOwnedByAddress(bastardContract, userAddress);
   const nft20Indices = await getIndicesOwnedByAddress(bastardContract, NFT20_ADDRESS);
   const nftxV1Indices = await getIndicesOwnedByAddress(bastardContract, NFTX_V1_ADDRESS);
   const nftxV2Indices = await getIndicesOwnedByAddress(bastardContract, NFTX_V2_ADDRESS);
 
-  return {
+  const filterSpecification = {
     attribute: 'OWNER',
     options: [
-      { label: `YOU - ${userIndices.length}`, value: userIndices },
       { label: `NFT20 - ${nft20Indices.length}`, value: nft20Indices },
       { label: `NFTX V1 - ${nftxV1Indices.length}`, value: nftxV1Indices },
       { label: `NFTX V2 - ${nftxV2Indices.length}`, value: nftxV2Indices },
     ],
   };
+
+  if (userIndices) {
+    filterSpecification.options.unshift(
+      { label: `YOU - ${userIndices.length}`, value: userIndices },
+    );
+  }
+
+  return filterSpecification;
 };
