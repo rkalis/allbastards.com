@@ -1,6 +1,6 @@
 import { BigNumber, Contract, providers } from 'ethers';
 import BASTARD_ABI from './bastards-abi.json';
-import { BASTARD_CONTRACT_ADDRESS, NFT20_ADDRESS, NFTX_V1_ADDRESS, NFTX_V2_ADDRESS } from './constants';
+import { BASTARD_CONTRACT_ADDRESS, DEAD_ADDRESS, NFT20_ADDRESS, NFTX_V1_ADDRESS, NFTX_V2_ADDRESS } from './constants';
 
 export const getLibrary = (provider: any) => new providers.Web3Provider(provider);
 
@@ -20,8 +20,8 @@ export const displayConnectedAddress = async (address: string, provider?: provid
 };
 
 export const getIndicesOwnedByAddress = async (contract: Contract, address: string) => {
-  const [indicesRaw] = await contract.functions.tokensOfOwner(address);
-  const indices = indicesRaw.map((bn: BigNumber) => bn.toNumber());
+  const [indicesRaw] = await contract.functions.tokensOfOwner(address) as BigNumber[][];
+  const indices = indicesRaw.map((bn: BigNumber) => bn.toNumber()).sort((a, b) => a - b);
   return indices;
 };
 
@@ -32,19 +32,21 @@ export const getOwnerFilters = async (provider: providers.Web3Provider, userAddr
   const nft20Indices = await getIndicesOwnedByAddress(bastardContract, NFT20_ADDRESS);
   const nftxV1Indices = await getIndicesOwnedByAddress(bastardContract, NFTX_V1_ADDRESS);
   const nftxV2Indices = await getIndicesOwnedByAddress(bastardContract, NFTX_V2_ADDRESS);
+  const burnedIndices = await getIndicesOwnedByAddress(bastardContract, DEAD_ADDRESS);
 
   const filterSpecification = {
     attribute: 'OWNER',
     options: [
-      { label: `NFT20 - ${nft20Indices.length}`, value: nft20Indices },
-      { label: `NFTX V1 - ${nftxV1Indices.length}`, value: nftxV1Indices },
-      { label: `NFTX V2 - ${nftxV2Indices.length}`, value: nftxV2Indices },
+      { label: `NFT20 - ${nft20Indices.length}`, value: 'NFT20', indices: nft20Indices },
+      { label: `NFTX V1 - ${nftxV1Indices.length}`, value: 'NFTX V1', indices: nftxV1Indices },
+      { label: `NFTX V2 - ${nftxV2Indices.length}`, value: 'NFTX V2', indices: nftxV2Indices },
+      { label: `BURNED - ${burnedIndices.length}`, value: 'BURNED', indices: burnedIndices },
     ],
   };
 
   if (userIndices) {
     filterSpecification.options.unshift(
-      { label: `YOU - ${userIndices.length}`, value: userIndices },
+      { label: `YOU - ${userIndices.length}`, value: 'YOU', indices: userIndices },
     );
   }
 

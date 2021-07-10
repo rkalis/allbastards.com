@@ -6,7 +6,8 @@ export interface ISettings {
 
 export interface FilterOption {
   label: string;
-  value: number[];
+  value: string;
+  indices: number[];
 }
 
 export interface ActiveFilters {

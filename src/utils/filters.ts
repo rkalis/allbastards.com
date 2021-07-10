@@ -8,8 +8,8 @@ export const getAllAttributeFilters = () => {
   const allFilters = Object.entries(attributesIndex)
     .map(([attribute, attributeIndex]) => {
       const options = Object.entries(attributeIndex)
-        .map(([label, value]) => ({ label: `${label} - ${value.length}`, value }))
-        .sort((a, b) => b.value.length - a.value.length);
+        .map(([value, indices]) => ({ label: `${value} - ${indices.length}`, value, indices }))
+        .sort((a, b) => b.indices.length - a.indices.length);
 
       return { attribute, options };
     });
@@ -34,7 +34,7 @@ export const applyFilters = (filters: { [index: string]: FilterOption[] }) => {
   const indicesPerFilter = Object.values(filters)
     .filter((selectedFilters) => selectedFilters.length > 0)
     .map((filterOptions) => (
-      filterOptions.reduce<number[]>((all, current) => all.concat(current.value), [])
+      filterOptions.reduce<number[]>((all, current) => all.concat(current.indices), [])
     ));
 
   // Keep only the indices that occur in every filter
@@ -49,7 +49,7 @@ export const updateUrl = (activeFilters: ActiveFilters) => {
 
   const filterEntries = Object.entries(activeFilters)
     .map(([attribute, filterOptions]) => {
-      const filterValues = filterOptions.map(({ label }) => label.split(' - ')[0]);
+      const filterValues = filterOptions.map(({ value }) => value);
       return [attribute, filterValues];
     })
     .filter(([, filterValues]) => filterValues.length > 0);

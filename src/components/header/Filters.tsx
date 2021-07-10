@@ -61,7 +61,7 @@ function Filters({ settings, setIndices }: Props) {
         }
 
         const attributeFilter = allFilters.find((filterSpecification) => filterSpecification.attribute === attribute);
-        const selectedOptions = attributeFilter?.options.filter((option) => filterValues.includes(option.label.split(' - ')[0]));
+        const selectedOptions = attributeFilter?.options.filter(({ value }) => filterValues.includes(value));
 
         return [attribute, selectedOptions];
       })
@@ -76,7 +76,7 @@ function Filters({ settings, setIndices }: Props) {
 
   const applyParsedUrlOwnerFilter = () => {
     if (ownerFilters.length === 0 || parsedUrlOwnerFilter.length === 0) return;
-    const selectedOptions = ownerFilters[0].options.filter((option) => parsedUrlOwnerFilter.includes(option.label.split(' - ')[0]));
+    const selectedOptions = ownerFilters[0].options.filter(({ value }) => parsedUrlOwnerFilter.includes(value));
     setActiveFilters({ ...activeFilters, OWNER: selectedOptions });
     setParsedUrlOwnerFilter([]);
   };
@@ -98,7 +98,7 @@ function Filters({ settings, setIndices }: Props) {
 
   useEffect(() => {
     applyParsedUrlOwnerFilter();
-  }, [ownerFilters]);
+  }, [ownerFilters, parsedUrlOwnerFilter]);
 
   useEffect(() => {
     parseUrlForFilters();
@@ -111,6 +111,14 @@ function Filters({ settings, setIndices }: Props) {
       updateUrl(activeFilters);
     }
   }, [activeFilters]);
+
+  useEffect(() => {
+    if (settings.showFiltersInUrl) {
+      updateUrl(activeFilters);
+    } else {
+      updateUrl({});
+    }
+  }, [settings.showFiltersInUrl]);
 
   useEffect(() => {
     // Don't run on first render when library and owner filter aren't loaded yet,
