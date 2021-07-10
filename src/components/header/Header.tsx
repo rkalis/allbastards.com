@@ -39,7 +39,7 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
         <div className="flex justify-center align-middle items-center gap-2">
           <About />
           <Settings settings={settings} setSettings={setSettings} />
-          <Filters setIndices={setIndices} />
+          <Filters settings={settings} setIndices={setIndices} />
           <Sort indices={indices} setIndices={setIndices} />
           <Shuffle indices={indices} setIndices={setIndices} />
         </div>

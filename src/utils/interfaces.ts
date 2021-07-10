@@ -1,6 +1,7 @@
 export interface ISettings {
   colourfulBackground: boolean;
   displayNumbers: boolean;
+  showFiltersInUrl: boolean;
 }
 
 export interface FilterOption {

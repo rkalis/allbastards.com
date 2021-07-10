@@ -1,5 +1,5 @@
 import { Web3ReactProvider } from '@web3-react/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import createPersistedState from 'use-persisted-state';
 import Gallery from './components/gallery/Gallery';
 import Header from './components/header/Header';
@@ -18,6 +18,14 @@ function App() {
 
   const [marginTop, setMarginTop] = useState<number>(0);
   const [marginBottom, setMarginBottom] = useState<number>(0);
+
+  useEffect(() => {
+    // Ensure that new settings are added alongside the old ones if settings are already saved
+    const combinedSettings = { ...DEFAULT_SETTINGS, ...settings };
+    if (JSON.stringify(combinedSettings) !== JSON.stringify(settings)) {
+      setSettings(combinedSettings);
+    }
+  }, [settings]);
 
   return (
     <Web3ReactProvider getLibrary={getLibrary}>

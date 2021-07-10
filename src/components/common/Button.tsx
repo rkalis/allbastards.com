@@ -3,12 +3,16 @@ import { overrideTailwindClasses } from 'tailwind-override';
 interface Props {
   label: string;
   onClick?: () => void;
+  inverted?: boolean;
   className?: string;
 }
 
-function Button({ label, onClick, className }: Props) {
+function Button({ label, onClick, inverted, className }: Props) {
+  const regularColours = 'bg-blue-500 hover:bg-red-500';
+  const invertedColours = 'bg-red-500 hover:bg-blue-500';
+
   const fullClassName = overrideTailwindClasses(
-    `border-2 border-black shadow-sm px-4 py-2 bg-blue-500 text-sm text-white font-charriot font-bold hover:bg-red-500 focus:outline-none ${className}`,
+    `${inverted ? invertedColours : regularColours} border-2 border-black shadow-sm px-4 py-2 text-sm text-white font-charriot font-bold focus:outline-none ${className}`,
   );
 
   return (

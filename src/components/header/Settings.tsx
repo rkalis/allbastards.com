@@ -27,6 +27,11 @@ function Settings({ settings, setSettings }: Props) {
           value={settings.displayNumbers}
           update={(value: boolean) => setSettings({ ...settings, displayNumbers: value })}
         />
+        <BooleanSetting
+          label="SHOW FILTERS IN URL"
+          value={settings.showFiltersInUrl}
+          update={(value: boolean) => setSettings({ ...settings, showFiltersInUrl: value })}
+        />
       </Modal>
     </div>
   );

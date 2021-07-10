@@ -3,39 +3,29 @@ import { useWeb3React } from '@web3-react/core';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import Button from '../common/Button';
-import attributesIndex from '../../utils/attributes-index.json';
-import { ActiveFilters, FilterOption, FilterSpecification, HypeType } from '../../utils/interfaces';
-import { CALM_ATTRIBUTES, GENERAL_ATTRIBUTES, HIGHEST_BASTARD_ID, HYPED_ATTRIBUTES } from '../../utils/constants';
-import { filterObjectByKey, range } from '../../utils';
+import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings } from '../../utils/interfaces';
+import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES } from '../../utils/constants';
+import { filterObjectByKey } from '../../utils';
 import IconButton from '../common/IconButton';
 import RangeSlider from '../common/RangeSlider';
 import { getOwnerFilters } from '../../utils/web3';
+import { applyFilters, getAllAttributeFilters, separateAttributeFilters, updateUrl } from '../../utils/filters';
 
 interface Props {
+  settings: ISettings;
   setIndices: (indices: number[]) => void;
 }
 
-function Filters({ setIndices }: Props) {
+function Filters({ settings, setIndices }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
   const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
+  const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
   const { library, account } = useWeb3React();
 
-  // Convert the JSON in the attributes-index.json into a format that can be digested by the MultiSelect component
-  const allFilters = Object.entries(attributesIndex)
-    .map(([attribute, attributeIndex]) => {
-      const options = Object.entries(attributeIndex)
-        .map(([label, value]) => ({ label: `${label} - ${value.length}`, value }))
-        .sort((a, b) => b.value.length - a.value.length);
-
-      return { attribute, options };
-    });
-
-  const generalFilters = allFilters.filter(({ attribute }) => GENERAL_ATTRIBUTES.includes(attribute));
-  const hypedFilters = allFilters.filter(({ attribute }) => HYPED_ATTRIBUTES.includes(attribute));
-  const calmFilters = allFilters.filter(({ attribute }) => CALM_ATTRIBUTES.includes(attribute));
-  const hypeTypeFilter = allFilters.find(({ attribute }) => attribute === 'HYPE TYPE');
+  const allFilters = getAllAttributeFilters();
+  const { generalFilters, hypedFilters, calmFilters, hypeTypeFilter } = separateAttributeFilters(allFilters);
 
   const updateSelectedHypeType = (value: number) => {
     // Remove all selected filters from the hype type specific categories
@@ -43,7 +33,7 @@ function Filters({ setIndices }: Props) {
       !CALM_ATTRIBUTES.includes(attribute) && !HYPED_ATTRIBUTES.includes(attribute)
     ));
 
-    // Apply the HYPE_TYPE filter selection
+    // Apply the HYPE TYPE filter selection
     const filter = [];
     if (value === 1) {
       const calmSelected = hypeTypeFilter?.options.find(({ label }) => label.includes(HypeType.CALM)) as FilterOption;
@@ -53,37 +43,42 @@ function Filters({ setIndices }: Props) {
       filter.push(hypedSelected);
     }
 
-    setActiveFilters({ ...newActiveFilters, HYPE_TYPE: filter });
+    setActiveFilters({ ...newActiveFilters, 'HYPE TYPE': filter });
     setSelectedHypeType(value);
   };
 
-  const applyFilters = (filters: { [index: string]: FilterOption[] }) => {
-    const indices = range(HIGHEST_BASTARD_ID + 1);
+  const parseUrlForFilters = () => {
+    // Parse the filter query parameter from the JSON
+    const url = new URL(window.location.href);
+    const filterEntries = Object.entries<string[]>(JSON.parse(url.searchParams.get('filters') ?? '{}'));
 
-    // Convert the filters object to a list containing all selected indices for a specific attribute
-    // discarding attributes without any selected options
-    // Essentially we OR all filters within the same attribute and we AND the different attributes
-    const indicesPerFilter = Object.values(filters)
-      .filter((selectedFilters) => selectedFilters.length > 0)
-      .map((filterOptions) => (
-        filterOptions.reduce<number[]>((all, current) => all.concat(current.value), [])
-      ));
+    const selectedFilters = filterEntries
+      .map(([attribute, filterValues]) => {
+        console.log(attribute);
+        if (attribute === 'HYPE TYPE') {
+          const hypeTypeNumber = filterValues[0] === HypeType.CALM ? 1 : 3;
+          setSelectedHypeType(hypeTypeNumber);
+        }
 
-    // Keep only the indices that occur in every filter
-    const filteredIndices = indicesPerFilter
-      .reduce<number[]>((filtered, filter) => filtered.filter((index) => filter.includes(index)), [...indices]);
+        const attributeFilter = allFilters.find((filterSpecification) => filterSpecification.attribute === attribute);
+        const selectedOptions = attributeFilter?.options.filter((option) => filterValues.includes(option.label.split(' - ')[0]));
 
-    return filteredIndices;
+        return [attribute, selectedOptions];
+      })
+      .filter(([, selectedOptions]) => selectedOptions !== undefined && selectedOptions.length > 0);
+
+    // Store the parsed url filter for OWNER so it can be processed *after*
+    const ownerFilterEntry = filterEntries.find(([attribute]) => attribute === 'OWNER');
+    if (ownerFilterEntry) setParsedUrlOwnerFilter(ownerFilterEntry[1]);
+
+    setActiveFilters(Object.fromEntries(selectedFilters));
   };
 
-  useEffect(() => {
-    const filteredIndices = applyFilters(activeFilters);
-    setIndices(filteredIndices);
-  }, [activeFilters]);
-
-  const clearFilters = () => {
-    setActiveFilters({});
-    setSelectedHypeType(2);
+  const applyParsedUrlOwnerFilter = () => {
+    if (ownerFilters.length === 0 || parsedUrlOwnerFilter.length === 0) return;
+    const selectedOptions = ownerFilters[0].options.filter((option) => parsedUrlOwnerFilter.includes(option.label.split(' - ')[0]));
+    setActiveFilters({ ...activeFilters, OWNER: selectedOptions });
+    setParsedUrlOwnerFilter([]);
   };
 
   const updateOwnerFilters = async () => {
@@ -96,8 +91,33 @@ function Filters({ setIndices }: Props) {
     }
   };
 
+  const clearFilters = () => {
+    setActiveFilters({});
+    setSelectedHypeType(2);
+  };
+
   useEffect(() => {
-    updateOwnerFilters();
+    applyParsedUrlOwnerFilter();
+  }, [ownerFilters]);
+
+  useEffect(() => {
+    parseUrlForFilters();
+  }, []);
+
+  useEffect(() => {
+    const filteredIndices = applyFilters(activeFilters);
+    setIndices(filteredIndices);
+    if (settings.showFiltersInUrl) {
+      updateUrl(activeFilters);
+    }
+  }, [activeFilters]);
+
+  useEffect(() => {
+    // Don't run on first render when library and owner filter aren't loaded yet,
+    // otherwise we run into concurrency issues with setActiveFilters and url parsing
+    if (library || ownerFilters.length > 0) {
+      updateOwnerFilters();
+    }
   }, [library, account]);
 
   const renderFiltersFor = (filterList: any[]) => (
@@ -125,7 +145,7 @@ function Filters({ setIndices }: Props) {
   };
 
   const clearFiltersButton = (
-    <Button onClick={clearFilters} label="CLEAR ALL" className="w-full inline-flex justify-center" />
+    <Button onClick={clearFilters} label="CLEAR ALL" inverted className="w-full inline-flex justify-center" />
   );
 
   return (
