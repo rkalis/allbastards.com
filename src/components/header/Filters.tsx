@@ -13,10 +13,11 @@ import { applyFilters, getAllAttributeFilters, separateAttributeFilters, updateU
 
 interface Props {
   settings: ISettings;
+  indices: number[];
   setIndices: (indices: number[]) => void;
 }
 
-function Filters({ settings, setIndices }: Props) {
+function Filters({ settings, indices, setIndices }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
@@ -161,6 +162,9 @@ function Filters({ settings, setIndices }: Props) {
       <IconButton iconName="Filter" onClick={() => setIsOpen(true)} />
 
       <Modal title="FILTERS" isOpen={isOpen} setIsOpen={setIsOpen} additionalButtons={[clearFiltersButton]}>
+        <div className="text-center">
+          Total: {indices.length}
+        </div>
         <div>
           {renderFiltersFor(generalFilters)}
           {renderFiltersFor(ownerFilters)}
