@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { forceCheck } from 'react-lazyload';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Bastard from './Bastard';
 import { ISettings } from '../../utils/interfaces';
@@ -20,6 +21,10 @@ function Gallery({ indices, settings, marginTop, marginBottom }: Props) {
     setLoadedIndices(indices.slice(0, initialLoad));
     console.log(indices);
   }, [indices]);
+
+  useEffect(() => {
+    forceCheck();
+  }, [loadedIndices]);
 
   const nextIndices = () => {
     setLoadedIndices(indices.slice(0, loadedIndices.length + loadCount));
