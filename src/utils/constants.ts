@@ -36,6 +36,7 @@ export const HYPED_ATTRIBUTES = [
 export const CALM_ATTRIBUTES = [
   'TYPE',
   'BACKGROUND',
+  'GLITCH PATTERN',
   'FACING DIRECTION',
   'BAD HABIT(S)',
 ];
