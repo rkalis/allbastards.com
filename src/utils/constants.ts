@@ -42,7 +42,7 @@ export const CALM_ATTRIBUTES = [
 ];
 
 export const DEFAULT_SETTINGS: ISettings = {
-  colourfulBackground: true,
+  colourfulBackground: false,
   displayNumbers: false,
   showFiltersInUrl: true,
 };
