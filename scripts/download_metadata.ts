@@ -34,6 +34,6 @@ const LAST = fs.readdirSync(path.join(__dirname, '..', 'public', 'metadata'))
   .sort((a, b) => a - b)
   .pop();
 
-const START = LAST === undefined ? 0 : LAST + 1;
+const START = LAST === undefined ? 1 : LAST + 1;
 
 downloadBastards(HIGHEST_BASTARD_ID - START + 1, START);

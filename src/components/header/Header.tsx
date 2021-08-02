@@ -4,9 +4,9 @@ import Settings from './Settings';
 import About from './About';
 import HeaderBackground from '../p5/HeaderBackground';
 import Shuffle from './Shuffle';
-import Filters from './Filters';
+// import Filters from './Filters';
 import Sort from './Sort';
-import Wallet from './Wallet';
+// import Wallet from './Wallet';
 
 const useDimensions = require('react-use-dimensions').default;
 
@@ -30,16 +30,16 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
         <div className="grid grid-cols-5">
           <div />
           <div className="flex justify-center items-center font-charriot text-header col-span-3">
-            ALL BASTARDS
+            ALL GLYPHS
           </div>
           <div className="flex justify-end items-center">
-            <Wallet />
+            {/* <Wallet /> */}
           </div>
         </div>
         <div className="flex justify-center align-middle items-center gap-2">
           <About />
           <Settings settings={settings} setSettings={setSettings} />
-          <Filters settings={settings} indices={indices} setIndices={setIndices} />
+          {/* <Filters settings={settings} indices={indices} setIndices={setIndices} /> */}
           <Sort indices={indices} setIndices={setIndices} />
           <Shuffle indices={indices} setIndices={setIndices} />
         </div>

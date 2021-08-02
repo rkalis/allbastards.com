@@ -1,20 +1,22 @@
 import { ActiveFilters, FilterOption, FilterSpecification } from './interfaces';
-import attributesIndex from './attributes-index.json';
+// import attributesIndex from './attributes-index.json';
 import { CALM_ATTRIBUTES, GENERAL_ATTRIBUTES, HIGHEST_BASTARD_ID, HYPED_ATTRIBUTES } from './constants';
 import { range } from '.';
 
 // Convert the JSON in the attributes-index.json into a format that can be used by the MultiSelect component
 export const getAllAttributeFilters = () => {
-  const allFilters = Object.entries(attributesIndex)
-    .map(([attribute, attributeIndex]) => {
-      const options = Object.entries(attributeIndex)
-        .map(([value, indices]) => ({ label: `${value} - ${indices.length}`, value, indices }))
-        .sort((a, b) => b.indices.length - a.indices.length);
+  // const allFilters = Object.entries(attributesIndex)
+  //   .map(([attribute, attributeIndex]) => {
+  //     const options = Object.entries(attributeIndex)
+  //       .map(([value, indices]) => ({ label: `${value} - ${indices.length}`, value, indices }))
+  //       .sort((a, b) => b.indices.length - a.indices.length);
 
-      return { attribute, options };
-    });
+  //     return { attribute, options };
+  //   });
 
-  return allFilters;
+  // return allFilters;
+
+  return [] as FilterSpecification[];
 };
 
 export const separateAttributeFilters = (allFilters: FilterSpecification[]) => {
@@ -26,7 +28,7 @@ export const separateAttributeFilters = (allFilters: FilterSpecification[]) => {
 };
 
 export const applyFilters = (filters: { [index: string]: FilterOption[] }) => {
-  const allIndices = range(HIGHEST_BASTARD_ID + 1);
+  const allIndices = range(HIGHEST_BASTARD_ID, 1);
 
   // Convert the filters object to a list containing all selected indices for a specific attribute
   // discarding attributes without any selected options

@@ -3,13 +3,11 @@ import { useWeb3React } from '@web3-react/core';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import Button from '../common/Button';
-import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings } from '../../utils/interfaces';
-import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES } from '../../utils/constants';
+import { ActiveFilters, FilterOption, FilterSpecification, ISettings } from '../../utils/interfaces';
 import { filterObjectByKey } from '../../utils';
 import IconButton from '../common/IconButton';
-import RangeSlider from '../common/RangeSlider';
 import { getOwnerFilters } from '../../utils/web3';
-import { applyFilters, getAllAttributeFilters, separateAttributeFilters, updateUrl } from '../../utils/filters';
+import { applyFilters, getAllAttributeFilters, updateUrl } from '../../utils/filters';
 
 interface Props {
   settings: ISettings;
@@ -20,33 +18,11 @@ interface Props {
 function Filters({ settings, indices, setIndices }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
-  const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
   const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
   const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
   const { library, account } = useWeb3React();
 
   const allFilters = getAllAttributeFilters();
-  const { generalFilters, hypedFilters, calmFilters, hypeTypeFilter } = separateAttributeFilters(allFilters);
-
-  const updateSelectedHypeType = (value: number) => {
-    // Remove all selected filters from the hype type specific categories
-    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => (
-      !CALM_ATTRIBUTES.includes(attribute) && !HYPED_ATTRIBUTES.includes(attribute)
-    ));
-
-    // Apply the HYPE TYPE filter selection
-    const filter = [];
-    if (value === 1) {
-      const calmSelected = hypeTypeFilter?.options.find(({ label }) => label.includes(HypeType.CALM)) as FilterOption;
-      filter.push(calmSelected);
-    } else if (value === 3) {
-      const hypedSelected = hypeTypeFilter?.options.find(({ label }) => label.includes(HypeType.HYPED)) as FilterOption;
-      filter.push(hypedSelected);
-    }
-
-    setActiveFilters({ ...newActiveFilters, 'HYPE TYPE': filter });
-    setSelectedHypeType(value);
-  };
 
   const parseUrlForFilters = () => {
     // Parse the filter query parameter from the JSON
@@ -56,13 +32,6 @@ function Filters({ settings, indices, setIndices }: Props) {
     const selectedFilters = filterEntries
       .map(([attribute, filterValues]) => {
         console.log(attribute);
-        if (attribute === 'HYPE TYPE') {
-          if (filterValues[0] === HypeType.CALM) {
-            setSelectedHypeType(1);
-          } else if (filterValues[0] === HypeType.HYPED) {
-            setSelectedHypeType(3);
-          }
-        }
 
         const attributeFilter = allFilters.find((filterSpecification) => filterSpecification.attribute === attribute);
         const selectedOptions = attributeFilter?.options.filter(({ value }) => filterValues.includes(value));
@@ -97,7 +66,6 @@ function Filters({ settings, indices, setIndices }: Props) {
 
   const clearFilters = () => {
     setActiveFilters({});
-    setSelectedHypeType(2);
   };
 
   useEffect(() => {
@@ -144,18 +112,6 @@ function Filters({ settings, indices, setIndices }: Props) {
     ))
   );
 
-  const renderHypeTypeSpecificFilters = () => {
-    if (selectedHypeType === 1) {
-      return renderFiltersFor(calmFilters);
-    }
-
-    if (selectedHypeType === 3) {
-      return renderFiltersFor(hypedFilters);
-    }
-
-    return <p className="text-lg text-center">Please select CALM AF or HYPED AF for type-specific filters.</p>;
-  };
-
   const clearFiltersButton = (
     <Button onClick={clearFilters} label="CLEAR ALL" inverted className="w-full inline-flex justify-center" />
   );
@@ -169,17 +125,9 @@ function Filters({ settings, indices, setIndices }: Props) {
           Total: {indices.length}
         </div>
         <div>
-          {renderFiltersFor(generalFilters)}
+          {renderFiltersFor(allFilters)}
           {renderFiltersFor(ownerFilters)}
         </div>
-        <div className="border-2 p-2 my-2">
-          <div className="flex justify-around items-center">
-            <span className="text-lg font-bold">CALM AF</span>
-            <RangeSlider min={1} max={3} value={selectedHypeType} onChange={updateSelectedHypeType} className="w-1/4" />
-            <span className="text-lg font-bold">HYPED AF</span>
-          </div>
-        </div>
-        <div>{renderHypeTypeSpecificFilters()}</div>
       </Modal>
     </div>
   );

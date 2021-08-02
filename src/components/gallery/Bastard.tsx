@@ -1,11 +1,9 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import LazyLoad from 'react-lazyload';
 import { useWindowSize } from '@react-hook/window-size';
-import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE, METADATA_BASE, OPEANSEA_REFERRAL } from '../../utils/constants';
+import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE, OPEANSEA_REFERRAL } from '../../utils/constants';
 import { ISettings } from '../../utils/interfaces';
 import PlaceholderImage from './PlaceholderImage';
-import { isSafari } from '../../utils';
 
 interface Props {
   index: number;
@@ -21,16 +19,7 @@ function Bastard({ index, settings }: Props) {
   const [mouse, setMouse] = useState<MousePosition>({});
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [windowWidth, windowHeight] = useWindowSize();
-  const [imageSource, setImageSource] = useState<string>(`${IMAGE_BASE}/${index}.webp`);
-
-  const useFallbackImageFromIpfs = async () => {
-    const metadataUrl = `${METADATA_BASE}/${index}.json`;
-    const { data: metadata } = await axios.get(metadataUrl);
-    setImageSource(metadata.image);
-  };
-
-  // Safari doesn't properly support WebP, so we use the fallback images
-  if (isSafari()) useFallbackImageFromIpfs();
+  const imageSource = `${IMAGE_BASE}/${index}.png`;
 
   // Track mouse position and hovering status
 
@@ -81,7 +70,7 @@ function Bastard({ index, settings }: Props) {
             width={`${IMAGE_SIZE_SMALL}px`}
             height={`${IMAGE_SIZE_SMALL}px`}
             src={imageSource}
-            alt={`Bastard ${index}`}
+            alt={`Glyph ${index}`}
           />
           {
             settings.displayNumbers &&
@@ -103,7 +92,7 @@ function Bastard({ index, settings }: Props) {
             height={`${IMAGE_SIZE_LARGE}px`}
             src={imageSource}
             className="fixed z-30"
-            alt={`Bastard ${index}`}
+            alt={`Glyph ${index}`}
             style={{ left: hoverImageX, top: hoverImageY }}
           />
 

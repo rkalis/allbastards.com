@@ -10,11 +10,11 @@ import { DEFAULT_SETTINGS, HIGHEST_BASTARD_ID } from './utils/constants';
 import { ISettings } from './utils/interfaces';
 import { getLibrary } from './utils/web3';
 
-const useSettingsState = createPersistedState('allbastards-settings');
+const useSettingsState = createPersistedState('allglyphs-settings');
 
 function App() {
   const [settings, setSettings] = useSettingsState<ISettings>(DEFAULT_SETTINGS);
-  const [indices, setIndices] = useState<number[]>(range(HIGHEST_BASTARD_ID + 1));
+  const [indices, setIndices] = useState<number[]>(range(HIGHEST_BASTARD_ID, 1));
 
   const [marginTop, setMarginTop] = useState<number>(0);
   const [marginBottom, setMarginBottom] = useState<number>(0);

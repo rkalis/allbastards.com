@@ -12,10 +12,9 @@ function About() {
 
       <Modal title="ABOUT" isOpen={isOpen} setIsOpen={setIsOpen}>
         <div className="text-lg">
-          BASTARD GAN PUNKS are a collection of NFTs created by <Link to="http://berkozdemir.com/" text="BERK ÖZDEMIR" />.
-          The artwork for BASTARD GAN PUNKS was created by applying a GAN on <Link to="https://larvalabs.com/cryptopunks" text="CRYPTOPUNKS" inverted />.
-          ALLBASTARDS.COM displays the entire bastard collection.
-          Learn more about BASTARD GAN PUNKS at <Link to="https://bastardganpunks.club/" text="BASTARDGANPUNKS.CLUB" />.
+          PyxelGlyphs are a collection of avatar NFTs that are generated completely on-chain
+          using a cellular automaton. ALLGLYPHS.COM displays the entire collection of PixelGlyphs.
+          Learn more about PixelGlyphs at <Link to="https://pixelglyphs.io/" text="pixelglyphs.io" />.
         </div>
       </Modal>
     </div>

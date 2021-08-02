@@ -8,7 +8,8 @@ const downloadBastard = async (index: number) => {
   console.log(`Downloading ${index}`);
 
   const { data } = await axios.get(`${BASTARDS_API_BASE}/${index}`);
-  const { data: stream } = await axios.get(data.image, { responseType: 'stream' });
+  const imageUrl = data.image.replace('ipfs://', 'https://ipfs.io/ipfs/');
+  const { data: stream } = await axios.get(imageUrl, { responseType: 'stream' });
 
   await new Promise<void>((resolve, reject) => {
     setTimeout(reject, 10000);
@@ -41,6 +42,6 @@ const LAST = fs.readdirSync(path.join(__dirname, '..', 'public', 'img', 'full'))
   .sort((a, b) => a - b)
   .pop();
 
-const START = LAST === undefined ? 0 : LAST + 1;
+const START = LAST === undefined ? 1 : LAST + 1;
 
 downloadBastards(HIGHEST_BASTARD_ID - START + 1, START);
