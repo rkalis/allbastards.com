@@ -140,6 +140,7 @@ function Filters({ settings, indices, setIndices }: Props) {
         options={options}
         selected={activeFilters[attribute] ?? []}
         update={(selected: FilterOption[]) => setActiveFilters({ ...activeFilters, [attribute]: selected })}
+        settings={settings}
       />
     ))
   );

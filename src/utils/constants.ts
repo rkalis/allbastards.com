@@ -45,4 +45,5 @@ export const DEFAULT_SETTINGS: ISettings = {
   colourfulBackground: false,
   displayNumbers: false,
   showFiltersInUrl: true,
+  enableExperimentalTraits: false,
 };

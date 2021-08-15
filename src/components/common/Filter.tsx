@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
 import Tooltip from 'rc-tooltip';
 import MultiSelect from 'react-multi-select-component';
-import { FilterOption } from '../../utils/interfaces';
+import { FilterOption, ISettings } from '../../utils/interfaces';
 import ListItemRenderer from './ListItemRenderer';
 import Link from './Link';
 
@@ -10,9 +9,10 @@ interface Props {
   options: FilterOption[];
   selected: FilterOption[];
   update: (value: FilterOption[]) => void;
+  settings: ISettings;
 }
 
-function Filter({ label, options, selected, update }: Props) {
+function Filter({ label, options, selected, update, settings }: Props) {
   const tooltipOverlay = (
     <p className="break-words">
       THESE EXPERIMENTAL TRAITS WERE MANUALLY IDENTIFIED BY <Link to="https://twitter.com/BokkyPooBah" text="BOKKYPOOBAH" />.
@@ -22,10 +22,14 @@ function Filter({ label, options, selected, update }: Props) {
   );
 
   const experimentalTooltip = label === 'EXPERIMENTAL TRAITS' && (
-    <Tooltip placement="top" overlay={tooltipOverlay} overlayClassName="bg-white z-50 w-96 border-2 border-black" destroyTooltipOnHide>
+    <Tooltip placement="top" overlay={tooltipOverlay} overlayClassName="bg-white z-50 w-96 border-2 border-black p-2" destroyTooltipOnHide>
       <span className="ml-2">(?)</span>
     </Tooltip>
   );
+
+  if (label.includes('EXPERIMENTAL') && !settings.enableExperimentalTraits) {
+    return null;
+  }
 
   return (
     <div className="py-1 px-2 my-1 grid grid-cols-6 border-2">

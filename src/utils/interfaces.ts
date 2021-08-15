@@ -2,6 +2,7 @@ export interface ISettings {
   colourfulBackground: boolean;
   displayNumbers: boolean;
   showFiltersInUrl: boolean;
+  enableExperimentalTraits: boolean;
 }
 
 export interface FilterOption {
