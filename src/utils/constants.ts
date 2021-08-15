@@ -38,6 +38,7 @@ export const CALM_ATTRIBUTES = [
   'GLITCH PATTERN',
   'FACING DIRECTION',
   'BAD HABIT(S)',
+  'EXPERIMENTAL TRAITS',
 ];
 
 export const DEFAULT_SETTINGS: ISettings = {

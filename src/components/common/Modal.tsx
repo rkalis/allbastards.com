@@ -17,7 +17,7 @@ function Modal({ title, isOpen, setIsOpen, children, additionalButtons }: Props)
       <Dialog
         as="div"
         static
-        className="fixed z-50 inset-0 overflow-y-auto font-charriot"
+        className="fixed z-40 inset-0 overflow-y-auto font-charriot"
         open={isOpen}
         onClose={setIsOpen}
       >
