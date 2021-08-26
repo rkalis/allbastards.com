@@ -1,18 +1,25 @@
 import React, { ChangeEvent, useState } from 'react';
 import { providers, utils } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
+import { InjectedConnector } from '@web3-react/injected-connector';
 import { toast } from '../../utils';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
 
 function DonateButton() {
-  const { account, library } = useWeb3React<providers.Web3Provider>();
+  const { account, library, activate } = useWeb3React<providers.Web3Provider>();
   const [amount, setAmount] = useState<string>('0.01');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  if (!account || !library) return null;
+  if (!library) return null;
 
   const sendDonation = async () => {
+    if (!account) {
+      const injectedConnector = new InjectedConnector({ supportedChainIds: [1] });
+      activate(injectedConnector);
+      return;
+    }
+
     try {
       const signer = library.getSigner();
       if (!signer) return;
