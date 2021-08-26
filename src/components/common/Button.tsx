@@ -12,7 +12,7 @@ function Button({ label, onClick, inverted, className }: Props) {
   const invertedColours = 'bg-red-500 hover:bg-blue-500';
 
   const fullClassName = overrideTailwindClasses(
-    `${inverted ? invertedColours : regularColours} border-2 border-black shadow-sm px-4 py-2 text-sm text-white font-charriot font-bold focus:outline-none ${className}`,
+    `${inverted ? invertedColours : regularColours} border-2 border-black shadow-sm px-4 py-2 text-xs sm:text-sm text-white font-charriot font-bold focus:outline-none ${className}`,
   );
 
   return (

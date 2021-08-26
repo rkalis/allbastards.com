@@ -1,6 +1,7 @@
 import { Web3ReactProvider } from '@web3-react/core';
 import { useEffect, useState } from 'react';
 import createPersistedState from 'use-persisted-state';
+import { ToastContainer } from 'react-toastify';
 import Gallery from './components/gallery/Gallery';
 import Header from './components/header/Header';
 import Footer from './components/Footer';
@@ -9,6 +10,8 @@ import { range } from './utils';
 import { DEFAULT_SETTINGS, HIGHEST_BASTARD_ID } from './utils/constants';
 import { ISettings } from './utils/interfaces';
 import { getLibrary } from './utils/web3';
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
 
 const useSettingsState = createPersistedState('allbastards-settings');
 
@@ -30,6 +33,17 @@ function App() {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <div>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <Header
           settings={settings}
           setSettings={setSettings}

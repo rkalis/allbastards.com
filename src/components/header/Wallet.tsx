@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { providers } from 'ethers';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import Button from '../common/Button';
 import { lookupEnsName, shortenAddress } from '../../utils/web3';
@@ -11,7 +12,7 @@ declare let window: {
 
 function Wallet() {
   const [label, setLabel] = useState<string>('CONNECT WALLET');
-  const { account, library, activate } = useWeb3React();
+  const { account, library, activate } = useWeb3React<providers.Web3Provider>();
   const injectedConnector = new InjectedConnector({ supportedChainIds: [1] });
   const fallbackConnector = new FallbackConnector({ supportedChainIds: [1] });
 

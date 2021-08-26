@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import { providers } from 'ethers';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import Button from '../common/Button';
@@ -23,7 +24,7 @@ function Filters({ settings, indices, setIndices }: Props) {
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
   const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
   const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
-  const { library, account } = useWeb3React();
+  const { library, account } = useWeb3React<providers.Web3Provider>();
 
   const allFilters = getAllAttributeFilters();
   const { generalFilters, hypedFilters, calmFilters, hypeTypeFilter } = separateAttributeFilters(allFilters);

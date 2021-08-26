@@ -7,6 +7,7 @@ import Shuffle from './Shuffle';
 import Filters from './Filters';
 import Sort from './Sort';
 import Wallet from './Wallet';
+import DonateButton from './DonateButton';
 
 const useDimensions = require('react-use-dimensions').default;
 
@@ -28,11 +29,14 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
       <header className={`flex flex-col fixed top-0 left-0 right-0 z-20 py-2 px-4 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
         <div className="bg-white absolute" />
         <div className="grid grid-cols-5">
-          <div />
+          <div className="flex justify-start items-center gap-2">
+            <div className="block md:hidden"><DonateButton /></div>
+          </div>
           <div className="flex justify-center items-center font-charriot text-header col-span-3">
             ALL BASTARDS
           </div>
-          <div className="flex justify-end items-center">
+          <div className="flex justify-end items-center gap-2">
+            <div className="hidden md:block"><DonateButton /></div>
             <Wallet />
           </div>
         </div>
