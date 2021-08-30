@@ -17,11 +17,23 @@ export const getAllAttributeFilters = () => {
   return allFilters;
 };
 
+const sortByList = (list: string[], a: string, b: string) => (list.indexOf(a) - list.indexOf(b));
+
 export const separateAttributeFilters = (allFilters: FilterSpecification[]) => {
-  const generalFilters = allFilters.filter(({ attribute }) => GENERAL_ATTRIBUTES.includes(attribute));
-  const hypedFilters = allFilters.filter(({ attribute }) => HYPED_ATTRIBUTES.includes(attribute));
-  const calmFilters = allFilters.filter(({ attribute }) => CALM_ATTRIBUTES.includes(attribute));
+  const generalFilters = allFilters
+    .filter(({ attribute }) => GENERAL_ATTRIBUTES.includes(attribute))
+    .sort((a, b) => sortByList(GENERAL_ATTRIBUTES, a.attribute, b.attribute));
+
+  const hypedFilters = allFilters
+    .filter(({ attribute }) => HYPED_ATTRIBUTES.includes(attribute))
+    .sort((a, b) => sortByList(HYPED_ATTRIBUTES, a.attribute, b.attribute));
+
+  const calmFilters = allFilters
+    .filter(({ attribute }) => CALM_ATTRIBUTES.includes(attribute))
+    .sort((a, b) => sortByList(CALM_ATTRIBUTES, a.attribute, b.attribute));
+
   const hypeTypeFilter = allFilters.find(({ attribute }) => attribute === 'HYPE TYPE');
+
   return { generalFilters, hypedFilters, calmFilters, hypeTypeFilter };
 };
 
