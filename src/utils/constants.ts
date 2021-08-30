@@ -38,6 +38,9 @@ export const CALM_ATTRIBUTES = [
   'GLITCH PATTERN',
   'FACING DIRECTION',
   'BAD HABIT(S)',
+  'NOSE',
+  'EAR',
+  'FACE',
   'EXPERIMENTAL TRAITS',
 ];
 
