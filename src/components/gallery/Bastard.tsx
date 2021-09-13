@@ -26,7 +26,7 @@ function Bastard({ index, settings }: Props) {
   const useFallbackImageFromIpfs = async () => {
     const metadataUrl = `${METADATA_BASE}/${index}.json`;
     const { data: metadata } = await axios.get(metadataUrl);
-    setImageSource(metadata.image);
+    setImageSource(metadata.image_ipfs['512']);
   };
 
   // Safari doesn't properly support WebP, so we use the fallback images
@@ -81,7 +81,7 @@ function Bastard({ index, settings }: Props) {
             width={`${IMAGE_SIZE_SMALL}px`}
             height={`${IMAGE_SIZE_SMALL}px`}
             src={imageSource}
-            alt={`Bastard ${index}`}
+            alt={`GLICPIX ${index}`}
           />
           {
             settings.displayNumbers &&
@@ -103,7 +103,7 @@ function Bastard({ index, settings }: Props) {
             height={`${IMAGE_SIZE_LARGE}px`}
             src={imageSource}
             className="fixed z-30"
-            alt={`Bastard ${index}`}
+            alt={`GLICPIX ${index}`}
             style={{ left: hoverImageX, top: hoverImageY }}
           />
 

@@ -32,11 +32,6 @@ function Settings({ settings, setSettings }: Props) {
           value={settings.showFiltersInUrl}
           update={(value: boolean) => setSettings({ ...settings, showFiltersInUrl: value })}
         />
-        <BooleanSetting
-          label="ENABLE EXPERIMENTAL TRAITS"
-          value={settings.enableExperimentalTraits}
-          update={(value: boolean) => setSettings({ ...settings, enableExperimentalTraits: value })}
-        />
       </Modal>
     </div>
   );

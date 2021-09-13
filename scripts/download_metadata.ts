@@ -5,11 +5,14 @@ import { range } from '../src/utils';
 import { BASTARDS_API_BASE, HIGHEST_BASTARD_ID } from '../src/utils/constants';
 
 const downloadBastard = async (index: number) => {
+  const downloadPath = path.join(__dirname, '..', 'public', 'metadata', `${index}.json`);
+  if (fs.existsSync(downloadPath)) return false;
+
   console.log(`Downloading ${index}`);
 
   const { data } = await axios.get(`${BASTARDS_API_BASE}/${index}`);
 
-  fs.writeFileSync(path.join(__dirname, '..', 'public', 'metadata', `${index}.json`), JSON.stringify(data));
+  fs.writeFileSync(downloadPath, JSON.stringify(data));
 
   return data;
 };
@@ -29,11 +32,4 @@ const downloadBastards = async (count: number, start = 1) => {
   }
 };
 
-const LAST = fs.readdirSync(path.join(__dirname, '..', 'public', 'metadata'))
-  .map((name) => Number.parseInt(name.replace(/\.json/, ''), 10))
-  .sort((a, b) => a - b)
-  .pop();
-
-const START = LAST === undefined ? 0 : LAST + 1;
-
-downloadBastards(HIGHEST_BASTARD_ID - START + 1, START);
+downloadBastards(HIGHEST_BASTARD_ID + 1, 0);

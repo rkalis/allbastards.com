@@ -32,7 +32,7 @@ export const separateAttributeFilters = (allFilters: FilterSpecification[]) => {
     .filter(({ attribute }) => CALM_ATTRIBUTES.includes(attribute))
     .sort((a, b) => sortByList(CALM_ATTRIBUTES, a.attribute, b.attribute));
 
-  const hypeTypeFilter = allFilters.find(({ attribute }) => attribute === 'HYPE TYPE');
+  const hypeTypeFilter = allFilters.find(({ attribute }) => attribute === 'HYPEMETER');
 
   return { generalFilters, hypedFilters, calmFilters, hypeTypeFilter };
 };

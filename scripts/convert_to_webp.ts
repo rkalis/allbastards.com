@@ -9,16 +9,19 @@ const webp = require('webp-converter');
 export const isHyped = (index: number) => {
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const metadata = require(`../public/metadata/${index}.json`);
-  const hypeType = metadata.attributes.find((attr: any) => attr.trait_type === 'HYPE TYPE');
+  const hypeType = metadata.attributes.find((attr: any) => attr.trait_type === 'HYPEMETER');
 
   return hypeType.value === HypeType.HYPED;
 };
 
 const convertBastard = async (index: number) => {
-  console.log(`Converting ${index}`);
-
   const inputPath = path.join(__dirname, '..', 'public', 'img', 'full', `${index}.png`);
   const outputPath = path.join(__dirname, '..', 'public', 'img', 'full', `${index}.webp`);
+
+  if (!fs.existsSync(inputPath)) return;
+  if (fs.existsSync(outputPath)) return;
+
+  console.log(`Converting ${index}`);
 
   if (isHyped(index)) {
     await webp.gwebp(inputPath, outputPath, '-q 100');
@@ -44,12 +47,4 @@ const convertBastards = async (count: number, start = 1) => {
   }
 };
 
-const LAST = fs.readdirSync(path.join(__dirname, '..', 'public', 'img', 'full'))
-  .filter((name) => name.endsWith('.webp'))
-  .map((name) => Number.parseInt(name.replace(/\.webp/, ''), 10))
-  .sort((a, b) => a - b)
-  .pop();
-
-const START = LAST === undefined ? 0 : LAST + 1;
-
-convertBastards(HIGHEST_BASTARD_ID - START + 1, START);
+convertBastards(HIGHEST_BASTARD_ID + 1, 0);

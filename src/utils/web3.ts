@@ -1,6 +1,6 @@
 import { BigNumber, Contract, providers } from 'ethers';
 import BASTARD_ABI from './bastards-abi.json';
-import { BASTARD_CONTRACT_ADDRESS, DEAD_ADDRESS, NFT20_ADDRESS, NFTX_ADDRESS } from './constants';
+import { BASTARD_CONTRACT_ADDRESS, DEAD_ADDRESS } from './constants';
 
 export const getLibrary = (provider: any) => new providers.Web3Provider(provider);
 
@@ -29,15 +29,15 @@ export const getOwnerFilters = async (provider: providers.Web3Provider, userAddr
   const bastardContract = new Contract(BASTARD_CONTRACT_ADDRESS, BASTARD_ABI, provider);
 
   const userIndices = userAddress && await getIndicesOwnedByAddress(bastardContract, userAddress);
-  const nft20Indices = await getIndicesOwnedByAddress(bastardContract, NFT20_ADDRESS);
-  const nftxIndices = await getIndicesOwnedByAddress(bastardContract, NFTX_ADDRESS);
+  // const nft20Indices = await getIndicesOwnedByAddress(bastardContract, NFT20_ADDRESS);
+  // const nftxIndices = await getIndicesOwnedByAddress(bastardContract, NFTX_ADDRESS);
   const burnedIndices = await getIndicesOwnedByAddress(bastardContract, DEAD_ADDRESS);
 
   const filterSpecification = {
     attribute: 'OWNER',
     options: [
-      { label: `NFT20 - ${nft20Indices.length}`, value: 'NFT20', indices: nft20Indices },
-      { label: `NFTX - ${nftxIndices.length}`, value: 'NFTX', indices: nftxIndices },
+      // { label: `NFT20 - ${nft20Indices.length}`, value: 'NFT20', indices: nft20Indices },
+      // { label: `NFTX - ${nftxIndices.length}`, value: 'NFTX', indices: nftxIndices },
       { label: `BURNED - ${burnedIndices.length}`, value: 'BURNED', indices: burnedIndices },
     ],
   };

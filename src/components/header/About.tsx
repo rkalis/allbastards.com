@@ -12,10 +12,10 @@ function About() {
 
       <Modal title="ABOUT" isOpen={isOpen} setIsOpen={setIsOpen}>
         <div className="text-lg">
-          BASTARD GAN PUNKS are a collection of NFTs created by <Link to="http://berkozdemir.com/" text="BERK ÖZDEMIR" />.
-          The artwork for BASTARD GAN PUNKS was created by applying a GAN on <Link to="https://larvalabs.com/cryptopunks" text="CRYPTOPUNKS" inverted />.
-          ALLBASTARDS.COM displays the entire bastard collection.
-          Learn more about BASTARD GAN PUNKS at <Link to="https://bastardganpunks.club/" text="BASTARDGANPUNKS.CLUB" />.
+          GLICPIX are a collection of NFTs created by <Link to="http://berkozdemir.com/" text="BERK ÖZDEMIR" />.
+          The artwork for GLICPIX was created by cutting 32x32 tiles from images generated with the encoding tool GLIC.
+          ALLGLICPIX.COM displays the entire GLICPIX collection.
+          Learn more about GLICPIX at <Link to="https://glicpixxx.love/" text="GLICPIXXX.LOVE" inverted />.
         </div>
       </Modal>
     </div>

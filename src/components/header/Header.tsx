@@ -33,7 +33,7 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
             <div className="block md:hidden"><DonateButton /></div>
           </div>
           <div className="flex justify-center items-center font-charriot text-header col-span-3">
-            ALL BASTARDS
+            ALL GLICPIX
           </div>
           <div className="flex justify-end items-center gap-2">
             <div className="hidden md:block"><DonateButton /></div>

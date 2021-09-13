@@ -14,7 +14,7 @@ import { getLibrary } from './utils/web3';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
-const useSettingsState = createPersistedState('allbastards-settings');
+const useSettingsState = createPersistedState('allglicpix-settings');
 
 function App() {
   const [settings, setSettings] = useSettingsState<ISettings>(DEFAULT_SETTINGS);

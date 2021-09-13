@@ -21,6 +21,11 @@ export interface FilterSpecification {
 }
 
 export enum HypeType {
-  CALM = 'CALM AF (STILL)',
-  HYPED = 'HYPED AF (ANIMATED)',
+  CALM = 'CALM AF',
+  HYPED = 'HYPED AF',
+}
+
+export enum BastardType {
+  BASTARD = 'BASTARD',
+  NOT = 'NOT',
 }
