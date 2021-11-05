@@ -1,16 +1,13 @@
 import { Web3ReactProvider } from '@web3-react/core';
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import createPersistedState from 'use-persisted-state';
 import { ToastContainer } from 'react-toastify';
-import Gallery from './components/gallery/Gallery';
-import Header from './components/header/Header';
-import Footer from './components/Footer';
-import Background from './components/p5/Background';
 import { displayGitcoinToast } from './components/common/gitcoin-toast';
-import { range } from './utils';
-import { DEFAULT_SETTINGS, HIGHEST_BASTARD_ID } from './utils/constants';
+import { DEFAULT_SETTINGS } from './utils/constants';
 import { ISettings } from './utils/interfaces';
 import { getLibrary } from './utils/web3';
+import GalleryPage from './pages/GalleryPage';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
@@ -18,7 +15,6 @@ const useSettingsState = createPersistedState('allbastards-settings');
 
 function App() {
   const [settings, setSettings] = useSettingsState<ISettings>(DEFAULT_SETTINGS);
-  const [indices, setIndices] = useState<number[]>(range(HIGHEST_BASTARD_ID + 1));
 
   const [marginTop, setMarginTop] = useState<number>(0);
   const [marginBottom, setMarginBottom] = useState<number>(0);
@@ -37,29 +33,34 @@ function App() {
 
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <div>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        <Header
-          settings={settings}
-          setSettings={setSettings}
-          indices={indices}
-          setIndices={setIndices}
-          setMarginTop={setMarginTop}
-        />
-        <Gallery settings={settings} indices={indices} marginTop={marginTop} marginBottom={marginBottom} />
-        <Footer settings={settings} setMarginBottom={setMarginBottom} />
-        {settings.colourfulBackground && <Background />}
-      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <GalleryPage
+                settings={settings}
+                setSettings={setSettings}
+                marginTop={marginTop}
+                setMarginTop={setMarginTop}
+                marginBottom={marginBottom}
+                setMarginBottom={setMarginBottom}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </Web3ReactProvider>
   );
 }
