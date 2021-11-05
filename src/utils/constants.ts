@@ -1,5 +1,7 @@
 import { ISettings } from './interfaces';
 
+export const BGANPUNKS_GALLERY_BASE = 'https://www.bastardganpunks.club/v2';
+export const RARIBLE_BASE = 'https://rarible.com/token/0x31385d3520bced94f77aae104b406994d8f2168c';
 export const OPENSEA_BASE = 'https://opensea.io/assets/0x31385d3520bced94f77aae104b406994d8f2168c';
 export const OPEANSEA_REFERRAL = 'ref=0xe126b3e5d052f1f575828f61feba4f4f2603652a';
 export const BASTARDS_API_BASE = 'https://api.bastardganpunks.club';

@@ -20,6 +20,20 @@ export interface FilterSpecification {
   options: FilterOption[];
 }
 
+export interface Metadata {
+  tokenId: number;
+  name: string;
+  description: string;
+  image: string;
+  imageArweave: string;
+  external_url: string;
+  attributes: Attribute[];
+}
+export interface Attribute {
+  trait_type: string;
+  value: string;
+}
+
 export enum HypeType {
   CALM = 'CALM AF (STILL)',
   HYPED = 'HYPED AF (ANIMATED)',

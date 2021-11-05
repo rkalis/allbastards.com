@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import { ISettings } from '../../utils/interfaces';
 import Settings from './Settings';
 import About from './About';
@@ -14,9 +15,9 @@ const useDimensions = require('react-use-dimensions').default;
 interface Props {
   settings: ISettings;
   setSettings: (settings: ISettings) => void;
-  indices: number[];
-  setIndices: (indices: number[]) => void;
   setMarginTop: (marginTop: number) => void;
+  indices?: number[];
+  setIndices?: (indices: number[]) => void;
 }
 
 function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Props) {
@@ -33,7 +34,7 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
             <div className="block md:hidden"><DonateButton /></div>
           </div>
           <div className="flex justify-center items-center font-charriot text-header col-span-3">
-            ALL BASTARDS
+            <NavLink to="/">ALL BASTARDS</NavLink>
           </div>
           <div className="flex justify-end items-center gap-2">
             <div className="hidden md:block"><DonateButton /></div>
@@ -43,9 +44,9 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
         <div className="flex justify-center align-middle items-center gap-2">
           <About />
           <Settings settings={settings} setSettings={setSettings} />
-          <Filters settings={settings} indices={indices} setIndices={setIndices} />
-          <Sort indices={indices} setIndices={setIndices} />
-          <Shuffle indices={indices} setIndices={setIndices} />
+          {indices && setIndices && <Filters settings={settings} indices={indices} setIndices={setIndices} />}
+          {indices && setIndices && <Sort indices={indices} setIndices={setIndices} />}
+          {indices && setIndices && <Shuffle indices={indices} setIndices={setIndices} />}
         </div>
       </header>
       {settings.colourfulBackground && <HeaderBackground x={x} y={y} width={width} height={height} />}

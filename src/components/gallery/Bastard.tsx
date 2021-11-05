@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import { useWindowSize } from '@react-hook/window-size';
-import { OPENSEA_BASE, IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE, METADATA_BASE, OPEANSEA_REFERRAL } from '../../utils/constants';
+import { IMAGE_BASE, IMAGE_SIZE_SMALL, IMAGE_SIZE_LARGE, METADATA_BASE } from '../../utils/constants';
 import { ISettings } from '../../utils/interfaces';
 import PlaceholderImage from './PlaceholderImage';
 import { isSafari } from '../../utils';
@@ -29,8 +30,10 @@ function Bastard({ index, settings }: Props) {
     setImageSource(metadata.image);
   };
 
-  // Safari doesn't properly support WebP, so we use the fallback images
-  if (isSafari()) useFallbackImageFromIpfs();
+  useEffect(() => {
+    // Safari doesn't properly support WebP, so we use the fallback images
+    if (isSafari()) useFallbackImageFromIpfs();
+  }, []);
 
   // Track mouse position and hovering status
 
@@ -69,8 +72,8 @@ function Bastard({ index, settings }: Props) {
         placeholder={<PlaceholderImage />}
         once
       >
-        <a
-          href={`${OPENSEA_BASE}/${index}?${OPEANSEA_REFERRAL}`}
+        <RouterLink
+          to={`/details/${index}`}
           target="_blank"
           rel="noreferrer"
           onMouseEnter={onMouseEnter}
@@ -92,7 +95,7 @@ function Bastard({ index, settings }: Props) {
               {index}
             </div>
           }
-        </a>
+        </RouterLink>
       </LazyLoad>
 
       {

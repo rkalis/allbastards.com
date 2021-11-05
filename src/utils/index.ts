@@ -1,5 +1,8 @@
 import { ToastContent, ToastOptions, toast as doToast } from 'react-toastify';
 import { overrideTailwindClasses } from 'tailwind-override';
+import axios from 'axios';
+import { METADATA_BASE } from './constants';
+import { Metadata } from './interfaces';
 
 export const range = (count: number, start = 0) => [...Array(count).keys()].map((i) => i + start);
 
@@ -20,4 +23,11 @@ export const toast = (content: ToastContent, options?: ToastOptions) => {
   const combinedOptions = { ...defaultOptions, ...options, className };
 
   doToast(content, combinedOptions);
+};
+
+export const getMetadata = async (index: number) => {
+  const metadataUrl = `${METADATA_BASE}/${index}.json`;
+  const { data: metadata } = await axios.get(metadataUrl);
+
+  return metadata as Metadata;
 };
