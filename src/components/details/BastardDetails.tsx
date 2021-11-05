@@ -44,13 +44,13 @@ function BastardDetails({ index, marginBottom, marginTop }: Props) {
         </div>
         <div className="flex justify-center">
           <div className="w-1/2 max-w-md flex flex-row justify-center gap-4">
-            <a href={`${OPENSEA_BASE}/${index}?${OPEANSEA_REFERRAL}`}>
+            <a href={`${OPENSEA_BASE}/${index}?${OPEANSEA_REFERRAL}`} target="_blank" rel="noreferrer">
               <img src="/img/opensea.png" alt="OpenSea link" width="24px" />
             </a>
-            <a href={`${RARIBLE_BASE}:${index}`}>
+            <a href={`${RARIBLE_BASE}:${index}`} target="_blank" rel="noreferrer">
               <img src="/img/rarible.webp" alt="Rarible link" width="24px" />
             </a>
-            <a href={`${BGANPUNKS_GALLERY_BASE}/${index}`}>
+            <a href={`${BGANPUNKS_GALLERY_BASE}/${index}`} target="_blank" rel="noreferrer">
               <img src="/img/bganpunkswebsite.png" alt="BASTARD GAN PUNKS v2 GALLERY link" width="24px" />
             </a>
           </div>

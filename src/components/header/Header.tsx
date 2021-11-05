@@ -34,7 +34,7 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
             <div className="block md:hidden"><DonateButton /></div>
           </div>
           <div className="flex justify-center items-center font-charriot text-header col-span-3">
-            <NavLink to="/">ALL BASTARDS</NavLink>
+            <NavLink to={{ pathname: '/', search: window.location.search }}>ALL BASTARDS</NavLink>
           </div>
           <div className="flex justify-end items-center gap-2">
             <div className="hidden md:block"><DonateButton /></div>
