@@ -1,6 +1,6 @@
 import { Web3ReactProvider } from '@web3-react/core';
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import createPersistedState from 'use-persisted-state';
 import { ToastContainer } from 'react-toastify';
 import { displayGitcoinToast } from './components/common/gitcoin-toast';
@@ -8,6 +8,7 @@ import { DEFAULT_SETTINGS } from './utils/constants';
 import { ISettings } from './utils/interfaces';
 import { getLibrary } from './utils/web3';
 import GalleryPage from './pages/GalleryPage';
+import DetailsPage from './pages/DetailsPage';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
@@ -59,6 +60,20 @@ function App() {
               />
             }
           />
+          <Route
+            path="/details/:bastardId"
+            element={
+              <DetailsPage
+                settings={settings}
+                setSettings={setSettings}
+                marginTop={marginTop}
+                setMarginTop={setMarginTop}
+                marginBottom={marginBottom}
+                setMarginBottom={setMarginBottom}
+              />
+            }
+          />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </Web3ReactProvider>
