@@ -33,7 +33,7 @@ function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Pr
           <div className="flex justify-start items-center gap-2">
             <div className="block md:hidden"><DonateButton /></div>
           </div>
-          <div className="flex justify-center items-center font-charriot text-header col-span-3">
+          <div className="flex justify-center items-center text-header col-span-3">
             <NavLink to={{ pathname: '/', search: window.location.search }}>ALL BASTARDS</NavLink>
           </div>
           <div className="flex justify-end items-center gap-2">

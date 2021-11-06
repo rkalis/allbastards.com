@@ -1,3 +1,7 @@
+import { Activity, Order } from '@rarible/ethereum-api-client';
+
+export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+
 export interface ISettings {
   colourfulBackground: boolean;
   displayNumbers: boolean;
@@ -29,6 +33,15 @@ export interface Metadata {
   external_url: string;
   attributes: Attribute[];
 }
+
+export interface MarketData {
+  owner: string;
+  ownerDisplay: string;
+  listing?: Order;
+  listingPriceDisplay?: string;
+  activity: Activity[];
+}
+
 export interface Attribute {
   trait_type: string;
   value: string;

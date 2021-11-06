@@ -18,7 +18,7 @@ function Footer({ settings, setMarginBottom }: Props) {
   return (
     <>
       <footer className={`fixed left-0 right-0 bottom-0 z-20 p-2 border-t-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
-        <div className="font-charriot text-footer md:text-footer-md lg:text-footer-lg">
+        <div className="text-footer md:text-footer-md lg:text-footer-lg">
           <div className="grid grid-cols-1">
             <div className="flex justify-center items-center">
               <div>

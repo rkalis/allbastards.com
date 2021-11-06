@@ -89,7 +89,7 @@ function Bastard({ index, settings }: Props) {
           {
             settings.displayNumbers &&
             <div
-              className="absolute inset-0 z-1 px-1 text-2xl text-white font-charriot"
+              className="absolute inset-0 z-1 px-1 text-2xl text-white"
               style={{ WebkitTextStroke: '1px black', height: IMAGE_SIZE_SMALL, width: IMAGE_SIZE_SMALL }}
             >
               {index}
@@ -111,7 +111,7 @@ function Bastard({ index, settings }: Props) {
           />
 
           <div
-            className="fixed z-30 mx-2 text-6xl text-white font-charriot"
+            className="fixed z-30 mx-2 text-6xl text-white"
             style={{ WebkitTextStroke: '2px black', left: hoverImageX, top: hoverImageY }}
           >
             {index}
