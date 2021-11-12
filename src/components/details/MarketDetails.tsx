@@ -2,17 +2,19 @@ import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { MarketData } from '../../utils/interfaces';
 import Button from '../common/Button';
+import Sell from './Sell';
 
 interface Props {
   marketData: MarketData;
+  tokenId: number;
 }
 
-function MarketDetails({ marketData }: Props) {
-  const { account } = useWeb3React<providers.Web3Provider>();
+function MarketDetails({ marketData, tokenId }: Props) {
+  const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const isForSale = marketData.listingPriceDisplay !== undefined;
-  const canSell = marketData.owner === account;
-  const canBid = account !== undefined && marketData.owner !== account;
+  const canSell = library !== undefined && marketData.owner === account;
+  const canBid = library !== undefined && account !== undefined && marketData.owner !== account;
   const canBuy = canBid && isForSale;
 
   return (
@@ -30,7 +32,7 @@ function MarketDetails({ marketData }: Props) {
         </div>
 
         <div className="flex justify-center gap-2">
-          {canSell && <Button label="SELL" />}
+          {canSell && <Sell tokenId={tokenId} />}
           {canBuy && <Button label="BUY" />}
           {canBid && <Button label="BID" />}
         </div>

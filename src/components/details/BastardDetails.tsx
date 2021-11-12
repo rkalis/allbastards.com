@@ -12,23 +12,23 @@ import ExternalLinks from './ExternalLinks';
 import Description from './Description';
 
 interface Props {
-  index: number;
+  tokenId: number;
   marginTop: number;
   marginBottom: number;
 }
 
-function BastardDetails({ index, marginBottom, marginTop }: Props) {
+function BastardDetails({ tokenId, marginBottom, marginTop }: Props) {
   const [metadata, setMetadata] = useState<Metadata>();
   const [marketData, setMarketData] = useState<MarketData>();
   const { library } = useWeb3React<providers.Web3Provider>();
 
   const updateMetadata = async () => {
-    const newMetadata = await getMetadata(index);
+    const newMetadata = await getMetadata(tokenId);
     setMetadata(newMetadata);
   };
 
   const updateMarketData = async () => {
-    const newMarketData = await getMarketData(index, library);
+    const newMarketData = await getMarketData(tokenId, library);
     setMarketData(newMarketData);
   };
 
@@ -52,7 +52,7 @@ function BastardDetails({ index, marginBottom, marginTop }: Props) {
         <ExternalLinks metadata={metadata} />
         <Description metadata={metadata} />
         <Attributes metadata={metadata} />
-        <MarketDetails marketData={marketData} />
+        <MarketDetails marketData={marketData} tokenId={tokenId} />
         <MarketHistory marketData={marketData} />
       </div>
     </div>

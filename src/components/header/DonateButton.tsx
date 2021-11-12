@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { providers, utils } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { toast } from '../../utils';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
+import NumberSetting from '../common/NumberSetting';
 
 function DonateButton() {
   const { account, library, activate } = useWeb3React<providers.Web3Provider>();
@@ -52,37 +53,14 @@ function DonateButton() {
     }
   };
 
-  const donateButton = (<Button label="DONATE" onClick={sendDonation} inverted className="w-full inline-flex justify-center" />);
-
-  const updateAmount = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    const regex = /^[0-9]{1,6}(\.[0-9]{1,4})?$/;
-    if (value.match(regex)) setAmount(value);
-  };
+  const donateButton = (<Button label="DONATE" onClick={sendDonation} className="w-full inline-flex justify-center" />);
 
   return (
     <div className="flex justify-center align-middle items-center">
       <Button label="DONATE" onClick={() => setIsOpen(true)} />
 
       <Modal title="DONATE" isOpen={isOpen} setIsOpen={setIsOpen} additionalButtons={[donateButton]}>
-        <div className="py-1 px-2 my-1 grid grid-cols-6 border-2">
-          <div className="col-span-3 text-md sm:text-xl font-bold align-middle items-center inline-flex">AMOUNT</div>
-          <div className="col-span-3 inline-flex justify-end items-center">
-            <div className="border-2 border-black w-full p-2 gap-2 flex">
-              <input
-                className="w-full focus:outline-none"
-                name="amount"
-                type="number"
-                value={amount}
-                min="0.00"
-                max="1000"
-                step="0.01"
-                onChange={updateAmount}
-              />
-              <span>ETH</span>
-            </div>
-          </div>
-        </div>
+        <NumberSetting label="AMOUNT" value={amount} min="0.00" max="1000" step="0.01" unit="ETH" update={setAmount} />
       </Modal>
     </div>
   );

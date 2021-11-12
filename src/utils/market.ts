@@ -1,6 +1,6 @@
-import { providers } from 'ethers';
+import { providers, utils } from 'ethers';
 import { getAddress } from '@ethersproject/address';
-import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
+import { createRaribleSdk as createRaribleSdkInternal } from '@rarible/protocol-ethereum-sdk';
 import { toAddress, toBigNumber } from '@rarible/types';
 import { Order, OrderActivityFilterByItemTypes, OrderStatus } from '@rarible/ethereum-api-client';
 import { EthersWeb3ProviderEthereum } from '@rarible/ethers-ethereum';
@@ -8,9 +8,14 @@ import { BASTARD_CONTRACT_ADDRESS } from './constants';
 import { displayAddress } from './web3';
 import { MarketData } from './interfaces';
 
-export const getMarketData = async (index: number, provider?: providers.Web3Provider): Promise<MarketData> => {
+export const createRaribleSdk = (provider?: providers.Web3Provider) => {
   const ethereum = provider && new EthersWeb3ProviderEthereum(provider);
-  const sdk = createRaribleSdk(ethereum, 'mainnet');
+  const sdk = createRaribleSdkInternal(ethereum, 'mainnet');
+  return sdk;
+};
+
+export const getMarketData = async (index: number, provider?: providers.Web3Provider): Promise<MarketData> => {
+  const sdk = createRaribleSdk(provider);
 
   const filter = {
     contract: BASTARD_CONTRACT_ADDRESS,
@@ -22,7 +27,6 @@ export const getMarketData = async (index: number, provider?: providers.Web3Prov
 
   const owner = getAddress(ownershipResult.ownerships[0].owner);
 
-  console.log(provider)
   const ownerDisplay = await displayAddress(owner, provider);
 
   const ordersResult = await sdk.apis.order.getSellOrdersByItemAndByStatus(filter);
@@ -58,4 +62,28 @@ export const displayPrice = (listing: Order) => {
   const amount = listing.take.valueDecimal?.toString();
 
   return `${amount} ${asset}`;
+};
+
+export const sell = async (tokenId: number, price: string, seller: string, provider: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const sellRequest = {
+    makeAssetType: {
+      assetClass: 'ERC721',
+      contract: toAddress(BASTARD_CONTRACT_ADDRESS),
+      tokenId: toBigNumber(String(tokenId)),
+    },
+    amount: 1,
+    originFees: [],
+    payouts: [],
+    maker: toAddress(seller),
+    price: toBigNumber(utils.parseEther(price).toString()),
+    takeAssetType: {
+      assetClass: 'ETH' as const,
+    },
+  };
+
+  const sellOrder = await sdk.order.sell(sellRequest);
+
+  return sellOrder;
 };

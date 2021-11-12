@@ -29,7 +29,7 @@ function DetailsPage({ settings, setSettings, marginTop, marginBottom, setMargin
   return (
     <div>
       <Header settings={settings} setSettings={setSettings} setMarginTop={setMarginTop} />
-      <BastardDetails index={bastardId} marginTop={marginTop} marginBottom={marginBottom} />
+      <BastardDetails tokenId={bastardId} marginTop={marginTop} marginBottom={marginBottom} />
       <Footer settings={settings} setMarginBottom={setMarginBottom} />
       {settings.colourfulBackground && <Background />}
     </div>

@@ -159,7 +159,7 @@ function Filters({ settings, indices, setIndices }: Props) {
   };
 
   const clearFiltersButton = (
-    <Button onClick={clearFilters} label="CLEAR ALL" inverted className="w-full inline-flex justify-center" />
+    <Button onClick={clearFilters} label="CLEAR ALL" className="w-full inline-flex justify-center" />
   );
 
   return (

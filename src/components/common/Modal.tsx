@@ -53,7 +53,7 @@ function Modal({ title, isOpen, setIsOpen, children, additionalButtons }: Props)
               </div>
               <div className="bg-gray-100 px-4 py-4 flex gap-2">
                 {additionalButtons}
-                <Button onClick={() => setIsOpen(false)} label="CLOSE" className="w-full inline-flex justify-center" />
+                <Button onClick={() => setIsOpen(false)} label="CLOSE" className="w-full inline-flex justify-center" inverted />
               </div>
             </div>
           </Transition.Child>
