@@ -3,11 +3,11 @@ import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { MarketData, Metadata } from '../../utils/interfaces';
 import { getMetadata } from '../../utils';
-import MarketDetails from './MarketDetails';
+import MarketDetails from './market/MarketDetails';
 import { getMarketData } from '../../utils/market';
 import Attributes from './Attributes';
 import ImageAndHeader from './ImageAndHeader';
-import MarketHistory from './MarketHistory';
+import MarketHistory from './market/MarketHistory';
 import ExternalLinks from './ExternalLinks';
 import Description from './Description';
 

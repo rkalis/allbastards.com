@@ -1,11 +1,11 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { useState } from 'react';
-import Modal from '../common/Modal';
-import Button from '../common/Button';
-import NumberSetting from '../common/NumberSetting';
-import { sell } from '../../utils/market';
-import { toast } from '../../utils';
+import Modal from '../../common/Modal';
+import Button from '../../common/Button';
+import NumberSetting from '../../common/NumberSetting';
+import { sell } from '../../../utils/market';
+import { toast } from '../../../utils';
 
 interface Props {
   tokenId: number;

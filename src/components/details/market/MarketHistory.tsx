@@ -1,4 +1,4 @@
-import { MarketData } from '../../utils/interfaces';
+import { MarketData } from '../../../utils/interfaces';
 import MarketHistoryEntry from './MarketHistoryEntry';
 
 interface Props {

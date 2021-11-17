@@ -1,7 +1,7 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
-import { MarketData } from '../../utils/interfaces';
-import Button from '../common/Button';
+import { MarketData } from '../../../utils/interfaces';
+import Button from '../../common/Button';
 import Sell from './Sell';
 
 interface Props {
