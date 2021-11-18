@@ -2,7 +2,7 @@ import { providers, utils } from 'ethers';
 import { getAddress } from '@ethersproject/address';
 import { createRaribleSdk as createRaribleSdkInternal } from '@rarible/protocol-ethereum-sdk';
 import { toAddress, toBigNumber } from '@rarible/types';
-import { Order, OrderActivityFilterByItemTypes, OrderStatus } from '@rarible/ethereum-api-client';
+import { Order, OrderActivityFilterByItemTypes, OrderStatus, RaribleV2Order } from '@rarible/ethereum-api-client';
 import { EthersWeb3ProviderEthereum } from '@rarible/ethers-ethereum';
 import { BASTARD_CONTRACT_ADDRESS } from './constants';
 import { displayAddress } from './web3';
@@ -31,8 +31,8 @@ export const getMarketData = async (index: number, provider?: providers.Web3Prov
 
   const ordersResult = await sdk.apis.order.getSellOrdersByItemAndByStatus(filter);
 
-  // TODO: Support non-ETH orders
-  const listing = ordersResult.orders[0]?.take.assetType.assetClass === 'ETH'
+  // TODO: Support non-ETH orders & non-rarible orders
+  const listing = ordersResult.orders[0]?.take.assetType.assetClass === 'ETH' && ordersResult.orders[0]?.type === 'RARIBLE_V2'
     ? ordersResult.orders[0]
     : undefined;
 
@@ -86,4 +86,20 @@ export const sell = async (tokenId: number, price: string, seller: string, provi
   const sellOrder = await sdk.order.sell(sellRequest);
 
   return sellOrder;
+};
+
+export const buy = async (listing: RaribleV2Order, provider: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const fillRequest = {
+    order: listing,
+    amount: 1, // TODO: Check
+    // infinite: true,
+    // payouts: [],
+    // originFees: [],
+  };
+
+  const unconfirmedTransaction = await sdk.order.fill(fillRequest);
+
+  return unconfirmedTransaction;
 };

@@ -1,4 +1,4 @@
-import { Activity, Order } from '@rarible/ethereum-api-client';
+import { Activity, RaribleV2Order } from '@rarible/ethereum-api-client';
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
@@ -37,7 +37,7 @@ export interface Metadata {
 export interface MarketData {
   owner: string;
   ownerDisplay: string;
-  listing?: Order;
+  listing?: RaribleV2Order;
   listingPriceDisplay?: string;
   activity: Activity[];
 }
