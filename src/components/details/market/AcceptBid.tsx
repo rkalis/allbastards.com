@@ -9,25 +9,22 @@ interface Props {
   marketData: MarketData;
 }
 
-function Buy({ marketData }: Props) {
+function AcceptBid({ marketData }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
-  // TODO: Update UI after buying a bastard
-  const buyBastard = async () => {
-    if (!marketData.listing) return;
-    if (!library) return;
-
+  // TODO: Update UI after accepting a bid
+  const acceptBidOnBastard = async () => {
     try {
-      const unconfirmedTransaction = await fill(marketData.listing, library);
+      const unconfirmedTransaction = await fill(marketData.bid!, library!);
 
-      toast('BUY TRANSACTION SUBMITTED', {
+      toast('BID ACCEPT TRANSACTION SUBMITTED', {
         position: 'top-right',
       });
 
       try {
         await unconfirmedTransaction.wait();
       } catch {
-        toast('BUY TRANSACTION FAILED', {
+        toast('BID ACCEPT TRANSACTION FAILED', {
           position: 'top-center',
           className: 'bg-red-500',
         });
@@ -35,7 +32,7 @@ function Buy({ marketData }: Props) {
     } catch (error: any) {
       // Don't display an error message if the user rejected the popup
       if (!(error.code && error.code === 4001)) {
-        toast('PURCHASE FAILED', {
+        toast('ACCEPTING BID FAILED', {
           position: 'top-center',
           className: 'bg-red-500',
         });
@@ -44,13 +41,13 @@ function Buy({ marketData }: Props) {
   };
 
   if (!account || !library) return null;
-  if (!marketData.listing) return null;
+  if (!marketData.bid) return null;
 
   return (
     <div>
-      <Button label="BUY" onClick={buyBastard} />
+      <Button label="ACCEPT BID" onClick={acceptBidOnBastard} />
     </div>
   );
 }
 
-export default Buy;
+export default AcceptBid;

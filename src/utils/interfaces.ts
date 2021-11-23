@@ -40,6 +40,8 @@ export interface MarketData {
   listing?: RaribleV2Order;
   listingPriceDisplay?: string;
   activity: Activity[];
+  bid?: RaribleV2Order;
+  bidPriceDisplay?: string;
 }
 
 export interface Attribute {

@@ -56,7 +56,6 @@ function Filters({ settings, indices, setIndices }: Props) {
 
     const selectedFilters = filterEntries
       .map(([attribute, filterValues]) => {
-        console.log(attribute);
         if (attribute === 'HYPE TYPE') {
           if (filterValues[0] === HypeType.CALM) {
             setSelectedHypeType(1);
