@@ -44,7 +44,13 @@ function MarketHistoryEntry({ activity }: Props) {
       <td className="p-1">
         {'price' in activity && `${activity.price} ETH ($${Number.parseFloat(activity.priceUsd?.toString() ?? '').toFixed(0)})`}
       </td>
-      <td className="p-1">{dateString}</td>
+      <td className="p-1">
+        {
+          'transactionHash' in activity
+            ? <a href={`https://etherscan.io/tx/${activity.transactionHash}`} target="_blank" rel="noreferrer">{dateString}</a>
+            : dateString
+        }
+      </td>
     </tr>
   );
 }
