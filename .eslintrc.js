@@ -74,5 +74,8 @@ module.exports = {
 
     // I like to nest ternaries to avoid using 'let'
     'no-nested-ternary': 'off',
+
+    // I like reading top-down
+    '@typescript-eslint/no-use-before-define': 'off',
   },
 };

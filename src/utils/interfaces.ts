@@ -37,11 +37,9 @@ export interface Metadata {
 export interface MarketData {
   owner: string;
   ownerDisplay: string;
-  listing?: RaribleV2Order;
-  listingPriceDisplay?: string;
+  listings: RaribleV2Order[];
+  bids: RaribleV2Order[];
   activity: Activity[];
-  bid?: RaribleV2Order;
-  bidPriceDisplay?: string;
 }
 
 export interface Attribute {

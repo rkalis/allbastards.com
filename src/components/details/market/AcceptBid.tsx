@@ -12,10 +12,12 @@ interface Props {
 function AcceptBid({ marketData }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
+  const [highestBid] = marketData.bids;
+
   // TODO: Update UI after accepting a bid
   const acceptBidOnBastard = async () => {
     try {
-      const unconfirmedTransaction = await fill(marketData.bid!, library!);
+      const unconfirmedTransaction = await fill(highestBid, library!);
 
       toast('BID ACCEPT TRANSACTION SUBMITTED', {
         position: 'top-right',
@@ -41,7 +43,7 @@ function AcceptBid({ marketData }: Props) {
   };
 
   if (!account || !library) return null;
-  if (!marketData.bid) return null;
+  if (!highestBid) return null;
 
   return (
     <div>

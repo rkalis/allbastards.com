@@ -12,13 +12,15 @@ interface Props {
 function Buy({ marketData }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
+  const [lowestListing] = marketData.listings;
+
   // TODO: Update UI after buying a bastard
   const buyBastard = async () => {
-    if (!marketData.listing) return;
+    if (lowestListing) return;
     if (!library) return;
 
     try {
-      const unconfirmedTransaction = await fill(marketData.listing, library);
+      const unconfirmedTransaction = await fill(lowestListing, library);
 
       toast('BUY TRANSACTION SUBMITTED', {
         position: 'top-right',
@@ -44,7 +46,7 @@ function Buy({ marketData }: Props) {
   };
 
   if (!account || !library) return null;
-  if (!marketData.listing) return null;
+  if (!lowestListing) return null;
 
   return (
     <div>

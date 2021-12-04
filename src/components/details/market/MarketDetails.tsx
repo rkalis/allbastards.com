@@ -1,6 +1,7 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { MarketData } from '../../../utils/interfaces';
+import { getBidPriceDisplay, getListingPriceDisplay } from '../../../utils/market';
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
@@ -14,8 +15,11 @@ interface Props {
 function MarketDetails({ marketData, tokenId }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
-  const isForSale = marketData.listingPriceDisplay !== undefined;
-  const hasBid = marketData.bidPriceDisplay !== undefined;
+  const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
+  const bidPriceDisplay = getBidPriceDisplay(marketData.bids);
+
+  const isForSale = listingPriceDisplay !== undefined;
+  const hasBid = bidPriceDisplay !== undefined;
   const canSell = library !== undefined && marketData.owner === account;
   const canBid = library !== undefined && account !== undefined && marketData.owner !== account;
   const canBuy = canBid && isForSale;
@@ -28,13 +32,13 @@ function MarketDetails({ marketData, tokenId }: Props) {
         <div className="w-1/2 max-w-md mx-auto text-center text-sm md:text-base">
           <div>This bastard is currently owned by {marketData.ownerDisplay}.</div>
           {
-            marketData.listingPriceDisplay
-              ? <div>This bastard is currently for sale for {marketData.listingPriceDisplay}.</div>
+            listingPriceDisplay
+              ? <div>This bastard is currently for sale for {listingPriceDisplay}.</div>
               : <div>This bastard is currently not for sale.</div>
           }
           {
-            marketData.bidPriceDisplay
-              ? <div>There is a bid of {marketData.bidPriceDisplay} on this bastard.</div>
+            bidPriceDisplay
+              ? <div>There is a bid of {bidPriceDisplay} on this bastard.</div>
               : <div>There are currently no bids on this bastard.</div>
           }
         </div>
