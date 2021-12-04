@@ -5,6 +5,7 @@ import { getBidPriceDisplay, getListingPriceDisplay } from '../../../utils/marke
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
+import CancelListings from './CancelListings';
 import Sell from './Sell';
 import UpdateListing from './UpdateListing';
 
@@ -46,6 +47,7 @@ function MarketDetails({ marketData, tokenId }: Props) {
         <div className="flex justify-center gap-2">
           {canSell && !isForSale && <Sell marketData={marketData} />}
           {canSell && isForSale && <UpdateListing marketData={marketData} />}
+          {canSell && isForSale && <CancelListings marketData={marketData} />}
           {canBuy && <Buy marketData={marketData} />}
           {canBid && <Bid tokenId={tokenId} />}
           {canAcceptBid && <AcceptBid marketData={marketData} />}

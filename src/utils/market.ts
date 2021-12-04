@@ -148,6 +148,14 @@ export const updateListing = async (listing: RaribleV2Order, newPrice: string, p
   return updatedSellOrder;
 };
 
+export const cancel = async (listingOrBid: RaribleV2Order, provider: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const unconfirmedTransaction = await sdk.order.cancel(listingOrBid);
+
+  return unconfirmedTransaction;
+};
+
 export const fill = async (listingOrBid: RaribleV2Order, provider: providers.Web3Provider) => {
   const sdk = createRaribleSdk(provider);
 
