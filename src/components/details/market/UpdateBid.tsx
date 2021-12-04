@@ -32,9 +32,13 @@ function UpdateBid({ marketData }: Props) {
     } catch (error: any) {
       if (error.code === 4001) return;
 
-      console.log(error);
       if (typeof error.value?.message === 'string' && error.value.message.includes('\'make.value\' less then current')) {
         toast('BID CANNOT BE DECREASED, ONLY INCREASED', {
+          position: 'top-center',
+          className: 'bg-red-500',
+        });
+      } else if (error.message) {
+        toast(error.message, {
           position: 'top-center',
           className: 'bg-red-500',
         });

@@ -5,7 +5,7 @@ import { toAddress, toBigNumber } from '@rarible/types';
 import { Order, OrderActivityFilterByItemTypes, OrderStatus, Platform, RaribleV2Order } from '@rarible/ethereum-api-client';
 import { EthersWeb3ProviderEthereum } from '@rarible/ethers-ethereum';
 import { BASTARD_CONTRACT_ADDRESS, WETH_ADDRESS } from './constants';
-import { displayAddress } from './web3';
+import { checkWethBalance, displayAddress } from './web3';
 import { MarketData } from './interfaces';
 
 export const createRaribleSdk = (provider?: providers.Web3Provider) => {
@@ -155,6 +155,8 @@ export const updateListing = async (listing: RaribleV2Order, newPrice: string, p
 export const updateBid = async (bid: RaribleV2Order, newPrice: string, provider: providers.Web3Provider) => {
   const sdk = createRaribleSdk(provider);
 
+  await checkWethBalance(bid.maker.toString(), newPrice, provider);
+
   const updateRequest = {
     order: bid,
     price: toBigNumber(utils.parseEther(newPrice).toString()),
@@ -191,6 +193,8 @@ export const fill = async (listingOrBid: RaribleV2Order, provider: providers.Web
 
 export const bid = async (tokenId: number, price: string, bidder: string, provider: providers.Web3Provider) => {
   const sdk = createRaribleSdk(provider);
+
+  await checkWethBalance(bidder, price, provider);
 
   const bidRequest = {
     makeAssetType: {

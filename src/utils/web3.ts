@@ -1,6 +1,7 @@
-import { BigNumber, Contract, providers } from 'ethers';
+import { BigNumber, Contract, providers, utils } from 'ethers';
 import BASTARD_ABI from './bastards-abi.json';
-import { BASTARD_CONTRACT_ADDRESS, DEAD_ADDRESS, NFT20_ADDRESS, NFTX_ADDRESS } from './constants';
+import ERC20_ABI from './ERC20.json';
+import { BASTARD_CONTRACT_ADDRESS, DEAD_ADDRESS, NFT20_ADDRESS, NFTX_ADDRESS, WETH_ADDRESS } from './constants';
 
 export const getLibrary = (provider: any) => new providers.Web3Provider(provider);
 
@@ -49,4 +50,13 @@ export const getOwnerFilters = async (provider: providers.Web3Provider, userAddr
   }
 
   return filterSpecification;
+};
+
+export const checkWethBalance = async (account: string, requiredBalance: string, provider: providers.Web3Provider) => {
+  const wethContract = new Contract(WETH_ADDRESS, ERC20_ABI, provider);
+  const bidderBalance = await wethContract.balanceOf(account);
+
+  if (utils.parseEther(requiredBalance).gt(bidderBalance)) {
+    throw new Error('WETH BALANCE TOO LOW');
+  }
 };

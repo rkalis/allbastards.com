@@ -29,7 +29,14 @@ function Bid({ marketData }: Props) {
       setIsOpen(false);
     } catch (error: any) {
       // Don't display an error message if the user rejected the popup
-      if (!(error.code && error.code === 4001)) {
+      if (error.code && error.code === 4001) return;
+
+      if (error.message) {
+        toast(error.message, {
+          position: 'top-center',
+          className: 'bg-red-500',
+        });
+      } else {
         toast('BID FAILED', {
           position: 'top-center',
           className: 'bg-red-500',
