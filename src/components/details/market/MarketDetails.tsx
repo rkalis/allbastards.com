@@ -6,6 +6,7 @@ import { getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
+import CancelBids from './CancelBids';
 import CancelListings from './CancelListings';
 import Sell from './Sell';
 import UpdateBid from './UpdateBid';
@@ -54,6 +55,7 @@ function MarketDetails({ marketData }: Props) {
           {canBuy && <Buy marketData={marketData} />}
           {canBid && !hasBidsFromUser && <Bid marketData={marketData} />}
           {canBid && hasBidsFromUser && <UpdateBid marketData={marketData} />}
+          {canBid && hasBidsFromUser && <CancelBids marketData={marketData} />}
           {canAcceptBid && <AcceptBid marketData={marketData} />}
         </div>
       </div>
