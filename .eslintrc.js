@@ -71,5 +71,8 @@ module.exports = {
 
     // Sometiems this is necessary
     'no-param-reassign': 'off',
+
+    // I like to nest ternaries to avoid using 'let'
+    'no-nested-ternary': 'off',
   },
 };
