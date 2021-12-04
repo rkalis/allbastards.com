@@ -60,3 +60,7 @@ export const checkWethBalance = async (account: string, requiredBalance: string,
     throw new Error('WETH BALANCE TOO LOW');
   }
 };
+
+export const getBastardContract = (provider: providers.Web3Provider) => (
+  new Contract(BASTARD_CONTRACT_ADDRESS, BASTARD_ABI, provider)
+);

@@ -27,7 +27,7 @@ function Attribute({ attribute, value }: Props) {
   };
 
   return (
-    <a href={`/?filters=${JSON.stringify(filter)}`} >
+    <a href={`/?filters=${JSON.stringify(filter)}`}>
       <div className="border-2 w-64 border-black p-2 flex flex-col justify-center">
         <h4 className="font-bold text-blue-500 text-center text-lg md:text-xl">
           {adjustedAttribute}
