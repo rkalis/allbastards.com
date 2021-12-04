@@ -21,6 +21,7 @@ export const IMAGE_SIZE_LARGE = 480;
 export const GENERAL_ATTRIBUTES = [
   'BASTARDNESS',
   'SONG WORD COUNT',
+  'TRAIT COUNT',
 ];
 
 export const HYPED_ATTRIBUTES = [
@@ -46,6 +47,13 @@ export const CALM_ATTRIBUTES = [
   'EAR',
   'NECK',
   'EXPERIMENTAL TRAITS',
+];
+
+export const NULLISH_ATTRIBUTES = [
+  'NUTTIN\'',
+  'NAH',
+  'EDIBLES???',
+  'REGULAR',
 ];
 
 export const DEFAULT_SETTINGS: ISettings = {

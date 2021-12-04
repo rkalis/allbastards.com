@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { NULLISH_ATTRIBUTES } from '../src/utils/constants';
 import EXPERIMENTAL_CATEGORIES from './experimental-categories';
 
 const indexBastard = (bastardIndex: number, attributesIndex: any) => {
@@ -7,6 +8,9 @@ const indexBastard = (bastardIndex: number, attributesIndex: any) => {
 
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const metadata = require(`../public/metadata/${bastardIndex}.json`);
+
+  const definedTraits = metadata.attributes.filter(({ value }: any) => !NULLISH_ATTRIBUTES.includes(value));
+  metadata.attributes.push({ trait_type: 'TRAIT COUNT', value: definedTraits.length });
 
   metadata.attributes.forEach(({ trait_type, value }: any) => {
     attributesIndex[trait_type] = attributesIndex[trait_type] ?? {};
