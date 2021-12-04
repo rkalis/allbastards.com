@@ -17,6 +17,10 @@ export const getAllAttributeFilters = () => {
   return allFilters;
 };
 
+export const getAttributeCount = (attribute: string, value: string) => (
+  ((attributesIndex as any)[attribute] as any)?.[value]?.length ?? 0
+);
+
 const sortByList = (list: string[], a: string, b: string) => (list.indexOf(a) - list.indexOf(b));
 
 export const separateAttributeFilters = (allFilters: FilterSpecification[]) => {

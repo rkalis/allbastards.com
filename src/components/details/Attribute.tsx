@@ -1,3 +1,6 @@
+import { HIGHEST_BASTARD_ID } from '../../utils/constants';
+import { getAttributeCount } from '../../utils/filters';
+
 interface Props {
   attribute: string;
   value: string
@@ -5,6 +8,11 @@ interface Props {
 
 function Attribute({ attribute, value }: Props) {
   const adjustedAttribute = attribute === 'BACKGROUND GLITCH LEVEL' ? 'BG GLITCH LEVEL' : attribute;
+  const [adjustedValue] = value.split(' (');
+  const attributeCount = getAttributeCount(attribute, value);
+  const attributeRarity = attributeCount < 10
+    ? `1 of ${attributeCount}`
+    : `${((attributeCount / (HIGHEST_BASTARD_ID + 1)) * 100).toFixed(2)}%`;
 
   return (
     <div className="border-2 w-64 border-black p-2 flex flex-col justify-center">
@@ -12,7 +20,10 @@ function Attribute({ attribute, value }: Props) {
         {adjustedAttribute}
       </h4>
       <div className="text-center text-sm md:text-base">
-        {value}
+        {adjustedValue}
+      </div>
+      <div className="text-center text-sm md:text-base">
+        (<span className="text-red-500">{attributeRarity}</span>)
       </div>
     </div>
   );
