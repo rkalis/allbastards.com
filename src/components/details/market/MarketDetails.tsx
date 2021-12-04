@@ -1,27 +1,30 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
+import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
-import { getBidPriceDisplay, getListingPriceDisplay } from '../../../utils/market';
+import { getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
 import CancelListings from './CancelListings';
 import Sell from './Sell';
+import UpdateBid from './UpdateBid';
 import UpdateListing from './UpdateListing';
 
 interface Props {
   marketData: MarketData;
-  tokenId: number;
 }
 
-function MarketDetails({ marketData, tokenId }: Props) {
+function MarketDetails({ marketData }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
   const bidPriceDisplay = getBidPriceDisplay(marketData.bids);
+  const bidsFromUser = getBidsFromAccount(marketData.bids, account ?? ZERO_ADDRESS);
 
   const isForSale = listingPriceDisplay !== undefined;
   const hasBid = bidPriceDisplay !== undefined;
+  const hasBidsFromUser = bidsFromUser.length > 0;
   const canSell = library !== undefined && marketData.owner === account;
   const canBid = library !== undefined && account !== undefined && marketData.owner !== account;
   const canBuy = canBid && isForSale;
@@ -49,7 +52,8 @@ function MarketDetails({ marketData, tokenId }: Props) {
           {canSell && isForSale && <UpdateListing marketData={marketData} />}
           {canSell && isForSale && <CancelListings marketData={marketData} />}
           {canBuy && <Buy marketData={marketData} />}
-          {canBid && <Bid tokenId={tokenId} />}
+          {canBid && !hasBidsFromUser && <Bid marketData={marketData} />}
+          {canBid && hasBidsFromUser && <UpdateBid marketData={marketData} />}
           {canAcceptBid && <AcceptBid marketData={marketData} />}
         </div>
       </div>

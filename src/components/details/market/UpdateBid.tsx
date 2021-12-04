@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import NumberSetting from '../../common/NumberSetting';
-import { updateListing } from '../../../utils/market';
+import { updateBid } from '../../../utils/market';
 import { toast } from '../../../utils';
 import { MarketData } from '../../../utils/interfaces';
 
@@ -12,19 +12,19 @@ interface Props {
   marketData: MarketData;
 }
 
-function UpdateListing({ marketData }: Props) {
+function UpdateBid({ marketData }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [price, setPrice] = useState<string>('1');
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
-  const [existingListing] = marketData.listings;
+  const [existingBid] = marketData.bids;
 
   // TODO: Update UI after submitting a listing
-  const updateSellListing = async () => {
+  const updateExistingBid = async () => {
     try {
-      await updateListing(existingListing, price, library!);
+      await updateBid(existingBid, price, library!);
 
-      toast('LISTING UPDATED', {
+      toast('BID UPDATED', {
         position: 'top-right',
       });
 
@@ -32,8 +32,9 @@ function UpdateListing({ marketData }: Props) {
     } catch (error: any) {
       if (error.code === 4001) return;
 
-      if (typeof error.value?.message === 'string' && error.value.message.includes('\'take.value\' greater than maximum available')) {
-        toast('PRICE CANNOT BE INCREASED, ONLY DECREASED', {
+      console.log(error);
+      if (typeof error.value?.message === 'string' && error.value.message.includes('\'make.value\' less then current')) {
+        toast('BID CANNOT BE DECREASED, ONLY INCREASED', {
           position: 'top-center',
           className: 'bg-red-500',
         });
@@ -46,19 +47,19 @@ function UpdateListing({ marketData }: Props) {
     }
   };
 
-  const updateButton = (<Button label="UPDATE LISTING" onClick={updateSellListing} className="w-full inline-flex justify-center" />);
+  const updateButton = (<Button label="UPDATE BID" onClick={updateExistingBid} className="w-full inline-flex justify-center" />);
 
-  if (!account || !library || !existingListing) return null;
+  if (!account || !library || !existingBid) return null;
 
   return (
     <div>
-      <Button label="UPDATE LISTING" onClick={() => setIsOpen(true)} />
+      <Button label="UPDATE BID" onClick={() => setIsOpen(true)} />
 
-      <Modal title="UPDATE LISTING" isOpen={isOpen} setIsOpen={setIsOpen} additionalButtons={[updateButton]}>
-        <NumberSetting label="PRICE" unit="ETH" min="0" step="0.1" value={price} update={setPrice} />
+      <Modal title="UPDATE BID" isOpen={isOpen} setIsOpen={setIsOpen} additionalButtons={[updateButton]}>
+        <NumberSetting label="PRICE" unit="WETH" min="0" step="0.1" value={price} update={setPrice} />
       </Modal>
     </div>
   );
 }
 
-export default UpdateListing;
+export default UpdateBid;

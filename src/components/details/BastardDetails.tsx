@@ -52,7 +52,7 @@ function BastardDetails({ tokenId, marginBottom, marginTop }: Props) {
         <ExternalLinks metadata={metadata} />
         <Description metadata={metadata} />
         <Attributes metadata={metadata} />
-        <MarketDetails marketData={marketData} tokenId={tokenId} />
+        <MarketDetails marketData={marketData} />
         <MarketHistory marketData={marketData} />
       </div>
     </div>

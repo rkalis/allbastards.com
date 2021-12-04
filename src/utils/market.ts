@@ -103,6 +103,10 @@ export const getBidPriceDisplay = (bids: Order[]) => {
   return displayPrice(bids[0], 'make');
 };
 
+export const getBidsFromAccount = (bids: Order[], account: string) => (
+  bids.filter((bid) => bid.maker === toAddress(account))
+);
+
 export const displayPrice = (listing: Order, side: 'make' | 'take') => {
   // TODO: Support non-ETH orders
   const asset = 'ETH';
@@ -146,6 +150,19 @@ export const updateListing = async (listing: RaribleV2Order, newPrice: string, p
   const updatedSellOrder = await sdk.order.sellUpdate(updateRequest);
 
   return updatedSellOrder;
+};
+
+export const updateBid = async (bid: RaribleV2Order, newPrice: string, provider: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const updateRequest = {
+    order: bid,
+    price: toBigNumber(utils.parseEther(newPrice).toString()),
+  };
+
+  const updatedBid = await sdk.order.bidUpdate(updateRequest);
+
+  return updatedBid;
 };
 
 export const cancel = async (listingOrBid: RaribleV2Order, provider: providers.Web3Provider) => {
