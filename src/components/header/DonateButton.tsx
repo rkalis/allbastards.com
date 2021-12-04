@@ -35,7 +35,7 @@ function DonateButton() {
       });
 
       setIsOpen(false);
-    } catch (err) {
+    } catch (err: any) {
       if (err.code && err.code === 'INVALID_ARGUMENT') {
         toast('INVALID INPUT', {
           position: 'top-center',
