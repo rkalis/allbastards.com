@@ -6,12 +6,13 @@ import Button from '../../common/Button';
 import NumberSetting from '../../common/NumberSetting';
 import { sell } from '../../../utils/market';
 import { toast } from '../../../utils';
+import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
-  tokenId: number;
+  marketData: MarketData;
 }
 
-function Sell({ tokenId }: Props) {
+function Sell({ marketData }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [price, setPrice] = useState<string>('1');
   const { account, library } = useWeb3React<providers.Web3Provider>();
@@ -19,7 +20,7 @@ function Sell({ tokenId }: Props) {
   // TODO: Update UI after submitting a listing
   const createListing = async () => {
     try {
-      await sell(tokenId, price, account!, library!);
+      await sell(marketData.tokenId, price, account!, library!);
 
       toast('LISTING CREATED', {
         position: 'top-right',

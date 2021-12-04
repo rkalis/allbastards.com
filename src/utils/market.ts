@@ -14,12 +14,12 @@ export const createRaribleSdk = (provider?: providers.Web3Provider) => {
   return sdk;
 };
 
-export const getMarketData = async (index: number, provider?: providers.Web3Provider): Promise<MarketData> => {
+export const getMarketData = async (tokenId: number, provider?: providers.Web3Provider): Promise<MarketData> => {
   const sdk = createRaribleSdk(provider);
 
   const filter = {
     contract: BASTARD_CONTRACT_ADDRESS,
-    tokenId: String(index),
+    tokenId: String(tokenId),
     status: [OrderStatus.ACTIVE],
   };
 
@@ -29,9 +29,9 @@ export const getMarketData = async (index: number, provider?: providers.Web3Prov
 
   const ownerDisplay = await displayAddress(owner, provider);
 
-  const listings = await getSortedListings(index, provider);
+  const listings = await getSortedListings(tokenId, provider);
 
-  const bids = await getSortedBids(index, provider);
+  const bids = await getSortedBids(tokenId, provider);
 
   const activityResult = await sdk.apis.orderActivity.getOrderActivities({
     orderActivityFilter: {
@@ -42,13 +42,13 @@ export const getMarketData = async (index: number, provider?: providers.Web3Prov
         OrderActivityFilterByItemTypes.MATCH,
       ],
       contract: toAddress(BASTARD_CONTRACT_ADDRESS),
-      tokenId: toBigNumber(String(index)),
+      tokenId: toBigNumber(String(tokenId)),
     },
   });
 
   const activity = activityResult.items;
 
-  return { owner, ownerDisplay, listings, bids, activity };
+  return { tokenId, owner, ownerDisplay, listings, bids, activity };
 };
 
 export const getSortedListings = async (tokenId: number, provider?: providers.Web3Provider) => {
@@ -133,6 +133,19 @@ export const sell = async (tokenId: number, price: string, seller: string, provi
   const sellOrder = await sdk.order.sell(sellRequest);
 
   return sellOrder;
+};
+
+export const updateListing = async (listing: RaribleV2Order, newPrice: string, provider: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const updateRequest = {
+    order: listing,
+    price: toBigNumber(utils.parseEther(newPrice).toString()),
+  };
+
+  const updatedSellOrder = await sdk.order.sellUpdate(updateRequest);
+
+  return updatedSellOrder;
 };
 
 export const fill = async (listingOrBid: RaribleV2Order, provider: providers.Web3Provider) => {

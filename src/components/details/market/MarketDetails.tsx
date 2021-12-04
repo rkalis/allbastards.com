@@ -6,6 +6,7 @@ import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
 import Sell from './Sell';
+import UpdateListing from './UpdateListing';
 
 interface Props {
   marketData: MarketData;
@@ -43,7 +44,8 @@ function MarketDetails({ marketData, tokenId }: Props) {
           }
         </div>
         <div className="flex justify-center gap-2">
-          {canSell && <Sell tokenId={tokenId} />}
+          {canSell && !isForSale && <Sell marketData={marketData} />}
+          {canSell && isForSale && <UpdateListing marketData={marketData} />}
           {canBuy && <Buy marketData={marketData} />}
           {canBid && <Bid tokenId={tokenId} />}
           {canAcceptBid && <AcceptBid marketData={marketData} />}

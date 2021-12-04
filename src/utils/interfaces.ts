@@ -35,6 +35,7 @@ export interface Metadata {
 }
 
 export interface MarketData {
+  tokenId: number;
   owner: string;
   ownerDisplay: string;
   listings: RaribleV2Order[];
