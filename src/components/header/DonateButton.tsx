@@ -60,7 +60,7 @@ function DonateButton() {
       <Button label="DONATE" onClick={() => setIsOpen(true)} />
 
       <Modal title="DONATE" isOpen={isOpen} setIsOpen={setIsOpen} additionalButtons={[donateButton]}>
-        <NumberSetting label="AMOUNT" value={amount} min="0.00" max="1000" step="0.01" unit="ETH" update={setAmount} />
+        <NumberSetting label="AMOUNT" value={amount} min="0" step="0.01" unit="ETH" update={setAmount} />
       </Modal>
     </div>
   );

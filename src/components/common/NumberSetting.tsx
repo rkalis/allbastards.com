@@ -12,8 +12,11 @@ interface Props {
 
 function NumberSetting({ label, value, min, max, step, unit, update }: Props) {
   const updateValue = (event: ChangeEvent<HTMLInputElement>) => {
-    const regex = /^[0-9]{1,6}(\.[0-9]{1,4})?$/;
-    if (event.target.value.match(regex)) update(event.target.value);
+    // Potential input errors are badInput, customError, rangeOverflow, rangeUnderflow
+    // Other errors (like missing input) are allowed and are handled downstream
+    const { badInput, customError, rangeOverflow, rangeUnderflow } = event.target.validity;
+    if (badInput || customError || rangeOverflow || rangeUnderflow) return;
+    update(event.target.value);
   };
 
   return (
