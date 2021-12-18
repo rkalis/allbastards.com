@@ -1,4 +1,4 @@
-import { Activity, ActivityFilterByItemType } from '@rarible/ethereum-api-client';
+import { Activity } from '@rarible/ethereum-api-client';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { useEffect, useState } from 'react';

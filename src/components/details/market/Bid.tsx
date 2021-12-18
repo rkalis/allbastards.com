@@ -14,7 +14,7 @@ interface Props {
 
 function Bid({ marketData }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [price, setPrice] = useState<string>('1');
+  const [price, setPrice] = useState<string>('');
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   // TODO: Update UI after submitting a listing

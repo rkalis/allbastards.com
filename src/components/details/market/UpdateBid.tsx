@@ -1,23 +1,23 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { useState } from 'react';
+import { RaribleV2Order } from '@rarible/ethereum-api-client';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import NumberSetting from '../../common/NumberSetting';
 import { updateBid } from '../../../utils/market';
 import { toast } from '../../../utils';
-import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
-  marketData: MarketData;
+  bids: RaribleV2Order[];
 }
 
-function UpdateBid({ marketData }: Props) {
+function UpdateBid({ bids }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [price, setPrice] = useState<string>('1');
+  const [price, setPrice] = useState<string>('');
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
-  const [existingBid] = marketData.bids;
+  const [existingBid] = bids;
 
   // TODO: Update UI after submitting a listing
   const updateExistingBid = async () => {

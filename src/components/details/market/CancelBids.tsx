@@ -1,15 +1,15 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
+import { RaribleV2Order } from '@rarible/ethereum-api-client';
 import Button from '../../common/Button';
 import { cancel } from '../../../utils/market';
 import { toast } from '../../../utils';
-import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
-  marketData: MarketData;
+  bids: RaribleV2Order[];
 }
 
-function CancelBids({ marketData }: Props) {
+function CancelBids({ bids }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   // TODO: Update UI after cancelling a bid
@@ -18,7 +18,7 @@ function CancelBids({ marketData }: Props) {
 
     try {
       const unconfirmedTransactions = await Promise.all(
-        marketData.bids.map((bid) => cancel(bid, library!)),
+        bids.map((bid) => cancel(bid, library!)),
       );
 
       toast('CANCELLATION TRANSACTION(S) SUBMITTED', {
@@ -45,7 +45,7 @@ function CancelBids({ marketData }: Props) {
   };
 
   if (!account || !library) return null;
-  if (marketData.bids.length === 0) return null;
+  if (bids.length === 0) return null;
 
   return (
     <div>

@@ -2,7 +2,7 @@ import { providers, utils } from 'ethers';
 import { getAddress } from '@ethersproject/address';
 import { createRaribleSdk as createRaribleSdkInternal } from '@rarible/protocol-ethereum-sdk';
 import { toAddress, toBigNumber } from '@rarible/types';
-import { ActivitySort, Order, OrderActivityFilterByItemTypes, OrderStatus, Platform, RaribleV2Order } from '@rarible/ethereum-api-client';
+import { ActivitySort, Erc20AssetType, Order, OrderActivityFilterByItemTypes, OrderStatus, Platform, RaribleV2Order } from '@rarible/ethereum-api-client';
 import { EthersWeb3ProviderEthereum } from '@rarible/ethers-ethereum';
 import { BASTARD_CONTRACT_ADDRESS, WETH_ADDRESS } from './constants';
 import { checkWethBalance, displayAddress } from './web3';
@@ -16,11 +16,12 @@ export const createRaribleSdk = (provider?: providers.Web3Provider) => {
 
 export const getMarketData = async (tokenId: number, provider?: providers.Web3Provider): Promise<MarketData> => {
   const { owner, ownerDisplay } = await getOwner(tokenId, provider);
-  const listings = await getSortedListings(tokenId, provider);
-  const bids = await getSortedBids(tokenId, provider);
+  const listings = await getListings(tokenId, provider);
+  const bids = await getBids(tokenId, OrderStatus.ACTIVE, provider);
+  const inactiveBids = await getBids(tokenId, OrderStatus.INACTIVE, provider);
   const activity = await getActivity(tokenId, provider);
 
-  return { tokenId, owner, ownerDisplay, listings, bids, activity };
+  return { tokenId, owner, ownerDisplay, listings, bids, inactiveBids, activity };
 };
 
 export const getOwner = async (tokenId: number, provider?: providers.Web3Provider) => {
@@ -41,7 +42,7 @@ export const getOwner = async (tokenId: number, provider?: providers.Web3Provide
   return { owner, ownerDisplay };
 };
 
-export const getSortedListings = async (tokenId: number, provider?: providers.Web3Provider) => {
+export const getListings = async (tokenId: number, provider?: providers.Web3Provider) => {
   const sdk = createRaribleSdk(provider);
 
   const filter = {
@@ -51,36 +52,41 @@ export const getSortedListings = async (tokenId: number, provider?: providers.We
     status: [OrderStatus.ACTIVE],
   };
 
+  // Listings from the Rarible API are returned sorted (TODO: local sorting)
   const { orders: listings } = await sdk.apis.order.getSellOrdersByItemAndByStatus(filter);
 
-  // TODO: Support non-ETH orders & non-rarible orders
-  const listingsInEth = listings.filter((listing) => listing.take.assetType.assetClass === 'ETH');
-  const raribleListingsInEth = listingsInEth.filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
+  // Only Rarible ETH listings are supported
+  const filteredListings = listings
+    .filter((listing) => listing.take.assetType.assetClass === 'ETH')
+    .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
 
-  // TODO: Sort -- currently already sorted by Rarible SDK
-  return raribleListingsInEth;
+  return filteredListings;
 };
 
-export const getSortedBids = async (tokenId: number, provider?: providers.Web3Provider) => {
+export const getBids = async (tokenId: number, status: OrderStatus, provider?: providers.Web3Provider) => {
   const sdk = createRaribleSdk(provider);
 
   const filter = {
     contract: BASTARD_CONTRACT_ADDRESS,
     tokenId: String(tokenId),
     platform: Platform.RARIBLE,
-    status: [OrderStatus.ACTIVE],
+    status: [status],
   };
 
+  // Bids from the Rarible API are returned sorted (TODO: local sorting)
   const { orders: bids } = await sdk.apis.order.getOrderBidsByItemAndByStatus(filter);
 
-  // TODO: Support non-WETH orders & non-rarible orders
-  const bidsInWeth = bids.filter((listing) => (
-    listing.make.assetType.assetClass === 'ERC20' && getAddress(listing.make.assetType.contract) === WETH_ADDRESS
-  ));
-  const raribleBidsInWeth = bidsInWeth.filter((bid) => bid.type === 'RARIBLE_V2') as RaribleV2Order[];
+  // Only Rarible WETH bids are supported
+  const filteredBids = bids
+    .filter((bid) => bid.make.assetType.assetClass === 'ERC20')
+    .filter((bid) => getAddress((bid.make.assetType as Erc20AssetType).contract) === WETH_ADDRESS)
+    .filter((bid) => bid.type === 'RARIBLE_V2') as RaribleV2Order[];
 
-  // TODO: Sort -- currently already sorted by Rarible SDK
-  return raribleBidsInWeth;
+  // Remove bids with a duplicate hash
+  const deduplicatedBids = filteredBids
+    .filter((bid, index) => filteredBids.findIndex((other) => other.hash === bid.hash) === index);
+
+  return deduplicatedBids;
 };
 
 export const getActivity = async (tokenId: number, provider?: providers.Web3Provider) => {
@@ -113,7 +119,7 @@ export const getBidPriceDisplay = (bids: Order[]) => {
   return displayPrice(bids[0], 'make');
 };
 
-export const getBidsFromAccount = (bids: Order[], account: string) => (
+export const getBidsFromAccount = <T extends Order>(bids: T[], account: string) => (
   bids.filter((bid) => bid.maker === toAddress(account))
 );
 

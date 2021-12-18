@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
-import { getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
+import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
@@ -21,7 +21,9 @@ function MarketDetails({ marketData }: Props) {
 
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
   const bidPriceDisplay = getBidPriceDisplay(marketData.bids);
-  const bidsFromUser = getBidsFromAccount(marketData.bids, account ?? ZERO_ADDRESS);
+  const activeBidsFromUser = getBidsFromAccount(marketData.bids, account ?? ZERO_ADDRESS);
+  const inactiveBidsFromUser = getBidsFromAccount(marketData.inactiveBids, account ?? ZERO_ADDRESS);
+  const bidsFromUser = [...activeBidsFromUser, ...inactiveBidsFromUser];
 
   const isForSale = listingPriceDisplay !== undefined;
   const hasBid = bidPriceDisplay !== undefined;
@@ -37,16 +39,17 @@ function MarketDetails({ marketData }: Props) {
       <div className="flex flex-col gap-2">
         <div className="w-1/2 max-w-md mx-auto text-center text-sm md:text-base">
           <div>This bastard is currently owned by {marketData.ownerDisplay}.</div>
+          {listingPriceDisplay && <div>This bastard is currently for sale for {listingPriceDisplay}.</div>}
+          {!listingPriceDisplay && <div>This bastard is currently not for sale.</div>}
+          {bidPriceDisplay && <div>There is a bid of {bidPriceDisplay} on this bastard.</div>}
+          {!bidPriceDisplay && <div>There are currently no active bids on this bastard.</div>}
           {
-            listingPriceDisplay
-              ? <div>This bastard is currently for sale for {listingPriceDisplay}.</div>
-              : <div>This bastard is currently not for sale.</div>
+            canBid && hasBidsFromUser &&
+              <div>
+                You have {bidsFromUser.length} bid(s) on this bastard of {bidsFromUser.map((bid) => displayPrice(bid, 'make')).join(', ')}.
+              </div>
           }
-          {
-            bidPriceDisplay
-              ? <div>There is a bid of {bidPriceDisplay} on this bastard.</div>
-              : <div>There are currently no bids on this bastard.</div>
-          }
+          {(!canBid || !hasBidsFromUser) && <div>You have no bids on this bastard.</div>}
         </div>
         <div className="flex justify-center gap-2">
           {canSell && !isForSale && <Sell marketData={marketData} />}
@@ -54,8 +57,8 @@ function MarketDetails({ marketData }: Props) {
           {canSell && isForSale && <CancelListings marketData={marketData} />}
           {canBuy && <Buy marketData={marketData} />}
           {canBid && !hasBidsFromUser && <Bid marketData={marketData} />}
-          {canBid && hasBidsFromUser && <UpdateBid marketData={marketData} />}
-          {canBid && hasBidsFromUser && <CancelBids marketData={marketData} />}
+          {canBid && hasBidsFromUser && <UpdateBid bids={bidsFromUser} />}
+          {canBid && hasBidsFromUser && <CancelBids bids={bidsFromUser} />}
           {canAcceptBid && <AcceptBid marketData={marketData} />}
         </div>
       </div>
