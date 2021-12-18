@@ -10,16 +10,16 @@ import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
   marketData: MarketData;
+  refresh: () => void;
 }
 
-function UpdateListing({ marketData }: Props) {
+function UpdateListing({ marketData, refresh }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [price, setPrice] = useState<string>('');
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const [existingListing] = marketData.listings;
 
-  // TODO: Update UI after submitting a listing
   const updateSellListing = async () => {
     try {
       await updateListing(existingListing, price, library!);
@@ -27,6 +27,8 @@ function UpdateListing({ marketData }: Props) {
       toast('LISTING UPDATED', {
         position: 'top-right',
       });
+
+      refresh();
 
       setIsOpen(false);
     } catch (error: any) {

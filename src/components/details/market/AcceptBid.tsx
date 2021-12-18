@@ -7,24 +7,25 @@ import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
   marketData: MarketData;
+  refresh: () => void;
 }
 
-function AcceptBid({ marketData }: Props) {
+function AcceptBid({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const [highestBid] = marketData.bids;
 
-  // TODO: Update UI after accepting a bid
   const acceptBidOnBastard = async () => {
     try {
       const unconfirmedTransaction = await fill(highestBid, library!);
 
-      toast('BID ACCEPT TRANSACTION SUBMITTED', {
+      toast('BID ACCEPT TRANSACTION SUBMITTED, DATA WILL UPDATE AFTER IT IS CONFIRMED', {
         position: 'top-right',
       });
 
       try {
         await unconfirmedTransaction.wait();
+        refresh();
       } catch {
         toast('BID ACCEPT TRANSACTION FAILED', {
           position: 'top-center',

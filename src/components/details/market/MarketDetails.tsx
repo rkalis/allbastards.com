@@ -14,9 +14,10 @@ import UpdateListing from './UpdateListing';
 
 interface Props {
   marketData: MarketData;
+  refresh: () => void;
 }
 
-function MarketDetails({ marketData }: Props) {
+function MarketDetails({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
@@ -52,14 +53,14 @@ function MarketDetails({ marketData }: Props) {
           {(!canBid || !hasBidsFromUser) && <div>You have no bids on this bastard.</div>}
         </div>
         <div className="flex justify-center gap-2">
-          {canSell && !isForSale && <Sell marketData={marketData} />}
-          {canSell && isForSale && <UpdateListing marketData={marketData} />}
-          {canSell && isForSale && <CancelListings marketData={marketData} />}
-          {canBuy && <Buy marketData={marketData} />}
-          {canBid && !hasBidsFromUser && <Bid marketData={marketData} />}
-          {canBid && hasBidsFromUser && <UpdateBid bids={bidsFromUser} />}
-          {canBid && hasBidsFromUser && <CancelBids bids={bidsFromUser} />}
-          {canAcceptBid && <AcceptBid marketData={marketData} />}
+          {canSell && !isForSale && <Sell marketData={marketData} refresh={refresh} />}
+          {canSell && isForSale && <UpdateListing marketData={marketData} refresh={refresh} />}
+          {canSell && isForSale && <CancelListings marketData={marketData} refresh={refresh} />}
+          {canBuy && <Buy marketData={marketData} refresh={refresh} />}
+          {canBid && !hasBidsFromUser && <Bid marketData={marketData} refresh={refresh} />}
+          {canBid && hasBidsFromUser && <UpdateBid bids={bidsFromUser} refresh={refresh} />}
+          {canBid && hasBidsFromUser && <CancelBids bids={bidsFromUser} refresh={refresh} />}
+          {canAcceptBid && <AcceptBid marketData={marketData} refresh={refresh} />}
         </div>
       </div>
     </div>

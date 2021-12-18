@@ -7,27 +7,25 @@ import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
   marketData: MarketData;
+  refresh: () => void;
 }
 
-function Buy({ marketData }: Props) {
+function Buy({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const [lowestListing] = marketData.listings;
 
-  // TODO: Update UI after buying a bastard
   const buyBastard = async () => {
-    if (lowestListing) return;
-    if (!library) return;
-
     try {
-      const unconfirmedTransaction = await fill(lowestListing, library);
+      const unconfirmedTransaction = await fill(lowestListing, library!);
 
-      toast('BUY TRANSACTION SUBMITTED', {
+      toast('BUY TRANSACTION SUBMITTED, DATA WILL UPDATE AFTER IT IS CONFIRMED', {
         position: 'top-right',
       });
 
       try {
         await unconfirmedTransaction.wait();
+        refresh();
       } catch {
         toast('BUY TRANSACTION FAILED', {
           position: 'top-center',

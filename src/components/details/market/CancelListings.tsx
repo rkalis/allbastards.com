@@ -7,12 +7,12 @@ import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
   marketData: MarketData;
+  refresh: () => void;
 }
 
-function CancelListings({ marketData }: Props) {
+function CancelListings({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
-  // TODO: Update UI after cancelling a listing
   const cancelListings = async () => {
     if (!library) return;
 
@@ -21,12 +21,13 @@ function CancelListings({ marketData }: Props) {
         marketData.listings.map((listing) => cancel(listing, library!)),
       );
 
-      toast('CANCELLATION TRANSACTION(S) SUBMITTED', {
+      toast('CANCELLATION TRANSACTION(S) SUBMITTED, DATA WILL UPDATE AFTER THEY ARE CONFIRMED', {
         position: 'top-right',
       });
 
       try {
         await Promise.all(unconfirmedTransactions.map((transaction) => transaction.wait()));
+        refresh();
       } catch {
         toast('CANCELLATION TRANSACTION(S) FAILED', {
           position: 'top-center',

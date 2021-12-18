@@ -52,7 +52,10 @@ function BastardDetails({ tokenId, settings, marginBottom, marginTop }: Props) {
         <ExternalLinks metadata={metadata} />
         <Description metadata={metadata} />
         <Attributes metadata={metadata} />
-        {settings.enableMarketplace && marketData && <MarketDetails marketData={marketData} />}
+        {
+          settings.enableMarketplace &&
+            marketData && <MarketDetails marketData={marketData} refresh={updateMarketData} />
+        }
         {marketData && <MarketHistory marketData={marketData} />}
       </div>
     </div>

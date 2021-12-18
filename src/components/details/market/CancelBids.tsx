@@ -7,12 +7,12 @@ import { toast } from '../../../utils';
 
 interface Props {
   bids: RaribleV2Order[];
+  refresh: () => void;
 }
 
-function CancelBids({ bids }: Props) {
+function CancelBids({ bids, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
-  // TODO: Update UI after cancelling a bid
   const cancelBids = async () => {
     if (!library) return;
 
@@ -21,12 +21,13 @@ function CancelBids({ bids }: Props) {
         bids.map((bid) => cancel(bid, library!)),
       );
 
-      toast('CANCELLATION TRANSACTION(S) SUBMITTED', {
+      toast('CANCELLATION TRANSACTION(S) SUBMITTED, DATA WILL UPDATE AFTER THEY ARE CONFIRMED', {
         position: 'top-right',
       });
 
       try {
         await Promise.all(unconfirmedTransactions.map((transaction) => transaction.wait()));
+        refresh();
       } catch {
         toast('CANCELLATION TRANSACTION(S) FAILED', {
           position: 'top-center',

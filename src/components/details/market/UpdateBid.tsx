@@ -10,16 +10,16 @@ import { toast } from '../../../utils';
 
 interface Props {
   bids: RaribleV2Order[];
+  refresh: () => void;
 }
 
-function UpdateBid({ bids }: Props) {
+function UpdateBid({ bids, refresh }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [price, setPrice] = useState<string>('');
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const [existingBid] = bids;
 
-  // TODO: Update UI after submitting a listing
   const updateExistingBid = async () => {
     try {
       await updateBid(existingBid, price, library!);
@@ -27,6 +27,8 @@ function UpdateBid({ bids }: Props) {
       toast('BID UPDATED', {
         position: 'top-right',
       });
+
+      refresh();
 
       setIsOpen(false);
     } catch (error: any) {
