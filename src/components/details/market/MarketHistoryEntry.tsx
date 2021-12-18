@@ -1,11 +1,42 @@
-import { Activity } from '@rarible/ethereum-api-client';
+import { Activity, ActivityFilterByItemType } from '@rarible/ethereum-api-client';
+import { useWeb3React } from '@web3-react/core';
+import { providers } from 'ethers';
+import { useEffect, useState } from 'react';
+import { displayAddress } from '../../../utils/web3';
 
 interface Props {
   activity: Activity
 }
 
 function MarketHistoryEntry({ activity }: Props) {
-  const dateString = new Date(activity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const [from, setFrom] = useState<string>();
+  const [to, setTo] = useState<string>();
+  const { library } = useWeb3React<providers.Web3Provider>();
+
+  useEffect(() => {
+    if (!activity) return;
+    setParties(library);
+  }, [activity, library]);
+
+  const setParties = async (provider?: providers.Web3Provider) => {
+    const fromBase = activity['@type'] === 'match'
+      ? activity.left.maker
+      : activity['@type'] === 'bid' || activity['@type'] === 'list' || activity['@type'] === 'cancel_bid' || activity['@type'] === 'cancel_list'
+        ? activity.maker
+        : undefined;
+
+    const toBase = activity['@type'] === 'match'
+      ? activity.right.maker
+      : undefined;
+
+    const fromDisplay = fromBase && await displayAddress(fromBase, provider);
+    const toDisplay = toBase && await displayAddress(toBase, provider);
+
+    setFrom(fromDisplay);
+    setTo(toDisplay);
+  };
+
+  const dateString = new Date(activity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase();
 
   const actionName = {
     match: 'SOLD',
@@ -29,18 +60,16 @@ function MarketHistoryEntry({ activity }: Props) {
     transfer: 'bg-green-200',
   };
 
-  const platformName = {
-    RARIBLE: 'Rarible',
-    OPEN_SEA: 'OpenSea',
-    CRYPTO_PUNKS: 'Invalid',
-  };
-
-  if (actionName[activity['@type']].includes('CANCELLED')) return null;
-
   return (
     <tr key={activity.id} className={`border-b ${backgroundColors[activity['@type']]}`}>
       <td className="p-1">{actionName[activity['@type']]}</td>
-      <td className="p-1">{'source' in activity && platformName[activity.source]}</td>
+      {/* <td className="p-1">{'source' in activity && platformName[activity.source]}</td> */}
+      <td className="p-1 hidden md:table-cell">
+        <a href={`https://etherscan.io/address/${from}`} target="_blank" rel="noreferrer">{from}</a>
+      </td>
+      <td className="p-1 hidden md:table-cell">
+        <a href={`https://etherscan.io/address/${to}`} target="_blank" rel="noreferrer">{to}</a>
+      </td>
       <td className="p-1">
         {'price' in activity && `${activity.price} ETH ($${Number.parseFloat(activity.priceUsd?.toString() ?? '').toFixed(0)})`}
       </td>

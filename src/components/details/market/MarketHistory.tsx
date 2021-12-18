@@ -12,14 +12,15 @@ function MarketHistory({ marketData }: Props) {
   return (
     <div>
       <h3 className="font-bold text-center text-xl sm:text-2xl md:text-3xl">HISTORY</h3>
-      <div className="w-3/4 mx-auto">
+      <div className="w-full xl:w-4/5 mx-auto">
         <table className="table-fixed w-full">
           <thead className="border-b-2 border-black text-left">
             <tr>
-              <th className="w-1/4 p-1">TYPE</th>
-              <th className="w-1/4 p-1">PLATFORM</th>
-              <th className="w-1/4 p-1">PRICE</th>
-              <th className="w-1/4 p-1">DATE</th>
+              <th className="w-1/5 p-1">TYPE</th>
+              <th className="w-1/5 p-1 hidden md:table-cell">FROM</th>
+              <th className="w-1/5 p-1 hidden md:table-cell">TO</th>
+              <th className="w-1/5 p-1">PRICE</th>
+              <th className="w-1/5 p-1">DATE</th>
             </tr>
           </thead>
           <tbody>
