@@ -37,6 +37,11 @@ function Settings({ settings, setSettings }: Props) {
           value={settings.enableExperimentalTraits}
           update={(value: boolean) => setSettings({ ...settings, enableExperimentalTraits: value })}
         />
+        <BooleanSetting
+          label="ENABLE MARKETPLACE"
+          value={settings.enableMarketplace ?? false}
+          update={(value: boolean) => setSettings({ ...settings, enableMarketplace: value })}
+        />
       </Modal>
     </div>
   );

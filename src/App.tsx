@@ -7,6 +7,7 @@ import { displayGitcoinToast } from './components/common/gitcoin-toast';
 import { DEFAULT_SETTINGS } from './utils/constants';
 import { ISettings } from './utils/interfaces';
 import { getLibrary } from './utils/web3';
+import MarketplaceOptin from './components/header/MarketplaceOptIn';
 import GalleryPage from './pages/GalleryPage';
 import DetailsPage from './pages/DetailsPage';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,6 +46,7 @@ function App() {
         draggable
         pauseOnHover
       />
+      <MarketplaceOptin settings={settings} setSettings={setSettings} />
       <BrowserRouter>
         <Routes>
           <Route

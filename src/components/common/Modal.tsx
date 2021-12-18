@@ -5,7 +5,7 @@ import Button from './Button';
 interface Props {
   title: string;
   isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
+  setIsOpen?: (value: boolean) => void;
   children: React.ReactNode | React.ReactNode[];
   additionalButtons?: React.ReactNode[];
 }
@@ -19,7 +19,7 @@ function Modal({ title, isOpen, setIsOpen, children, additionalButtons }: Props)
         static
         className="fixed z-40 inset-0 overflow-y-auto"
         open={isOpen}
-        onClose={setIsOpen}
+        onClose={setIsOpen ?? (() => {})}
       >
         <div className="flex items-start justify-center min-h-screen px-4 text-center pt-40">
           <Transition.Child
@@ -53,7 +53,7 @@ function Modal({ title, isOpen, setIsOpen, children, additionalButtons }: Props)
               </div>
               <div className="bg-gray-100 px-4 py-4 flex gap-2">
                 {additionalButtons}
-                <Button onClick={() => setIsOpen(false)} label="CLOSE" className="w-full inline-flex justify-center" inverted />
+                {setIsOpen && <Button onClick={() => setIsOpen(false)} label="CLOSE" className="w-full inline-flex justify-center" inverted />}
               </div>
             </div>
           </Transition.Child>

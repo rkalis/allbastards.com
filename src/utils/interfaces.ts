@@ -7,6 +7,7 @@ export interface ISettings {
   displayNumbers: boolean;
   showFiltersInUrl: boolean;
   enableExperimentalTraits: boolean;
+  enableMarketplace?: boolean
 }
 
 export interface FilterOption {

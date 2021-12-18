@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
-import { MarketData, Metadata } from '../../utils/interfaces';
+import { ISettings, MarketData, Metadata } from '../../utils/interfaces';
 import { getMetadata } from '../../utils';
 import MarketDetails from './market/MarketDetails';
 import { getMarketData } from '../../utils/market';
@@ -13,11 +13,12 @@ import Description from './Description';
 
 interface Props {
   tokenId: number;
+  settings: ISettings;
   marginTop: number;
   marginBottom: number;
 }
 
-function BastardDetails({ tokenId, marginBottom, marginTop }: Props) {
+function BastardDetails({ tokenId, settings, marginBottom, marginTop }: Props) {
   const [metadata, setMetadata] = useState<Metadata>();
   const [marketData, setMarketData] = useState<MarketData>();
   const { library } = useWeb3React<providers.Web3Provider>();
@@ -42,7 +43,6 @@ function BastardDetails({ tokenId, marginBottom, marginTop }: Props) {
     updateMarketData();
   }, [library]);
 
-  if (!marketData) return null;
   if (!metadata) return null;
 
   return (
@@ -52,8 +52,8 @@ function BastardDetails({ tokenId, marginBottom, marginTop }: Props) {
         <ExternalLinks metadata={metadata} />
         <Description metadata={metadata} />
         <Attributes metadata={metadata} />
-        <MarketDetails marketData={marketData} />
-        <MarketHistory marketData={marketData} />
+        {settings.enableMarketplace && marketData && <MarketDetails marketData={marketData} />}
+        {marketData && <MarketHistory marketData={marketData} />}
       </div>
     </div>
   );
