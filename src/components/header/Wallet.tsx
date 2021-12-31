@@ -5,6 +5,7 @@ import { InjectedConnector } from '@web3-react/injected-connector';
 import Button from '../common/Button';
 import { lookupEnsName, shortenAddress } from '../../utils/web3';
 import { FallbackConnector } from '../../utils/FallbackConnector';
+import { emitAnalyticsEvent } from '../../utils';
 
 declare let window: {
   ethereum: any
@@ -30,6 +31,7 @@ function Wallet() {
     const connectedAccounts = await window.ethereum.request({ method: 'eth_accounts', params: [] });
     if (connectedAccounts.length > 0) {
       activate(injectedConnector);
+      emitAnalyticsEvent('connect_wallet');
     } else {
       activate(fallbackConnector);
     }

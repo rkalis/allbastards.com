@@ -6,7 +6,7 @@ import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import NumberSetting from '../../common/NumberSetting';
 import { updateBid } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 
 interface Props {
   bids: RaribleV2Order[];
@@ -23,6 +23,7 @@ function UpdateBid({ bids, refresh }: Props) {
   const updateExistingBid = async () => {
     try {
       await updateBid(existingBid, price, library!);
+      emitAnalyticsEvent('marketplace_bid_update');
 
       toast('BID UPDATED', {
         position: 'top-right',

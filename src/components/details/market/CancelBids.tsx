@@ -3,7 +3,7 @@ import { providers } from 'ethers';
 import { RaribleV2Order } from '@rarible/ethereum-api-client';
 import Button from '../../common/Button';
 import { cancel } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 
 interface Props {
   bids: RaribleV2Order[];
@@ -20,6 +20,7 @@ function CancelBids({ bids, refresh }: Props) {
       const unconfirmedTransactions = await Promise.all(
         bids.map((bid) => cancel(bid, library!)),
       );
+      emitAnalyticsEvent('marketplace_bid_cancel');
 
       toast('CANCELLATION TRANSACTION(S) SUBMITTED, DATA WILL UPDATE AFTER THEY ARE CONFIRMED', {
         position: 'top-right',

@@ -5,7 +5,7 @@ import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import NumberSetting from '../../common/NumberSetting';
 import { sell } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
@@ -21,6 +21,7 @@ function Sell({ marketData, refresh }: Props) {
   const createListing = async () => {
     try {
       await sell(marketData.tokenId, price, account!, library!);
+      emitAnalyticsEvent('marketplace_list');
 
       toast('LISTING CREATED', {
         position: 'top-right',

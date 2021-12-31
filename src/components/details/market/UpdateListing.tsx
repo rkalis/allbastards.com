@@ -5,7 +5,7 @@ import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import NumberSetting from '../../common/NumberSetting';
 import { updateListing } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
@@ -23,6 +23,7 @@ function UpdateListing({ marketData, refresh }: Props) {
   const updateSellListing = async () => {
     try {
       await updateListing(existingListing, price, library!);
+      emitAnalyticsEvent('marketplace_listing_update');
 
       toast('LISTING UPDATED', {
         position: 'top-right',

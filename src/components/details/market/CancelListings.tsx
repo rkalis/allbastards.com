@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import Button from '../../common/Button';
 import { cancel } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
@@ -20,6 +20,7 @@ function CancelListings({ marketData, refresh }: Props) {
       const unconfirmedTransactions = await Promise.all(
         marketData.listings.map((listing) => cancel(listing, library!)),
       );
+      emitAnalyticsEvent('marketplace_listing_cancel');
 
       toast('CANCELLATION TRANSACTION(S) SUBMITTED, DATA WILL UPDATE AFTER THEY ARE CONFIRMED', {
         position: 'top-right',

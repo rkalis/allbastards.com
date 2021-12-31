@@ -31,3 +31,9 @@ export const getMetadata = async (index: number) => {
 
   return metadata as Metadata;
 };
+
+export const emitAnalyticsEvent = (eventName: string) => {
+  if (window && (window as any).sa_event) {
+    (window as any).sa_event(eventName);
+  }
+};

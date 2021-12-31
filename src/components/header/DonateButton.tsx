@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { providers, utils } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
-import { toast } from '../../utils';
+import { emitAnalyticsEvent, toast } from '../../utils';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
 import NumberSetting from '../common/NumberSetting';
@@ -30,6 +30,7 @@ function DonateButton() {
         from: account,
         value: utils.parseEther(amount),
       });
+      emitAnalyticsEvent('donate');
 
       toast('THANKS FOR DONATING!', {
         position: 'top-right',

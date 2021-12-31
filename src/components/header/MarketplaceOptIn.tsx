@@ -2,6 +2,7 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 import { ISettings } from '../../utils/interfaces';
 import Link from '../common/Link';
+import { emitAnalyticsEvent } from '../../utils';
 
 interface Props {
   settings: ISettings;
@@ -9,8 +10,18 @@ interface Props {
 }
 
 function MarketplaceOptin({ settings, setSettings }: Props) {
-  const enableButton = (<Button label="ENABLE" onClick={() => setSettings({ ...settings, enableMarketplace: true })} className="w-full inline-flex justify-center" />);
-  const disableButton = (<Button label="DISABLE" onClick={() => setSettings({ ...settings, enableMarketplace: false })} className="w-full inline-flex justify-center" inverted />);
+  const enable = () => {
+    setSettings({ ...settings, enableMarketplace: true });
+    emitAnalyticsEvent('marketplace_optin');
+  };
+
+  const disable = () => {
+    setSettings({ ...settings, enableMarketplace: false });
+    emitAnalyticsEvent('marketplace_optout');
+  };
+
+  const enableButton = (<Button label="ENABLE" onClick={enable} className="w-full inline-flex justify-center" />);
+  const disableButton = (<Button label="DISABLE" onClick={disable} className="w-full inline-flex justify-center" inverted />);
 
   // Only ask for confirmation once
   if (settings.enableMarketplace !== undefined) return null;

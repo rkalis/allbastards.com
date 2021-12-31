@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import Button from '../../common/Button';
 import { fill } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
@@ -18,6 +18,7 @@ function AcceptBid({ marketData, refresh }: Props) {
   const acceptBidOnBastard = async () => {
     try {
       const unconfirmedTransaction = await fill(highestBid, library!);
+      emitAnalyticsEvent('marketplace_bid_accept');
 
       toast('BID ACCEPT TRANSACTION SUBMITTED, DATA WILL UPDATE AFTER IT IS CONFIRMED', {
         position: 'top-right',

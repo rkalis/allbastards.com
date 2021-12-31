@@ -5,7 +5,7 @@ import Modal from '../../common/Modal';
 import Button from '../../common/Button';
 import NumberSetting from '../../common/NumberSetting';
 import { bid } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
@@ -21,6 +21,7 @@ function Bid({ marketData, refresh }: Props) {
   const createBid = async () => {
     try {
       await bid(marketData.tokenId, price, account!, library!);
+      emitAnalyticsEvent('marketplace_bid');
 
       toast('BID PLACED', {
         position: 'top-right',

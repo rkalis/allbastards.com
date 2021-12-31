@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import Button from '../../common/Button';
 import { fill } from '../../../utils/market';
-import { toast } from '../../../utils';
+import { emitAnalyticsEvent, toast } from '../../../utils';
 import { MarketData } from '../../../utils/interfaces';
 
 interface Props {
@@ -18,6 +18,7 @@ function Buy({ marketData, refresh }: Props) {
   const buyBastard = async () => {
     try {
       const unconfirmedTransaction = await fill(lowestListing, library!);
+      emitAnalyticsEvent('marketplace_buy');
 
       toast('BUY TRANSACTION SUBMITTED, DATA WILL UPDATE AFTER IT IS CONFIRMED', {
         position: 'top-right',
