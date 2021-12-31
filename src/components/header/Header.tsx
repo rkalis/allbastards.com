@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ISettings } from '../../utils/interfaces';
 import Settings from './Settings';
@@ -15,19 +14,16 @@ const useDimensions = require('react-use-dimensions').default;
 interface Props {
   settings: ISettings;
   setSettings: (settings: ISettings) => void;
-  setMarginTop: (marginTop: number) => void;
   indices?: number[];
   setIndices?: (indices: number[]) => void;
 }
 
-function Header({ settings, setSettings, indices, setIndices, setMarginTop }: Props) {
+function Header({ settings, setSettings, indices, setIndices }: Props) {
   const [ref, { x, y, width, height }] = useDimensions();
-
-  useEffect(() => setMarginTop(height), [height]);
 
   return (
     <>
-      <header className={`flex flex-col fixed top-0 left-0 right-0 z-20 py-2 px-4 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
+      <header className={`sticky flex flex-col fixed top-0 left-0 right-0 z-20 py-2 px-4 border-b-4 border-black ${settings.colourfulBackground || 'bg-white'}`} ref={ref}>
         <div className="bg-white absolute" />
         <div className="grid grid-cols-5">
           <div className="flex justify-start items-center gap-2">

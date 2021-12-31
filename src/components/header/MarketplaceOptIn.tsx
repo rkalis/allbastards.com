@@ -22,8 +22,9 @@ function MarketplaceOptin({ settings, setSettings }: Props) {
         which is also used by the well-established RARIBLE marketplace. THE ALLBASTARDS MARKETPLACE is in
         a <b>PUBLIC BETA</b> phase, so some functionality may not work correctly.
         <br /><br />
-        By enabling the MARKETPLACE functionality you agree that ALLBASTARDS <b>CANNOT BE HELD LIABLE</b> for
-        the results of any bugs or unexpected behaviour. The MARKETPLACE can be toggled in the settings.
+        By enabling the MARKETPLACE functionality you agree that ALLBASTARDS.COM or its
+        creators <b>CANNOT BE HELD LIABLE</b> for the results of any bugs or unexpected behaviour.
+        The MARKETPLACE can be toggled in the settings.
       </div>
     </Modal>
   );

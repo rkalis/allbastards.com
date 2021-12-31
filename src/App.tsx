@@ -1,5 +1,5 @@
 import { Web3ReactProvider } from '@web3-react/core';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import createPersistedState from 'use-persisted-state';
 import { ToastContainer } from 'react-toastify';
@@ -17,9 +17,6 @@ const useSettingsState = createPersistedState('allbastards-settings');
 
 function App() {
   const [settings, setSettings] = useSettingsState<ISettings>(DEFAULT_SETTINGS);
-
-  const [marginTop, setMarginTop] = useState<number>(0);
-  const [marginBottom, setMarginBottom] = useState<number>(0);
 
   useEffect(() => {
     displayGitcoinToast();
@@ -52,27 +49,13 @@ function App() {
           <Route
             path="/"
             element={
-              <GalleryPage
-                settings={settings}
-                setSettings={setSettings}
-                marginTop={marginTop}
-                setMarginTop={setMarginTop}
-                marginBottom={marginBottom}
-                setMarginBottom={setMarginBottom}
-              />
+              <GalleryPage settings={settings} setSettings={setSettings} />
             }
           />
           <Route
             path="/details/:bastardId"
             element={
-              <DetailsPage
-                settings={settings}
-                setSettings={setSettings}
-                marginTop={marginTop}
-                setMarginTop={setMarginTop}
-                marginBottom={marginBottom}
-                setMarginBottom={setMarginBottom}
-              />
+              <DetailsPage settings={settings} setSettings={setSettings} />
             }
           />
           <Route path="*" element={<Navigate to="/" />} />

@@ -14,11 +14,9 @@ import Description from './Description';
 interface Props {
   tokenId: number;
   settings: ISettings;
-  marginTop: number;
-  marginBottom: number;
 }
 
-function BastardDetails({ tokenId, settings, marginBottom, marginTop }: Props) {
+function BastardDetails({ tokenId, settings }: Props) {
   const [metadata, setMetadata] = useState<Metadata>();
   const [marketData, setMarketData] = useState<MarketData>();
   const { library } = useWeb3React<providers.Web3Provider>();
@@ -46,7 +44,7 @@ function BastardDetails({ tokenId, settings, marginBottom, marginTop }: Props) {
   if (!metadata) return null;
 
   return (
-    <div className="container mx-auto" style={{ paddingTop: 10, paddingBottom: 10, marginTop, marginBottom }}>
+    <div className="container mx-auto" style={{ paddingTop: 10, paddingBottom: 10 }}>
       <div className="flex flex-col gap-2">
         <ImageAndHeader metadata={metadata} />
         <ExternalLinks metadata={metadata} />

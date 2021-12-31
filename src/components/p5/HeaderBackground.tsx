@@ -11,8 +11,6 @@ interface Props {
   height: number;
 }
 
-// The code for FooterBackground and HeaderBackground is literally the same,
-// but when I combine them into a single component it stops working -_-
 function HeaderBackground({ x, y, width, height }: Props) {
   const preload = (p5: P5) => {
     uniformsShader = p5.loadShader('/uniform.vert', '/uniform.frag');

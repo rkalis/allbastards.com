@@ -7,11 +7,9 @@ import { ISettings } from '../../utils/interfaces';
 interface Props {
   indices: number[];
   settings: ISettings;
-  marginTop: number;
-  marginBottom: number;
 }
 
-function Gallery({ indices, settings, marginTop, marginBottom }: Props) {
+function Gallery({ indices, settings }: Props) {
   const initialLoad = 500;
   const loadCount = 250;
 
@@ -31,7 +29,7 @@ function Gallery({ indices, settings, marginTop, marginBottom }: Props) {
   };
 
   return (
-    <div className="container mx-auto px-4 sm:px-8" style={{ paddingTop: 6, paddingBottom: 6, marginTop, marginBottom }}>
+    <div className="container mx-auto px-4 sm:px-8" style={{ paddingTop: 6, paddingBottom: 6 }}>
       <InfiniteScroll
         className="flex flex-row flex-wrap justify-center gap-1.5"
         dataLength={loadedIndices.length}
