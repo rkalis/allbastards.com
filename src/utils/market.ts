@@ -10,7 +10,7 @@ import { MarketData } from './interfaces';
 
 export const createRaribleSdk = (provider?: providers.Web3Provider) => {
   const ethereum = provider && new EthersWeb3ProviderEthereum(provider);
-  const sdk = createRaribleSdkInternal(ethereum, (process.env.REACT_APP_ETHEREUM_NETWORK !== 'rinkeby' ? 'mainnet' : 'rinkeby'));
+  const sdk = createRaribleSdkInternal(ethereum, (process.env.REACT_APP_ETHEREUM_NETWORK === 'rinkeby' ? 'rinkeby' : 'mainnet'));
   return sdk;
 };
 

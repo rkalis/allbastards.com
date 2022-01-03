@@ -14,8 +14,8 @@ declare let window: {
 function Wallet() {
   const [label, setLabel] = useState<string>('CONNECT WALLET');
   const { account, library, activate } = useWeb3React<providers.Web3Provider>();
-  const injectedConnector = new InjectedConnector({ supportedChainIds: [(process.env.REACT_APP_ETHEREUM_NETWORK !== 'rinkeby' ? 1 : 4)] });
-  const fallbackConnector = new FallbackConnector({ supportedChainIds: [(process.env.REACT_APP_ETHEREUM_NETWORK !== 'rinkeby' ? 1 : 4)] });
+  const injectedConnector = new InjectedConnector({ supportedChainIds: [(process.env.REACT_APP_ETHEREUM_NETWORK === 'rinkeby' ? 4 : 1)] });
+  const fallbackConnector = new FallbackConnector({ supportedChainIds: [(process.env.REACT_APP_ETHEREUM_NETWORK === 'rinkeby' ? 4 : 1)] });
 
   const updateLabel = async () => {
     if (!library || !account) {
