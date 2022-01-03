@@ -9,3 +9,6 @@ cd allbastards.com
 yarn
 yarn start
 ```
+
+### Using Rinkeby
+To use Rinkeby testnet, add the environment variable REACT_APP_ETHEREUM_NETWORK=rinkeby to the project.  See the .env.example
