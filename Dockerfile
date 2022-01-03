@@ -3,6 +3,9 @@ FROM node:12 as build
 
 WORKDIR /app
 
+ARG REACT_APP_ETHEREUM_NETWORK="mainnet"
+ENV REACT_APP_ETHEREUM_NETWORK=${REACT_APP_ETHEREUM_NETWORK}
+
 # Generate build
 COPY package.json /app
 COPY yarn.lock /app
