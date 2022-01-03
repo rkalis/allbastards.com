@@ -48,6 +48,8 @@ module.exports = {
     // I prefer operatrors before linebreaks
     'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' } }],
 
+    'linebreak-style': 0,
+
     // I don't care about parentheses around multi-line elements
     'react/jsx-wrap-multilines': 'off',
 
