@@ -12,6 +12,8 @@ interface Props {
 function MarketHistoryEntry({ activity }: Props) {
   const [from, setFrom] = useState<string>();
   const [to, setTo] = useState<string>();
+  const [unmodifiedFrom, setunmodifiedFrom] = useState<string>();
+  const [unmodifiedTo, setunmodifiedTo] = useState<string>();
   const { library } = useWeb3React<providers.Web3Provider>();
 
   useEffect(() => {
@@ -35,6 +37,9 @@ function MarketHistoryEntry({ activity }: Props) {
 
     setFrom(fromDisplay);
     setTo(toDisplay);
+
+    setunmodifiedFrom(fromBase);
+    setunmodifiedTo(toBase);
   };
 
   const dateString = new Date(activity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase();
@@ -66,10 +71,10 @@ function MarketHistoryEntry({ activity }: Props) {
       <td className="p-1">{actionName[activity['@type']]}</td>
       {/* <td className="p-1">{'source' in activity && platformName[activity.source]}</td> */}
       <td className="p-1 hidden md:table-cell">
-        <a href={`${ETHERSCAN_BASE}/address/${from}`} target="_blank" rel="noreferrer">{from}</a>
+        <a href={`${ETHERSCAN_BASE}/address/${unmodifiedFrom}`} target="_blank" rel="noreferrer">{from}</a>
       </td>
       <td className="p-1 hidden md:table-cell">
-        <a href={`${ETHERSCAN_BASE}/address/${to}`} target="_blank" rel="noreferrer">{to}</a>
+        <a href={`${ETHERSCAN_BASE}/address/${unmodifiedTo}`} target="_blank" rel="noreferrer">{to}</a>
       </td>
       <td className="p-1">
         {'price' in activity && `${activity.price} ETH ($${Number.parseFloat(activity.priceUsd?.toString() ?? '').toFixed(0)})`}
