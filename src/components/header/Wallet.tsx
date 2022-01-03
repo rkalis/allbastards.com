@@ -14,8 +14,8 @@ declare let window: {
 function Wallet() {
   const [label, setLabel] = useState<string>('CONNECT WALLET');
   const { account, library, activate } = useWeb3React<providers.Web3Provider>();
-  const injectedConnector = new InjectedConnector({ supportedChainIds: [1] });
-  const fallbackConnector = new FallbackConnector({ supportedChainIds: [1] });
+  const injectedConnector = new InjectedConnector({ supportedChainIds: [4] });
+  const fallbackConnector = new FallbackConnector({ supportedChainIds: [4] });
 
   const updateLabel = async () => {
     if (!library || !account) {
