@@ -21,17 +21,14 @@ interface Props {
 function MarketDetails({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
-  const activeAccountIsOwner = marketData.owner === account;
-
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
 
-  console.log('Market Data bids: ', marketData.bids);
+  const activeAccountIsOwner = marketData.owner === account;
+
   // Need to remove the current owners bids if they exist
   const bidsNotIncludingCurrentOwner = (activeAccountIsOwner
     ? marketData.bids.filter((bid) => bid.maker !== toAddress(account ?? ZERO_ADDRESS))
     : marketData.bids);
-
-  console.log('Modified bids: ', bidsNotIncludingCurrentOwner);
 
   const bidPriceDisplay = getBidPriceDisplay(bidsNotIncludingCurrentOwner);
   const activeBidsFromUser = getBidsFromAccount(bidsNotIncludingCurrentOwner, account ?? ZERO_ADDRESS);
