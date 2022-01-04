@@ -12,8 +12,8 @@ interface Props {
 function MarketHistoryEntry({ activity }: Props) {
   const [from, setFrom] = useState<string>();
   const [to, setTo] = useState<string>();
-  const [unmodifiedFrom, setunmodifiedFrom] = useState<string>();
-  const [unmodifiedTo, setunmodifiedTo] = useState<string>();
+  const [unmodifiedFrom, setUnmodifiedFrom] = useState<string>();
+  const [unmodifiedTo, setUnmodifiedTo] = useState<string>();
   const { library } = useWeb3React<providers.Web3Provider>();
 
   useEffect(() => {
@@ -38,8 +38,8 @@ function MarketHistoryEntry({ activity }: Props) {
     setFrom(fromDisplay);
     setTo(toDisplay);
 
-    setunmodifiedFrom(fromBase);
-    setunmodifiedTo(toBase);
+    setUnmodifiedFrom(fromBase);
+    setUnmodifiedTo(toBase);
   };
 
   const dateString = new Date(activity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase();
