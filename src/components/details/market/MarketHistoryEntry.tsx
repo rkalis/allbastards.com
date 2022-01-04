@@ -12,8 +12,6 @@ interface Props {
 function MarketHistoryEntry({ activity }: Props) {
   const [from, setFrom] = useState<string>();
   const [to, setTo] = useState<string>();
-  const [unmodifiedFrom, setUnmodifiedFrom] = useState<string>();
-  const [unmodifiedTo, setUnmodifiedTo] = useState<string>();
   const { library } = useWeb3React<providers.Web3Provider>();
 
   useEffect(() => {
@@ -22,25 +20,22 @@ function MarketHistoryEntry({ activity }: Props) {
   }, [activity, library]);
 
   const setParties = async (provider?: providers.Web3Provider) => {
-    const fromBase = activity['@type'] === 'match'
-      ? activity.left.maker
-      : activity['@type'] === 'bid' || activity['@type'] === 'list' || activity['@type'] === 'cancel_bid' || activity['@type'] === 'cancel_list'
-        ? activity.maker
-        : undefined;
-
-    const toBase = activity['@type'] === 'match'
-      ? activity.right.maker
-      : undefined;
-
     const fromDisplay = fromBase && await displayAddress(fromBase, provider);
     const toDisplay = toBase && await displayAddress(toBase, provider);
 
     setFrom(fromDisplay);
     setTo(toDisplay);
-
-    setUnmodifiedFrom(fromBase);
-    setUnmodifiedTo(toBase);
   };
+
+  const fromBase = activity['@type'] === 'match'
+    ? activity.left.maker
+    : activity['@type'] === 'bid' || activity['@type'] === 'list' || activity['@type'] === 'cancel_bid' || activity['@type'] === 'cancel_list'
+      ? activity.maker
+      : undefined;
+
+  const toBase = activity['@type'] === 'match'
+    ? activity.right.maker
+    : undefined;
 
   const dateString = new Date(activity.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase();
 
@@ -71,10 +66,10 @@ function MarketHistoryEntry({ activity }: Props) {
       <td className="p-1">{actionName[activity['@type']]}</td>
       {/* <td className="p-1">{'source' in activity && platformName[activity.source]}</td> */}
       <td className="p-1 hidden md:table-cell">
-        <a href={`${ETHERSCAN_BASE}/address/${unmodifiedFrom}`} target="_blank" rel="noreferrer">{from}</a>
+        <a href={`${ETHERSCAN_BASE}/address/${fromBase}`} target="_blank" rel="noreferrer">{from}</a>
       </td>
       <td className="p-1 hidden md:table-cell">
-        <a href={`${ETHERSCAN_BASE}/address/${unmodifiedTo}`} target="_blank" rel="noreferrer">{to}</a>
+        <a href={`${ETHERSCAN_BASE}/address/${toBase}`} target="_blank" rel="noreferrer">{to}</a>
       </td>
       <td className="p-1">
         {'price' in activity && `${activity.price} ETH ($${Number.parseFloat(activity.priceUsd?.toString() ?? '').toFixed(0)})`}
