@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
+import { toAddress } from '@rarible/types';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
 import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
@@ -20,17 +21,28 @@ interface Props {
 function MarketDetails({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
+  const activeAccountIsOwner = marketData.owner === account;
+
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
-  const bidPriceDisplay = getBidPriceDisplay(marketData.bids);
-  const activeBidsFromUser = getBidsFromAccount(marketData.bids, account ?? ZERO_ADDRESS);
+
+  console.log('Market Data bids: ', marketData.bids);
+  // Need to remove the current owners bids if they exist
+  const bidsNotIncludingCurrentOwner = (activeAccountIsOwner
+    ? marketData.bids.filter((bid) => bid.maker !== toAddress(account ?? ZERO_ADDRESS))
+    : marketData.bids);
+
+  console.log('Modified bids: ', bidsNotIncludingCurrentOwner);
+
+  const bidPriceDisplay = getBidPriceDisplay(bidsNotIncludingCurrentOwner);
+  const activeBidsFromUser = getBidsFromAccount(bidsNotIncludingCurrentOwner, account ?? ZERO_ADDRESS);
   const inactiveBidsFromUser = getBidsFromAccount(marketData.inactiveBids, account ?? ZERO_ADDRESS);
   const bidsFromUser = [...activeBidsFromUser, ...inactiveBidsFromUser];
 
   const isForSale = listingPriceDisplay !== undefined;
   const hasBid = bidPriceDisplay !== undefined;
   const hasBidsFromUser = bidsFromUser.length > 0;
-  const canSell = library !== undefined && marketData.owner === account;
-  const canBid = library !== undefined && account !== undefined && marketData.owner !== account;
+  const canSell = library !== undefined && activeAccountIsOwner;
+  const canBid = library !== undefined && account !== undefined && !activeAccountIsOwner;
   const canBuy = canBid && isForSale;
   const canAcceptBid = canSell && hasBid;
 

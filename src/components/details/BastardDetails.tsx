@@ -44,7 +44,7 @@ function BastardDetails({ tokenId, settings }: Props) {
   if (!metadata) return null;
 
   return (
-    <div className="container mx-auto" style={{ paddingTop: 10, paddingBottom: 10 }}>
+    <div className="container mx-auto" style={{ paddingTop: 10, paddingBottom: 100 }}>
       <div className="flex flex-col gap-2">
         <ImageAndHeader metadata={metadata} />
         <ExternalLinks metadata={metadata} />
