@@ -110,6 +110,7 @@ export const getActivity = async (tokenId: number, provider?: providers.Web3Prov
         OrderActivityFilterByItemTypes.BID,
         OrderActivityFilterByItemTypes.LIST,
         OrderActivityFilterByItemTypes.MATCH,
+        'CANCEL_BID' as OrderActivityFilterByItemTypes,
       ],
       contract: toAddress(BASTARD_CONTRACT_ADDRESS),
       tokenId: toBigNumber(String(tokenId)),
