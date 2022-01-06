@@ -19,10 +19,9 @@ export const getMarketData = async (tokenId: number, provider?: providers.Web3Pr
   const listings = await getListings(tokenId, provider);
   const bids = await getBids(tokenId, OrderStatus.ACTIVE, provider);
   const inactiveBids = await getBids(tokenId, OrderStatus.INACTIVE, provider);
-  const cancelledBids = await getBids(tokenId, OrderStatus.CANCELLED, provider);
   const activity = await getActivity(tokenId, provider);
 
-  return { tokenId, owner, ownerDisplay, listings, bids, inactiveBids, cancelledBids, activity };
+  return { tokenId, owner, ownerDisplay, listings, bids, inactiveBids, activity };
 };
 
 export const getOwner = async (tokenId: number, provider?: providers.Web3Provider) => {
