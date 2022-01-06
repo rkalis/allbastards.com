@@ -5,7 +5,7 @@ import { toAddress, toBigNumber } from '@rarible/types';
 import { ActivitySort, Erc20AssetType, Order, OrderActivityFilterByItemTypes, OrderStatus, Platform, RaribleV2Order } from '@rarible/ethereum-api-client';
 import { EthersWeb3ProviderEthereum } from '@rarible/ethers-ethereum';
 import { BASTARD_CONTRACT_ADDRESS, WETH_ADDRESS } from './constants';
-import { checkWethBalance, displayAddress } from './web3';
+import { checkWethBalance, displayAddress, getBastardContract } from './web3';
 import { MarketData } from './interfaces';
 
 export const createRaribleSdk = (provider?: providers.Web3Provider) => {
@@ -25,18 +25,8 @@ export const getMarketData = async (tokenId: number, provider?: providers.Web3Pr
 };
 
 export const getOwner = async (tokenId: number, provider?: providers.Web3Provider) => {
-  const sdk = createRaribleSdk(provider);
-
-  const filter = {
-    contract: BASTARD_CONTRACT_ADDRESS,
-    tokenId: String(tokenId),
-    status: [OrderStatus.ACTIVE],
-  };
-
-  const ownershipResult = await sdk.apis.nftOwnership.getNftOwnershipsByItem(filter);
-
-  const owner = getAddress(ownershipResult.ownerships[0].owner);
-
+  const bastardContract = provider && getBastardContract(provider);
+  const owner = bastardContract && await bastardContract.ownerOf(tokenId);
   const ownerDisplay = await displayAddress(owner, provider);
 
   return { owner, ownerDisplay };

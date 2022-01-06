@@ -64,9 +64,3 @@ export const checkWethBalance = async (account: string, requiredBalance: string,
 export const getBastardContract = (provider: providers.Web3Provider) => (
   new Contract(BASTARD_CONTRACT_ADDRESS, BASTARD_ABI, provider)
 );
-
-export const getOwnerOfBastard = async (tokenId: number, provider: providers.Web3Provider) => {
-  const bastardContract = getBastardContract(provider);
-  const owner = await bastardContract.ownerOf(tokenId);
-  return owner;
-};
