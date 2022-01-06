@@ -26,12 +26,10 @@ function MarketDetails({ marketData, refresh }: Props) {
   const activeAccountIsOwner = marketData.owner === account;
 
   // Need to remove the current owners bids if they exist
-  const bidsNotIncludingCurrentOwner = (activeAccountIsOwner
-    ? marketData.bids.filter((bid) => bid.maker !== toAddress(account ?? ZERO_ADDRESS))
-    : marketData.bids);
+  const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(marketData.owner ?? ZERO_ADDRESS));
 
-  const bidPriceDisplay = getBidPriceDisplay(bidsNotIncludingCurrentOwner);
-  const activeBidsFromUser = getBidsFromAccount(bidsNotIncludingCurrentOwner, account ?? ZERO_ADDRESS);
+  const bidPriceDisplay = getBidPriceDisplay(bidsOwnerRemoved);
+  const activeBidsFromUser = getBidsFromAccount(bidsOwnerRemoved, account ?? ZERO_ADDRESS);
   const inactiveBidsFromUser = getBidsFromAccount(marketData.inactiveBids, account ?? ZERO_ADDRESS);
   const bidsFromUser = [...activeBidsFromUser, ...inactiveBidsFromUser];
 
