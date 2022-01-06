@@ -42,6 +42,7 @@ export interface MarketData {
   listings: RaribleV2Order[];
   bids: RaribleV2Order[];
   inactiveBids: RaribleV2Order[];
+  cancelledBids: RaribleV2Order[];
   activity: Activity[];
 }
 
