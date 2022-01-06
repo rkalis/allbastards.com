@@ -26,10 +26,30 @@ export const getMarketData = async (tokenId: number, provider?: providers.Web3Pr
 
 export const getOwner = async (tokenId: number, provider?: providers.Web3Provider) => {
   const bastardContract = provider && getBastardContract(provider);
-  const owner = bastardContract && await bastardContract.ownerOf(tokenId);
-  const ownerDisplay = await displayAddress(owner, provider);
+
+  const owner = (bastardContract
+    ? await bastardContract.ownerOf(tokenId)
+    : await getOwnerFromRarible(tokenId, provider));
+
+  const ownerDisplay = owner && await displayAddress(owner, provider);
 
   return { owner, ownerDisplay };
+};
+
+export const getOwnerFromRarible = async (tokenId: number, provider?: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const filter = {
+    contract: BASTARD_CONTRACT_ADDRESS,
+    tokenId: String(tokenId),
+    status: [OrderStatus.ACTIVE],
+  };
+
+  const ownershipResult = await sdk.apis.nftOwnership.getNftOwnershipsByItem(filter);
+
+  const owner = getAddress(ownershipResult.ownerships[0].owner);
+
+  return owner;
 };
 
 export const getListings = async (tokenId: number, provider?: providers.Web3Provider) => {
