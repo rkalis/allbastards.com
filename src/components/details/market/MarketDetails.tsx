@@ -21,7 +21,8 @@ function MarketDetails({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const activeAccountIsOwner = marketData.owner === account;
-  const isBidFromOwner = marketData.bids[0].maker.toLowerCase() === marketData.owner.toLowerCase();
+  const isBidFromOwner = marketData.bids.length > 0 &&
+    marketData.bids[0].maker.toLowerCase() === marketData.owner.toLowerCase();
 
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
 
