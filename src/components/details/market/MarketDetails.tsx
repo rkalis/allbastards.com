@@ -4,7 +4,6 @@ import { toAddress } from '@rarible/types';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
 import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
-import { displayAddress, getOwnerOfBastard } from '../../../utils/web3';
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
@@ -19,17 +18,15 @@ interface Props {
   refresh: () => void;
 }
 
-async function MarketDetails({ marketData, refresh }: Props) {
+function MarketDetails({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
 
-  const bastardOwner = await getOwnerOfBastard(marketData.tokenId, library!);
-
-  const activeAccountIsOwner = bastardOwner === account;
+  const activeAccountIsOwner = marketData.owner === account;
 
   // Need to remove the current owners bids if they exist
-  const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(bastardOwner ?? ZERO_ADDRESS));
+  const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(marketData.owner ?? ZERO_ADDRESS));
 
   const bidPriceDisplay = getBidPriceDisplay(bidsOwnerRemoved);
   const activeBidsFromUser = getBidsFromAccount(marketData.bids, account ?? ZERO_ADDRESS);
@@ -49,7 +46,7 @@ async function MarketDetails({ marketData, refresh }: Props) {
       <h3 className="font-bold text-center text-2xl md:text-3xl">MARKET</h3>
       <div className="flex flex-col gap-2">
         <div className="w-1/2 max-w-md mx-auto text-center text-sm md:text-base">
-          <div>This bastard is currently owned by {displayAddress(bastardOwner)}.</div>
+          <div>This bastard is currently owned by {marketData.ownerDisplay}.</div>
           {listingPriceDisplay && <div>This bastard is currently for sale for {listingPriceDisplay}.</div>}
           {!listingPriceDisplay && <div>This bastard is currently not for sale.</div>}
           {bidPriceDisplay && <div>There is a bid of {bidPriceDisplay} on this bastard.</div>}
