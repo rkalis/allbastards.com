@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
+import { toAddress } from '@rarible/types';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
 import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
@@ -24,9 +25,11 @@ function MarketDetails({ marketData, refresh }: Props) {
   const isBidFromOwner = marketData.bids.length > 0 &&
     marketData.bids[0].maker.toLowerCase() === marketData.owner.toLowerCase();
 
+  const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(marketData.owner ?? ZERO_ADDRESS));
+
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
 
-  const bidPriceDisplay = getBidPriceDisplay(marketData.bids);
+  const bidPriceDisplay = getBidPriceDisplay(bidsOwnerRemoved);
   const activeBidsFromUser = getBidsFromAccount(marketData.bids, account ?? ZERO_ADDRESS);
   const inactiveBidsFromUser = getBidsFromAccount(marketData.inactiveBids, account ?? ZERO_ADDRESS);
   const bidsFromUser = [...activeBidsFromUser, ...inactiveBidsFromUser];
