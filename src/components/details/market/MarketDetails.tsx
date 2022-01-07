@@ -72,7 +72,7 @@ function MarketDetails({ marketData, refresh }: Props) {
           {canSell && isForSale && <CancelListings marketData={marketData} refresh={refresh} />}
           {canBuy && <Buy marketData={marketData} refresh={refresh} />}
           {canBid && !hasBidsFromUser && <Bid marketData={marketData} refresh={refresh} />}
-          {canBid && hasBidsFromUser && <UpdateBid bids={bidsFromUser} refresh={refresh} />}
+          {canCancelBid && <UpdateBid bids={bidsFromUser} refresh={refresh} />}
           {canCancelBid && <CancelBids bids={bidsFromUser} refresh={refresh} />}
           {canAcceptBid && <AcceptBid marketData={marketData} refresh={refresh} />}
         </div>
