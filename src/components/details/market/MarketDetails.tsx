@@ -38,6 +38,7 @@ function MarketDetails({ marketData, refresh }: Props) {
   const canBid = library !== undefined && account !== undefined && !activeAccountIsOwner;
   const canBuy = canBid && isForSale;
   const canAcceptBid = canSell && hasBid && !isBidFromOwner;
+  const canCancelBid = library !== undefined && account !== undefined && hasBidsFromUser;
 
   return (
     <div>
@@ -69,7 +70,7 @@ function MarketDetails({ marketData, refresh }: Props) {
           {canBuy && <Buy marketData={marketData} refresh={refresh} />}
           {canBid && !hasBidsFromUser && <Bid marketData={marketData} refresh={refresh} />}
           {canBid && hasBidsFromUser && <UpdateBid bids={bidsFromUser} refresh={refresh} />}
-          {hasBidsFromUser && <CancelBids bids={bidsFromUser} refresh={refresh} />}
+          {canCancelBid && <CancelBids bids={bidsFromUser} refresh={refresh} />}
           {canAcceptBid && <AcceptBid marketData={marketData} refresh={refresh} />}
         </div>
       </div>
