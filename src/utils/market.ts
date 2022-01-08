@@ -2,9 +2,10 @@ import { providers, utils } from 'ethers';
 import { getAddress } from '@ethersproject/address';
 import { createRaribleSdk as createRaribleSdkInternal } from '@rarible/protocol-ethereum-sdk';
 import { toAddress, toBigNumber } from '@rarible/types';
-import { ActivitySort, Erc20AssetType, Order, OrderActivityFilterByItemTypes, OrderStatus, Platform, RaribleV2Order } from '@rarible/ethereum-api-client';
+import { ActivitySort, Erc20AssetType, Erc721AssetType, Order, OrderActivityFilterByItemTypes, OrderStatus, Platform, RaribleV2Order } from '@rarible/ethereum-api-client';
 import { EthersWeb3ProviderEthereum } from '@rarible/ethers-ethereum';
-import { BASTARD_CONTRACT_ADDRESS, WETH_ADDRESS } from './constants';
+import { range } from '.';
+import { BASTARD_CONTRACT_ADDRESS, WETH_ADDRESS, HIGHEST_BASTARD_ID } from './constants';
 import { checkWethBalance, displayAddress, getBastardContract } from './web3';
 import { MarketData } from './interfaces';
 
@@ -71,6 +72,53 @@ export const getListings = async (tokenId: number, provider?: providers.Web3Prov
     .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
 
   return filteredListings;
+};
+
+export const getAllListings = async (provider?: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const filter = {
+    collection: BASTARD_CONTRACT_ADDRESS,
+    platform: Platform.RARIBLE,
+    status: [OrderStatus.ACTIVE],
+  };
+
+  // Listings from the Rarible API are returned sorted (TODO: local sorting)
+  const { orders: listings } = await sdk.apis.order.getSellOrdersByCollectionAndByStatus(filter);
+
+  // Only Rarible ETH listings are supported
+  const filteredListings = listings
+    .filter((listing) => listing.take.assetType.assetClass === 'ETH')
+    .filter((listing) => listing.make.assetType.assetClass === 'ERC721')
+    .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
+
+  const ids = filteredListings.map((list) => Number((list.make.assetType as Erc721AssetType).tokenId));
+
+  const uniqueIds = ids
+    .filter((value, i) => ids.indexOf(value) === i)
+    .sort((a, b) => a - b);
+
+  return uniqueIds;
+};
+
+export const getMarketplaceFilters = async (provider: providers.Web3Provider) => {
+  const listings = await getAllListings(provider);
+
+  const filterSpecification = {
+    attribute: 'MARKETPLACE',
+    options: [
+      { label: 'FOR SALE', value: 'FOR SALE', indices: listings },
+      { label: 'NOT FOR SALE', value: 'NOT FOR SALE', indices: getIndicesNotForSale(listings) },
+    ],
+  };
+
+  return filterSpecification;
+};
+
+export const getIndicesNotForSale = (forSale: number[]) => {
+  const listings: number[] = range(HIGHEST_BASTARD_ID + 1);
+  const indices = listings.filter((i) => !forSale.includes(i));
+  return indices;
 };
 
 export const getBids = async (tokenId: number, status: OrderStatus, provider?: providers.Web3Provider) => {
