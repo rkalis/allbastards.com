@@ -5,7 +5,7 @@ import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import Button from '../common/Button';
 import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings } from '../../utils/interfaces';
-import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES } from '../../utils/constants';
+import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES, MARKETPLACE_ATTRIBUTES } from '../../utils/constants';
 import { filterObjectByKey } from '../../utils';
 import IconButton from '../common/IconButton';
 import RangeSlider from '../common/RangeSlider';
@@ -25,7 +25,8 @@ function Filters({ settings, indices, setIndices }: Props) {
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
   const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
   const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
-  const [marketplaceFilters, setMarketplaceFilters] = useState<FilterSpecification[]>([]);
+  const [selectedMarketplaceFilter, setSelectedMarketplaceFilter] = useState<number>(2);
+  const [marketplaceFilters, setMarketplaceFilters] = useState<FilterSpecification>();
   const { library, account } = useWeb3React<providers.Web3Provider>();
 
   const allFilters = getAllAttributeFilters();
@@ -49,6 +50,26 @@ function Filters({ settings, indices, setIndices }: Props) {
 
     setActiveFilters({ ...newActiveFilters, 'HYPE TYPE': filter });
     setSelectedHypeType(value);
+  };
+
+  const updateSelectedMarketplaceFilter = (value: number) => {
+    // Remove all selected filters from the hype type specific categories
+    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => (
+      !MARKETPLACE_ATTRIBUTES.includes(attribute)
+    ));
+
+    // Apply the HYPE TYPE filter selection
+    const filter = [];
+    if (value === 1) {
+      const forSaleSelected = marketplaceFilters?.options.find(({ label }) => label.includes('FOR SALE')) as FilterOption;
+      filter.push(forSaleSelected);
+    } else if (value === 3) {
+      const notForSaleSelected = marketplaceFilters?.options.find(({ label }) => label.includes('NOT FOR SALE')) as FilterOption;
+      filter.push(notForSaleSelected);
+    }
+
+    setActiveFilters({ ...newActiveFilters, MARKETPLACE: filter });
+    setSelectedMarketplaceFilter(value);
   };
 
   const parseUrlForFilters = () => {
@@ -102,7 +123,7 @@ function Filters({ settings, indices, setIndices }: Props) {
     setActiveFilters(newActiveFilters);
 
     const updateFilters = await getMarketplaceFilters(library);
-    setMarketplaceFilters([updateFilters]);
+    setMarketplaceFilters(updateFilters);
 
     console.log('updateFilters: ', updateFilters);
     console.log('marketplaceFilters: ', marketplaceFilters);
@@ -188,6 +209,16 @@ function Filters({ settings, indices, setIndices }: Props) {
         <div className="text-center">
           Total: {indices.length}
         </div>
+        {
+          settings.enableMarketplace &&
+            <div className="border-2 p-2 my-2">
+              <div className="grid grid-cols-3 items-center px-4 text-lg font-bold">
+                <span className="inline-flex justify-start">FOR SALE</span>
+                <RangeSlider min={1} max={3} value={selectedMarketplaceFilter} onChange={updateSelectedMarketplaceFilter} className="w-full" />
+                <span className="inline-flex justify-end">NOT FOR SALE</span>
+              </div>
+            </div>
+        }
         <div>
           {renderFiltersFor(generalFilters)}
           {renderFiltersFor(ownerFilters)}
