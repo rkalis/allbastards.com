@@ -22,8 +22,6 @@ function MarketDetails({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   const activeAccountIsOwner = marketData.owner === account;
-  const isBidFromOwner = marketData.bids.length > 0 &&
-    marketData.bids[0].maker.toLowerCase() === marketData.owner.toLowerCase();
 
   const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(marketData.owner ?? ZERO_ADDRESS));
 
@@ -34,14 +32,15 @@ function MarketDetails({ marketData, refresh }: Props) {
   const inactiveBidsFromUser = getBidsFromAccount(marketData.inactiveBids, account ?? ZERO_ADDRESS);
   const bidsFromUser = [...activeBidsFromUser, ...inactiveBidsFromUser];
 
+  const isConnected = library !== undefined && account !== undefined;
   const isForSale = listingPriceDisplay !== undefined;
   const hasBid = bidPriceDisplay !== undefined;
   const hasBidsFromUser = bidsFromUser.length > 0;
-  const canSell = library !== undefined && activeAccountIsOwner;
-  const canBid = library !== undefined && account !== undefined && !activeAccountIsOwner;
+  const canSell = isConnected && activeAccountIsOwner;
+  const canBid = isConnected && !activeAccountIsOwner;
   const canBuy = canBid && isForSale;
-  const canAcceptBid = canSell && hasBid && !isBidFromOwner;
-  const canCancelBid = library !== undefined && account !== undefined && hasBidsFromUser;
+  const canAcceptBid = canSell && hasBid;
+  const canCancelBid = isConnected && hasBidsFromUser;
 
   return (
     <div>
