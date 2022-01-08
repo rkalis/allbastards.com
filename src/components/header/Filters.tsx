@@ -100,8 +100,11 @@ function Filters({ settings, indices, setIndices }: Props) {
   const updateMarketplaceFilters = async () => {
     const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => attribute !== 'MARKETPLACE');
     setActiveFilters(newActiveFilters);
-    setMarketplaceFilters([await getMarketplaceFilters(library)]);
 
+    const updateFilters = await getMarketplaceFilters(library);
+    setMarketplaceFilters([updateFilters]);
+
+    console.log('updateFilters: ', updateFilters);
     console.log('marketplaceFilters: ', marketplaceFilters);
   };
 
@@ -135,18 +138,18 @@ function Filters({ settings, indices, setIndices }: Props) {
   }, [settings.showFiltersInUrl]);
 
   useEffect(() => {
+    if (library) {
+      updateMarketplaceFilters();
+    }
+  }, [library]);
+
+  useEffect(() => {
     // Don't run on first render when library and owner filter aren't loaded yet,
     // otherwise we run into concurrency issues with setActiveFilters and url parsing
     if (library || ownerFilters.length > 0) {
       updateOwnerFilters();
     }
   }, [library, account]);
-
-  useEffect(() => {
-    if (library) {
-      updateMarketplaceFilters();
-    }
-  });
 
   const renderFiltersFor = (filterList: any[]) => (
     filterList.map(({ attribute, options }) => (
