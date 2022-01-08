@@ -101,7 +101,7 @@ export const getAllListings = async (provider?: providers.Web3Provider) => {
   return uniqueIds;
 };
 
-export const getMarketplaceFilters = async (provider: providers.Web3Provider) => {
+export const getMarketplaceFilters = async (provider?: providers.Web3Provider) => {
   const listings = await getAllListings(provider);
 
   const filterSpecification = {
