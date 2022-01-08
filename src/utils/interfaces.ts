@@ -54,3 +54,8 @@ export enum HypeType {
   CALM = 'CALM AF (STILL)',
   HYPED = 'HYPED AF (ANIMATED)',
 }
+
+export enum Marketplace {
+  FORSALE = 'FOR SALE',
+  NOTFORSALE = 'NOT FOR SALE',
+}

@@ -4,7 +4,7 @@ import { providers } from 'ethers';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import Button from '../common/Button';
-import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings } from '../../utils/interfaces';
+import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings, Marketplace } from '../../utils/interfaces';
 import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES, MARKETPLACE_ATTRIBUTES } from '../../utils/constants';
 import { filterObjectByKey } from '../../utils';
 import IconButton from '../common/IconButton';
@@ -61,11 +61,13 @@ function Filters({ settings, indices, setIndices }: Props) {
     // Apply the HYPE TYPE filter selection
     const filter = [];
     if (value === 1) {
-      const forSaleSelected = marketplaceFilters?.options.find(({ label }) => label.includes('FOR SALE')) as FilterOption;
-      filter.push(forSaleSelected);
+      const forSale = marketplaceFilters?.options
+        .find(({ label }) => label.includes(Marketplace.FORSALE)) as FilterOption;
+      filter.push(forSale);
     } else if (value === 3) {
-      const notForSaleSelected = marketplaceFilters?.options.find(({ label }) => label.includes('NOT FOR SALE')) as FilterOption;
-      filter.push(notForSaleSelected);
+      const notForSale = marketplaceFilters?.options
+        .find(({ label }) => label.includes(Marketplace.NOTFORSALE)) as FilterOption;
+      filter.push(notForSale);
     }
 
     setActiveFilters({ ...newActiveFilters, MARKETPLACE: filter });
@@ -124,9 +126,6 @@ function Filters({ settings, indices, setIndices }: Props) {
 
     const updateFilters = await getMarketplaceFilters(library);
     setMarketplaceFilters(updateFilters);
-
-    console.log('updateFilters: ', updateFilters);
-    console.log('marketplaceFilters: ', marketplaceFilters);
   };
 
   const clearFilters = () => {
