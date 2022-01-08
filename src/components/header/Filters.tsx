@@ -131,6 +131,7 @@ function Filters({ settings, indices, setIndices }: Props) {
   const clearFilters = () => {
     setActiveFilters({});
     setSelectedHypeType(2);
+    setSelectedMarketplaceFilter(2);
   };
 
   useEffect(() => {
