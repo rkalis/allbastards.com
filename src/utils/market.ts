@@ -7,7 +7,7 @@ import { EthersWeb3ProviderEthereum } from '@rarible/ethers-ethereum';
 import { range } from '.';
 import { BASTARD_CONTRACT_ADDRESS, WETH_ADDRESS, HIGHEST_BASTARD_ID } from './constants';
 import { checkWethBalance, displayAddress, getBastardContract } from './web3';
-import { MarketData } from './interfaces';
+import { MarketData, Marketplace } from './interfaces';
 
 export const createRaribleSdk = (provider?: providers.Web3Provider) => {
   const ethereum = provider && new EthersWeb3ProviderEthereum(provider);
@@ -107,8 +107,8 @@ export const getMarketplaceFilters = async (provider?: providers.Web3Provider) =
   const filterSpecification = {
     attribute: 'MARKETPLACE',
     options: [
-      { label: 'FOR SALE', value: 'FOR SALE', indices: listings },
-      { label: 'NOT FOR SALE', value: 'NOT FOR SALE', indices: getIndicesNotForSale(listings) },
+      { label: Marketplace.FORSALE, value: Marketplace.FORSALE, indices: listings },
+      { label: Marketplace.NOTFORSALE, value: Marketplace.NOTFORSALE, indices: getIndicesNotForSale(listings) },
     ],
   };
 
