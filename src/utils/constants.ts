@@ -60,11 +60,6 @@ export const NULLISH_ATTRIBUTES = [
   'REGULAR',
 ];
 
-export const MARKETPLACE_ATTRIBUTES = [
-  'FOR SALE',
-  'NOT FOR SALE',
-];
-
 export const DEFAULT_SETTINGS: ISettings = {
   colourfulBackground: false,
   displayNumbers: false,
