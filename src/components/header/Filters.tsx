@@ -5,7 +5,7 @@ import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import Button from '../common/Button';
 import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings, Marketplace } from '../../utils/interfaces';
-import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES, MARKETPLACE_ATTRIBUTES } from '../../utils/constants';
+import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES } from '../../utils/constants';
 import { filterObjectByKey } from '../../utils';
 import IconButton from '../common/IconButton';
 import RangeSlider from '../common/RangeSlider';
@@ -53,12 +53,7 @@ function Filters({ settings, indices, setIndices }: Props) {
   };
 
   const updateSelectedMarketplaceFilter = (value: number) => {
-    // Remove all selected filters from the hype type specific categories
-    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => (
-      !MARKETPLACE_ATTRIBUTES.includes(attribute)
-    ));
-
-    // Apply the HYPE TYPE filter selection
+    // Apply the MARKETPLACE filter selection
     const filter = [];
     if (value === 1) {
       const forSale = marketplaceFilters?.options
@@ -70,7 +65,7 @@ function Filters({ settings, indices, setIndices }: Props) {
       filter.push(notForSale);
     }
 
-    setActiveFilters({ ...newActiveFilters, MARKETPLACE: filter });
+    setActiveFilters({ ...activeFilters, MARKETPLACE: filter });
     setSelectedMarketplaceFilter(value);
   };
 
