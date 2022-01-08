@@ -212,9 +212,9 @@ function Filters({ settings, indices, setIndices }: Props) {
           settings.enableMarketplace &&
             <div className="border-2 p-2 my-2">
               <div className="grid grid-cols-3 items-center px-4 text-lg font-bold">
-                <span className="inline-flex justify-start">FOR SALE</span>
+                <span className="inline-flex justify-start">{Marketplace.FORSALE}</span>
                 <RangeSlider min={1} max={3} value={selectedMarketplaceFilter} onChange={updateSelectedMarketplaceFilter} className="w-full" />
-                <span className="inline-flex justify-end">NOT FOR SALE</span>
+                <span className="inline-flex justify-end">{Marketplace.NOTFORSALE}</span>
               </div>
             </div>
         }
