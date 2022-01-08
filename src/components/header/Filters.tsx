@@ -11,6 +11,7 @@ import IconButton from '../common/IconButton';
 import RangeSlider from '../common/RangeSlider';
 import { getOwnerFilters } from '../../utils/web3';
 import { applyFilters, getAllAttributeFilters, separateAttributeFilters, updateUrl } from '../../utils/filters';
+import { getMarketplaceFilters } from '../../utils/market';
 
 interface Props {
   settings: ISettings;
@@ -24,6 +25,7 @@ function Filters({ settings, indices, setIndices }: Props) {
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
   const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
   const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
+  const [marketplaceFilters, setMarketplaceFilters] = useState<FilterSpecification[]>([]);
   const { library, account } = useWeb3React<providers.Web3Provider>();
 
   const allFilters = getAllAttributeFilters();
@@ -95,6 +97,14 @@ function Filters({ settings, indices, setIndices }: Props) {
     }
   };
 
+  const updateMarketplaceFilters = async () => {
+    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => attribute !== 'MARKETPLACE');
+    setActiveFilters(newActiveFilters);
+    setMarketplaceFilters([await getMarketplaceFilters(library)]);
+
+    console.log('marketplaceFilters: ', marketplaceFilters);
+  };
+
   const clearFilters = () => {
     setActiveFilters({});
     setSelectedHypeType(2);
@@ -131,6 +141,12 @@ function Filters({ settings, indices, setIndices }: Props) {
       updateOwnerFilters();
     }
   }, [library, account]);
+
+  useEffect(() => {
+    if (library) {
+      updateMarketplaceFilters();
+    }
+  });
 
   const renderFiltersFor = (filterList: any[]) => (
     filterList.map(({ attribute, options }) => (
