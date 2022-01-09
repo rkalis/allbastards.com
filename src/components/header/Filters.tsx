@@ -25,6 +25,7 @@ function Filters({ settings, indices, setIndices }: Props) {
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
   const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
   const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
+  const [parsedUrlMarketplaceFilter, setParsedUrlMarketplaceFilter] = useState<string[]>([]);
   const [selectedMarketplaceFilter, setSelectedMarketplaceFilter] = useState<number>(2);
   const [marketplaceFilters, setMarketplaceFilters] = useState<FilterSpecification>();
   const { library, account } = useWeb3React<providers.Web3Provider>();
@@ -74,6 +75,8 @@ function Filters({ settings, indices, setIndices }: Props) {
     const url = new URL(window.location.href);
     const filterEntries = Object.entries<string[]>(JSON.parse(url.searchParams.get('filters') ?? '{}'));
 
+    console.log(filterEntries);
+
     const selectedFilters = filterEntries
       .map(([attribute, filterValues]) => {
         if (attribute === 'HYPE TYPE') {
@@ -82,10 +85,19 @@ function Filters({ settings, indices, setIndices }: Props) {
           } else if (filterValues[0] === HypeType.HYPED) {
             setSelectedHypeType(3);
           }
+        } else if (attribute === 'MARKETPLACE') {
+          if (filterValues[0] === Marketplace.FORSALE) {
+            setSelectedMarketplaceFilter(1);
+          } else if (filterValues[0] === Marketplace.NOTFORSALE) {
+            setSelectedMarketplaceFilter(3);
+          }
         }
 
         const attributeFilter = allFilters.find((filterSpecification) => filterSpecification.attribute === attribute);
         const selectedOptions = attributeFilter?.options.filter(({ value }) => filterValues.includes(value));
+
+        console.log('attribute', attribute);
+        console.log('selectedOptions', selectedOptions);
 
         return [attribute, selectedOptions];
       })
@@ -95,6 +107,9 @@ function Filters({ settings, indices, setIndices }: Props) {
     const ownerFilterEntry = filterEntries.find(([attribute]) => attribute === 'OWNER');
     if (ownerFilterEntry) setParsedUrlOwnerFilter(ownerFilterEntry[1]);
 
+    const marketplaceFilterEntry = filterEntries.find(([attribute]) => attribute === 'MARKETPLACE');
+    if (marketplaceFilterEntry) setParsedUrlMarketplaceFilter(marketplaceFilterEntry[1]);
+
     setActiveFilters(Object.fromEntries(selectedFilters));
   };
 
@@ -103,6 +118,19 @@ function Filters({ settings, indices, setIndices }: Props) {
     const selectedOptions = ownerFilters[0].options.filter(({ value }) => parsedUrlOwnerFilter.includes(value));
     setActiveFilters({ ...activeFilters, OWNER: selectedOptions });
     setParsedUrlOwnerFilter([]);
+  };
+
+  const applyParsedUrlMarketplaceFilter = () => {
+    if (marketplaceFilters === null || parsedUrlMarketplaceFilter.length === 0) return;
+    const filter = [];
+    const forSale = marketplaceFilters?.options
+      .find(({ label }) => label.includes(Marketplace.FORSALE)) as FilterOption;
+    filter.push(forSale);
+
+    console.log('made it!');
+
+    setActiveFilters({ ...activeFilters, MARKETPLACE: filter });
+    setParsedUrlMarketplaceFilter([]);
   };
 
   const updateOwnerFilters = async () => {
@@ -132,6 +160,10 @@ function Filters({ settings, indices, setIndices }: Props) {
   useEffect(() => {
     applyParsedUrlOwnerFilter();
   }, [ownerFilters, parsedUrlOwnerFilter]);
+
+  useEffect(() => {
+    applyParsedUrlMarketplaceFilter();
+  }, [marketplaceFilters, parsedUrlMarketplaceFilter]);
 
   useEffect(() => {
     parseUrlForFilters();
