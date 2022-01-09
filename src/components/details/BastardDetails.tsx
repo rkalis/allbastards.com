@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useAsync } from 'react-async-hook';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
-import { ISettings, MarketData, Metadata } from '../../utils/interfaces';
+import { ISettings } from '../../utils/interfaces';
 import { getMetadata } from '../../utils';
 import MarketDetails from './market/MarketDetails';
 import { getMarketData } from '../../utils/market';
@@ -17,29 +17,11 @@ interface Props {
 }
 
 function BastardDetails({ tokenId, settings }: Props) {
-  const [metadata, setMetadata] = useState<Metadata>();
-  const [marketData, setMarketData] = useState<MarketData>();
   const { library } = useWeb3React<providers.Web3Provider>();
-
-  const updateMetadata = async () => {
-    const newMetadata = await getMetadata(tokenId);
-    setMetadata(newMetadata);
-  };
-
-  const updateMarketData = async () => {
-    const newMarketData = await getMarketData(tokenId, library);
-    setMarketData(newMarketData);
-  };
-
-  useEffect(() => {
-    if (!metadata) {
-      updateMetadata();
-    }
-  }, []);
-
-  useEffect(() => {
-    updateMarketData();
-  }, [library]);
+  const { result: metadata } = useAsync(getMetadata, [tokenId]);
+  const { result: marketData, execute: updateMarketData } = useAsync(getMarketData, [tokenId, library], {
+    setLoading: (state) => ({ ...state, loading: true }),
+  });
 
   if (!metadata) return null;
 
@@ -51,8 +33,8 @@ function BastardDetails({ tokenId, settings }: Props) {
         <Description metadata={metadata} />
         <Attributes metadata={metadata} />
         {
-          settings.enableMarketplace &&
-            marketData && <MarketDetails marketData={marketData} refresh={updateMarketData} />
+          settings.enableMarketplace && marketData &&
+            <MarketDetails marketData={marketData} refresh={() => updateMarketData(tokenId, library)} />
         }
         {marketData && <MarketHistory marketData={marketData} />}
       </div>
