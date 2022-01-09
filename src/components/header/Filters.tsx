@@ -121,7 +121,7 @@ function Filters({ settings, indices, setIndices }: Props) {
     const filter = [];
     const filterOption = marketplaceFilters?.options
       .find(({ label }) => label.includes(parsedUrlMarketplaceFilter.toString())) as FilterOption;
-    filter.push(filterOption);
+    if (filterOption) filter.push(filterOption);
 
     setActiveFilters({ ...activeFilters, MARKETPLACE: filter });
     setParsedUrlMarketplaceFilter([]);
