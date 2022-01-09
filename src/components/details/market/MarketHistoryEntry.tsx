@@ -50,7 +50,7 @@ function MarketHistoryEntry({ activity }: Props) {
   };
 
   return (
-    <tr key={activity.id} className={`border-b ${backgroundColors[activity['@type']]}`}>
+    <tr className={`border-b ${backgroundColors[activity['@type']]}`}>
       <td className="p-1">{actionName[activity['@type']]}</td>
       <td className="p-1 hidden md:table-cell">
         <a href={`${ETHERSCAN_BASE}/address/${from}`} target="_blank" rel="noreferrer">{fromDisplay}</a>
