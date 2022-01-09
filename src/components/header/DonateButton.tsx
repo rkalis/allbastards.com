@@ -54,7 +54,7 @@ function DonateButton() {
     }
   };
 
-  const donateButton = (<Button label="DONATE" onClick={sendDonation} className="w-full inline-flex justify-center" />);
+  const donateButton = (<Button label="DONATE" onClick={sendDonation} className="w-full inline-flex justify-center" key="donate" />);
 
   return (
     <div className="flex justify-center align-middle items-center">

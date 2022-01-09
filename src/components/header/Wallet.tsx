@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useAsync } from 'react-async-hook';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import Button from '../common/Button';
-import { lookupEnsName, shortenAddress } from '../../utils/web3';
+import { displayAddress } from '../../utils/web3';
 import { FallbackConnector } from '../../utils/FallbackConnector';
 import { emitAnalyticsEvent } from '../../utils';
 
@@ -12,19 +13,13 @@ declare let window: {
 };
 
 function Wallet() {
-  const [label, setLabel] = useState<string>('CONNECT WALLET');
-  const { account, library, activate } = useWeb3React<providers.Web3Provider>();
   const injectedConnector = new InjectedConnector({ supportedChainIds: [(process.env.REACT_APP_ETHEREUM_NETWORK === 'rinkeby' ? 4 : 1)] });
   const fallbackConnector = new FallbackConnector({ supportedChainIds: [(process.env.REACT_APP_ETHEREUM_NETWORK === 'rinkeby' ? 4 : 1)] });
 
-  const updateLabel = async () => {
-    if (!library || !account) {
-      setLabel('CONNECT WALLET');
-      return;
-    }
-    const ensName = await lookupEnsName(account, library);
-    setLabel(ensName ?? shortenAddress(account));
-  };
+  const { account, library, activate } = useWeb3React<providers.Web3Provider>();
+  const { result: label = 'CONNECT WALLET' } = useAsync(displayAddress, [account, library], {
+    setLoading: (state) => ({ ...state, loading: true }),
+  });
 
   const connectIfUnlocked = async () => {
     if (!window.ethereum) return;
@@ -38,11 +33,6 @@ function Wallet() {
   };
 
   useEffect(() => {
-    connectIfUnlocked();
-  }, []);
-
-  useEffect(() => {
-    updateLabel();
     connectIfUnlocked();
   }, [account]);
 

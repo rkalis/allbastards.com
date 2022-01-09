@@ -49,7 +49,7 @@ function UpdateListing({ marketData, refresh }: Props) {
     }
   };
 
-  const updateButton = (<Button label="UPDATE LISTING" onClick={updateSellListing} className="w-full inline-flex justify-center" />);
+  const updateButton = (<Button label="UPDATE LISTING" onClick={updateSellListing} className="w-full inline-flex justify-center" key="update" />);
 
   if (!account || !library || !existingListing) return null;
 

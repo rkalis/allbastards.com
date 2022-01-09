@@ -20,8 +20,8 @@ function MarketplaceOptin({ settings, setSettings }: Props) {
     emitAnalyticsEvent('marketplace_optout');
   };
 
-  const enableButton = (<Button label="ENABLE" onClick={enable} className="w-full inline-flex justify-center" />);
-  const disableButton = (<Button label="DISABLE" onClick={disable} className="w-full inline-flex justify-center" inverted />);
+  const enableButton = (<Button label="ENABLE" onClick={enable} className="w-full inline-flex justify-center" key="enable" />);
+  const disableButton = (<Button label="DISABLE" onClick={disable} className="w-full inline-flex justify-center" inverted key="disable" />);
 
   // Only ask for confirmation once
   if (settings.enableMarketplace !== undefined) return null;

@@ -54,7 +54,7 @@ function UpdateBid({ bids, refresh }: Props) {
     }
   };
 
-  const updateButton = (<Button label="UPDATE BID" onClick={updateExistingBid} className="w-full inline-flex justify-center" />);
+  const updateButton = (<Button label="UPDATE BID" onClick={updateExistingBid} className="w-full inline-flex justify-center" key="update" />);
 
   if (!account || !library || !existingBid) return null;
 

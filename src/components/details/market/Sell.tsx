@@ -41,7 +41,7 @@ function Sell({ marketData, refresh }: Props) {
     }
   };
 
-  const sellButton = (<Button label="CREATE SELL LISTING" onClick={createListing} className="w-full inline-flex justify-center" />);
+  const sellButton = (<Button label="CREATE SELL LISTING" onClick={createListing} className="w-full inline-flex justify-center" key="sell" />);
 
   if (!account || !library) return null;
 

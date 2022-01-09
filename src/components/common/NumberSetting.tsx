@@ -12,10 +12,7 @@ interface Props {
 
 function NumberSetting({ label, value, min, max, step, unit, update }: Props) {
   const updateValue = (event: ChangeEvent<HTMLInputElement>) => {
-    // Potential input errors are badInput, customError, rangeOverflow, rangeUnderflow
-    // Other errors (like missing input) are allowed and are handled downstream
-    const { badInput, customError, rangeOverflow, rangeUnderflow } = event.target.validity;
-    if (badInput || customError || rangeOverflow || rangeUnderflow) return;
+    // Disregard *any* errors, since they will be caught downstream any way
     update(event.target.value);
   };
 
