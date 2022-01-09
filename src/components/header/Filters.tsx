@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAsync } from 'react-async-hook';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import Modal from '../common/Modal';
@@ -27,8 +28,10 @@ function Filters({ settings, indices, setIndices }: Props) {
   const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
   const [parsedUrlMarketplaceFilter, setParsedUrlMarketplaceFilter] = useState<string[]>([]);
   const [selectedMarketplaceFilter, setSelectedMarketplaceFilter] = useState<number>(2);
-  const [marketplaceFilters, setMarketplaceFilters] = useState<FilterSpecification>();
+
   const { library, account } = useWeb3React<providers.Web3Provider>();
+
+  const { result: marketplaceFilters } = useAsync(getMarketplaceFilters, []);
 
   const allFilters = getAllAttributeFilters();
   const { generalFilters, hypedFilters, calmFilters, hypeTypeFilter } = separateAttributeFilters(allFilters);
@@ -83,7 +86,11 @@ function Filters({ settings, indices, setIndices }: Props) {
           } else if (filterValues[0] === HypeType.HYPED) {
             setSelectedHypeType(3);
           }
-        } else if (attribute === 'MARKETPLACE') {
+          // Make sure that only the first filter is applied if for some reason multiple are provided
+          filterValues = [filterValues[0]];
+        }
+
+        if (attribute === 'MARKETPLACE') {
           if (filterValues[0] === Marketplace.FORSALE) {
             setSelectedMarketplaceFilter(1);
           } else if (filterValues[0] === Marketplace.NOTFORSALE) {
@@ -98,10 +105,11 @@ function Filters({ settings, indices, setIndices }: Props) {
       })
       .filter(([, selectedOptions]) => selectedOptions !== undefined && selectedOptions.length > 0);
 
-    // Store the parsed url filter for OWNER so it can be processed *after*
+    // Store the parsed url filter for OWNER so it can be processed *after* wallet is connected
     const ownerFilterEntry = filterEntries.find(([attribute]) => attribute === 'OWNER');
     if (ownerFilterEntry) setParsedUrlOwnerFilter(ownerFilterEntry[1]);
 
+    // Store the parsed url filter for MARKETPLACE so it can be processed *after* listings are loaded
     const marketplaceFilterEntry = filterEntries.find(([attribute]) => attribute === 'MARKETPLACE');
     if (marketplaceFilterEntry) setParsedUrlMarketplaceFilter(marketplaceFilterEntry[1]);
 
@@ -118,12 +126,12 @@ function Filters({ settings, indices, setIndices }: Props) {
   const applyParsedUrlMarketplaceFilter = () => {
     if (marketplaceFilters === undefined || parsedUrlMarketplaceFilter.length === 0) return;
 
-    const filter = [];
-    const filterOption = marketplaceFilters?.options
-      .find(({ label }) => label.includes(parsedUrlMarketplaceFilter.toString())) as FilterOption;
-    if (filterOption) filter.push(filterOption);
+    // Extract only the *first* passed filter if for any reason multiple are provided
+    const selectedOptions = marketplaceFilters?.options
+      .filter(({ value }) => parsedUrlMarketplaceFilter.includes(value))
+      .slice(0, 1);
 
-    setActiveFilters({ ...activeFilters, MARKETPLACE: filter });
+    setActiveFilters({ ...activeFilters, MARKETPLACE: selectedOptions });
     setParsedUrlMarketplaceFilter([]);
   };
 
@@ -135,14 +143,6 @@ function Filters({ settings, indices, setIndices }: Props) {
     } else {
       setOwnerFilters([]);
     }
-  };
-
-  const updateMarketplaceFilters = async () => {
-    const newActiveFilters = filterObjectByKey(activeFilters, (attribute) => attribute !== 'MARKETPLACE');
-    setActiveFilters(newActiveFilters);
-
-    const updateFilters = await getMarketplaceFilters(library);
-    setMarketplaceFilters(updateFilters);
   };
 
   const clearFilters = () => {
@@ -178,12 +178,6 @@ function Filters({ settings, indices, setIndices }: Props) {
       updateUrl({});
     }
   }, [settings.showFiltersInUrl]);
-
-  useEffect(() => {
-    if (library) {
-      updateMarketplaceFilters();
-    }
-  }, [library]);
 
   useEffect(() => {
     // Don't run on first render when library and owner filter aren't loaded yet,
@@ -245,10 +239,10 @@ function Filters({ settings, indices, setIndices }: Props) {
           {renderFiltersFor(ownerFilters)}
         </div>
         <div className="border-2 p-2 my-2">
-          <div className="flex justify-around items-center">
-            <span className="text-lg font-bold">CALM AF</span>
-            <RangeSlider min={1} max={3} value={selectedHypeType} onChange={updateSelectedHypeType} className="w-1/4" />
-            <span className="text-lg font-bold">HYPED AF</span>
+          <div className="grid grid-cols-3 items-center px-4 text-lg font-bold">
+            <span className="inline-flex justify-start">CALM AF</span>
+            <RangeSlider min={1} max={3} value={selectedHypeType} onChange={updateSelectedHypeType} className="w-full" />
+            <span className="inline-flex justify-end">HYPED AF</span>
           </div>
         </div>
         <div>{renderHypeTypeSpecificFilters()}</div>
