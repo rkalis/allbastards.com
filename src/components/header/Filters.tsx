@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
+import { useAsync } from 'react-async-hook';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import Modal from '../common/Modal';
 import Filter from '../common/Filter';
 import Button from '../common/Button';
-import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings } from '../../utils/interfaces';
+import { ActiveFilters, FilterOption, FilterSpecification, HypeType, ISettings, Marketplace } from '../../utils/interfaces';
 import { CALM_ATTRIBUTES, HYPED_ATTRIBUTES } from '../../utils/constants';
 import { filterObjectByKey } from '../../utils';
 import IconButton from '../common/IconButton';
 import RangeSlider from '../common/RangeSlider';
 import { getOwnerFilters } from '../../utils/web3';
 import { applyFilters, getAllAttributeFilters, separateAttributeFilters, updateUrl } from '../../utils/filters';
+import { getMarketplaceFilters } from '../../utils/market';
 
 interface Props {
   settings: ISettings;
@@ -24,7 +26,12 @@ function Filters({ settings, indices, setIndices }: Props) {
   const [selectedHypeType, setSelectedHypeType] = useState<number>(2);
   const [ownerFilters, setOwnerFilters] = useState<FilterSpecification[]>([]);
   const [parsedUrlOwnerFilter, setParsedUrlOwnerFilter] = useState<string[]>([]);
+  const [parsedUrlMarketplaceFilter, setParsedUrlMarketplaceFilter] = useState<string[]>([]);
+  const [selectedMarketplaceFilter, setSelectedMarketplaceFilter] = useState<number>(2);
+
   const { library, account } = useWeb3React<providers.Web3Provider>();
+
+  const { result: marketplaceFilters } = useAsync(getMarketplaceFilters, []);
 
   const allFilters = getAllAttributeFilters();
   const { generalFilters, hypedFilters, calmFilters, hypeTypeFilter } = separateAttributeFilters(allFilters);
@@ -49,6 +56,23 @@ function Filters({ settings, indices, setIndices }: Props) {
     setSelectedHypeType(value);
   };
 
+  const updateSelectedMarketplaceFilter = (value: number) => {
+    // Apply the MARKETPLACE filter selection
+    const filter = [];
+    if (value === 1) {
+      const forSale = marketplaceFilters?.options
+        .find(({ label }) => label.includes(Marketplace.FORSALE)) as FilterOption;
+      filter.push(forSale);
+    } else if (value === 3) {
+      const notForSale = marketplaceFilters?.options
+        .find(({ label }) => label.includes(Marketplace.NOTFORSALE)) as FilterOption;
+      filter.push(notForSale);
+    }
+
+    setActiveFilters({ ...activeFilters, MARKETPLACE: filter });
+    setSelectedMarketplaceFilter(value);
+  };
+
   const parseUrlForFilters = () => {
     // Parse the filter query parameter from the JSON
     const url = new URL(window.location.href);
@@ -62,6 +86,16 @@ function Filters({ settings, indices, setIndices }: Props) {
           } else if (filterValues[0] === HypeType.HYPED) {
             setSelectedHypeType(3);
           }
+          // Make sure that only the first filter is applied if for some reason multiple are provided
+          filterValues = [filterValues[0]];
+        }
+
+        if (attribute === 'MARKETPLACE') {
+          if (filterValues[0] === Marketplace.FORSALE) {
+            setSelectedMarketplaceFilter(1);
+          } else if (filterValues[0] === Marketplace.NOTFORSALE) {
+            setSelectedMarketplaceFilter(3);
+          }
         }
 
         const attributeFilter = allFilters.find((filterSpecification) => filterSpecification.attribute === attribute);
@@ -71,9 +105,13 @@ function Filters({ settings, indices, setIndices }: Props) {
       })
       .filter(([, selectedOptions]) => selectedOptions !== undefined && selectedOptions.length > 0);
 
-    // Store the parsed url filter for OWNER so it can be processed *after*
+    // Store the parsed url filter for OWNER so it can be processed *after* wallet is connected
     const ownerFilterEntry = filterEntries.find(([attribute]) => attribute === 'OWNER');
     if (ownerFilterEntry) setParsedUrlOwnerFilter(ownerFilterEntry[1]);
+
+    // Store the parsed url filter for MARKETPLACE so it can be processed *after* listings are loaded
+    const marketplaceFilterEntry = filterEntries.find(([attribute]) => attribute === 'MARKETPLACE');
+    if (marketplaceFilterEntry) setParsedUrlMarketplaceFilter(marketplaceFilterEntry[1]);
 
     setActiveFilters(Object.fromEntries(selectedFilters));
   };
@@ -83,6 +121,18 @@ function Filters({ settings, indices, setIndices }: Props) {
     const selectedOptions = ownerFilters[0].options.filter(({ value }) => parsedUrlOwnerFilter.includes(value));
     setActiveFilters({ ...activeFilters, OWNER: selectedOptions });
     setParsedUrlOwnerFilter([]);
+  };
+
+  const applyParsedUrlMarketplaceFilter = () => {
+    if (marketplaceFilters === undefined || parsedUrlMarketplaceFilter.length === 0) return;
+
+    // Extract only the *first* passed filter if for any reason multiple are provided
+    const selectedOptions = marketplaceFilters?.options
+      .filter(({ value }) => parsedUrlMarketplaceFilter.includes(value))
+      .slice(0, 1);
+
+    setActiveFilters({ ...activeFilters, MARKETPLACE: selectedOptions });
+    setParsedUrlMarketplaceFilter([]);
   };
 
   const updateOwnerFilters = async () => {
@@ -98,11 +148,16 @@ function Filters({ settings, indices, setIndices }: Props) {
   const clearFilters = () => {
     setActiveFilters({});
     setSelectedHypeType(2);
+    setSelectedMarketplaceFilter(2);
   };
 
   useEffect(() => {
     applyParsedUrlOwnerFilter();
   }, [ownerFilters, parsedUrlOwnerFilter]);
+
+  useEffect(() => {
+    applyParsedUrlMarketplaceFilter();
+  }, [marketplaceFilters, parsedUrlMarketplaceFilter]);
 
   useEffect(() => {
     parseUrlForFilters();
@@ -169,15 +224,25 @@ function Filters({ settings, indices, setIndices }: Props) {
         <div className="text-center">
           Total: {indices.length}
         </div>
+        {
+          settings.enableMarketplace &&
+            <div className="border-2 p-2 my-2">
+              <div className="grid grid-cols-3 items-center px-4 text-lg font-bold">
+                <span className="inline-flex justify-start">{Marketplace.FORSALE}</span>
+                <RangeSlider min={1} max={3} value={selectedMarketplaceFilter} onChange={updateSelectedMarketplaceFilter} className="w-full" />
+                <span className="inline-flex justify-end">{Marketplace.NOTFORSALE}</span>
+              </div>
+            </div>
+        }
         <div>
           {renderFiltersFor(generalFilters)}
           {renderFiltersFor(ownerFilters)}
         </div>
         <div className="border-2 p-2 my-2">
-          <div className="flex justify-around items-center">
-            <span className="text-lg font-bold">CALM AF</span>
-            <RangeSlider min={1} max={3} value={selectedHypeType} onChange={updateSelectedHypeType} className="w-1/4" />
-            <span className="text-lg font-bold">HYPED AF</span>
+          <div className="grid grid-cols-3 items-center px-4 text-lg font-bold">
+            <span className="inline-flex justify-start">CALM AF</span>
+            <RangeSlider min={1} max={3} value={selectedHypeType} onChange={updateSelectedHypeType} className="w-full" />
+            <span className="inline-flex justify-end">HYPED AF</span>
           </div>
         </div>
         <div>{renderHypeTypeSpecificFilters()}</div>
