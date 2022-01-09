@@ -75,8 +75,6 @@ function Filters({ settings, indices, setIndices }: Props) {
     const url = new URL(window.location.href);
     const filterEntries = Object.entries<string[]>(JSON.parse(url.searchParams.get('filters') ?? '{}'));
 
-    console.log(filterEntries);
-
     const selectedFilters = filterEntries
       .map(([attribute, filterValues]) => {
         if (attribute === 'HYPE TYPE') {
@@ -95,9 +93,6 @@ function Filters({ settings, indices, setIndices }: Props) {
 
         const attributeFilter = allFilters.find((filterSpecification) => filterSpecification.attribute === attribute);
         const selectedOptions = attributeFilter?.options.filter(({ value }) => filterValues.includes(value));
-
-        console.log('attribute', attribute);
-        console.log('selectedOptions', selectedOptions);
 
         return [attribute, selectedOptions];
       })
@@ -121,13 +116,12 @@ function Filters({ settings, indices, setIndices }: Props) {
   };
 
   const applyParsedUrlMarketplaceFilter = () => {
-    if (marketplaceFilters === null || parsedUrlMarketplaceFilter.length === 0) return;
-    const filter = [];
-    const forSale = marketplaceFilters?.options
-      .find(({ label }) => label.includes(Marketplace.FORSALE)) as FilterOption;
-    filter.push(forSale);
+    if (marketplaceFilters === undefined || parsedUrlMarketplaceFilter.length === 0) return;
 
-    console.log('made it!');
+    const filter = [];
+    const filterOption = marketplaceFilters?.options
+      .find(({ label }) => label.includes(parsedUrlMarketplaceFilter.toString())) as FilterOption;
+    filter.push(filterOption);
 
     setActiveFilters({ ...activeFilters, MARKETPLACE: filter });
     setParsedUrlMarketplaceFilter([]);
