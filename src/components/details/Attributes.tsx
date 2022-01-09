@@ -12,7 +12,7 @@ function Attributes({ metadata }: Props) {
       <div className="flex justify-center">
         <div className="w-5/6 flex flex-wrap justify-center gap-2">
           {metadata.attributes.map(({ trait_type, value }) => (
-            <Attribute attribute={trait_type} value={value} />
+            <Attribute attribute={trait_type} value={value} key={`${trait_type}_${value}`} />
           ))}
         </div>
       </div>

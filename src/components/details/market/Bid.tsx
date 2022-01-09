@@ -48,7 +48,7 @@ function Bid({ marketData, refresh }: Props) {
     }
   };
 
-  const bidButton = (<Button label="PLACE BID" onClick={createBid} className="w-full inline-flex justify-center" />);
+  const bidButton = (<Button label="PLACE BID" onClick={createBid} className="w-full inline-flex justify-center" key="bid" />);
 
   if (!account || !library) return null;
 

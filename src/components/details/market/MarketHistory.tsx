@@ -24,7 +24,7 @@ function MarketHistory({ marketData }: Props) {
             </tr>
           </thead>
           <tbody>
-            {marketData.activity.map((activity) => (<MarketHistoryEntry activity={activity} />))}
+            {marketData.activity.map((activity) => (<MarketHistoryEntry activity={activity} key={activity.id} />))}
           </tbody>
         </table>
       </div>
