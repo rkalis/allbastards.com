@@ -168,6 +168,21 @@ export const getActivity = async (tokenId: number, provider?: providers.Web3Prov
   return activity;
 };
 
+export const getSellOrdersByMaker = async (address: string, provider?: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const { orders: listings } = await sdk.apis.order.getSellOrdersByMakerAndByStatus({
+    maker: address,
+    platform: Platform.RARIBLE,
+    status: [
+      OrderStatus.ACTIVE,
+      OrderStatus.INACTIVE
+    ]
+  });
+
+  return listings;
+};
+
 export const getListingPriceDisplay = (listings: Order[]) => {
   if (listings.length === 0) return undefined;
   return displayPrice(listings[0], 'take');
