@@ -176,11 +176,17 @@ export const getSellOrdersByMaker = async (address: string, provider?: providers
     platform: Platform.RARIBLE,
     status: [
       OrderStatus.ACTIVE,
-      OrderStatus.INACTIVE
-    ]
+      OrderStatus.INACTIVE,
+    ],
   });
 
-  return listings;
+  const filteredListings = listings
+    .filter((listing) => listing.make.assetType.assetClass === 'ERC721')
+    .filter((listing) => ((listing.make.assetType) as Erc721AssetType)
+      .contract === toAddress(BASTARD_CONTRACT_ADDRESS))
+    .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
+
+  return filteredListings;
 };
 
 export const getListingPriceDisplay = (listings: Order[]) => {

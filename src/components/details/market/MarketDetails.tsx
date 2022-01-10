@@ -1,9 +1,10 @@
+import { useAsync } from 'react-async-hook';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { toAddress } from '@rarible/types';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
-import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
+import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay, getSellOrdersByMaker } from '../../../utils/market';
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
@@ -20,6 +21,8 @@ interface Props {
 
 function MarketDetails({ marketData, refresh }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
+
+  const { result: accountListings } = useAsync(getSellOrdersByMaker, [account ?? ZERO_ADDRESS, library]);
 
   const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(marketData.owner ?? ZERO_ADDRESS));
 
@@ -63,6 +66,11 @@ function MarketDetails({ marketData, refresh }: Props) {
               </div>
           }
           {!hasBidsFromUser && <div>You have no bids on this bastard.</div>}
+
+          {
+            accountListings && accountListings.length > 0 &&
+            <div>You have {accountListings.length} bastard listings(s).</div>
+          }
 
         </div>
         <div className="flex justify-center gap-2">
