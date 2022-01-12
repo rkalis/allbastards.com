@@ -5,6 +5,7 @@ import { ISettings } from '../../utils/interfaces';
 import { getMetadata } from '../../utils';
 import MarketDetails from './market/MarketDetails';
 import { getMarketData } from '../../utils/market';
+import { ZERO_ADDRESS } from '../../utils/constants';
 import Attributes from './Attributes';
 import ImageAndHeader from './ImageAndHeader';
 import MarketHistory from './market/MarketHistory';
@@ -17,11 +18,12 @@ interface Props {
 }
 
 function BastardDetails({ tokenId, settings }: Props) {
-  const { library } = useWeb3React<providers.Web3Provider>();
+  const { account, library } = useWeb3React<providers.Web3Provider>();
   const { result: metadata } = useAsync(getMetadata, [tokenId]);
-  const { result: marketData, execute: updateMarketData } = useAsync(getMarketData, [tokenId, library], {
-    setLoading: (state) => ({ ...state, loading: true }),
-  });
+  const { result: marketData, execute: updateMarketData } =
+    useAsync(getMarketData, [tokenId, account ?? ZERO_ADDRESS, library], {
+      setLoading: (state) => ({ ...state, loading: true }),
+    });
 
   if (!metadata) return null;
 
@@ -34,7 +36,10 @@ function BastardDetails({ tokenId, settings }: Props) {
         <Attributes metadata={metadata} />
         {
           settings.enableMarketplace && marketData &&
-            <MarketDetails marketData={marketData} refresh={() => updateMarketData(tokenId, library)} />
+            <MarketDetails
+              marketData={marketData}
+              refresh={() => updateMarketData(tokenId, account ?? ZERO_ADDRESS, library)}
+            />
         }
         {marketData && <MarketHistory marketData={marketData} />}
       </div>
