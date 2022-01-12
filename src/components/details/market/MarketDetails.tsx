@@ -1,10 +1,9 @@
-import { useAsync } from 'react-async-hook';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import { toAddress } from '@rarible/types';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
-import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay, getListingsFromAccount } from '../../../utils/market';
+import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
@@ -24,8 +23,7 @@ function MarketDetails({ marketData, refresh }: Props) {
 
   const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(marketData.owner ?? ZERO_ADDRESS));
 
-  const { result: listingsFromUser } =
-    useAsync(getListingsFromAccount, [marketData.tokenId, account ?? ZERO_ADDRESS]);
+  const activeAccountHasListings = marketData.activeAccountListings.length > 0;
 
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
 
@@ -69,9 +67,10 @@ function MarketDetails({ marketData, refresh }: Props) {
           {!hasBidsFromUser && <div>You have no bids on this bastard.</div>}
 
           {
-            listingsFromUser && listingsFromUser.length > 0 &&
+            activeAccountHasListings &&
               <div>
-                You have {listingsFromUser.length} listing(s) of this bastard for {listingsFromUser.map((listing) => displayPrice(listing, 'take')).join(', ')}.
+                You have {marketData.activeAccountListings.length} listing(s) of this bastard
+                for {marketData.activeAccountListings.map((listing) => displayPrice(listing, 'take')).join(', ')}.
               </div>
           }
 
@@ -79,7 +78,7 @@ function MarketDetails({ marketData, refresh }: Props) {
         <div className="flex justify-center gap-2">
           {canSell && !isForSale && <Sell marketData={marketData} refresh={refresh} />}
           {canSell && isForSale && <UpdateListing marketData={marketData} refresh={refresh} />}
-          {canSell && isForSale && <CancelListings marketData={marketData} refresh={refresh} />}
+          {activeAccountHasListings && <CancelListings marketData={marketData} refresh={refresh} />}
           {canBuy && <Buy marketData={marketData} refresh={refresh} />}
           {canBid && !hasBidsFromUser && <Bid marketData={marketData} refresh={refresh} />}
           {canUpdateBid && <UpdateBid bids={bidsFromUser} refresh={refresh} />}

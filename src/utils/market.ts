@@ -73,8 +73,6 @@ export const getListings = async (tokenId: number, provider?: providers.Web3Prov
     .filter((listing) => listing.take.assetType.assetClass === 'ETH')
     .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
 
-  console.log('getListings: ', filteredListings);
-
   return filteredListings;
 };
 
@@ -97,8 +95,6 @@ export const getListingsFromAccount = async (tokenId: number, address: string, p
     .filter((listing) => listing.cancelled === false)
     .filter((listing) => listing.take.assetType.assetClass === 'ETH')
     .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
-
-  console.log('filteredListings: ', filteredListings);
 
   return filteredListings;
 };
