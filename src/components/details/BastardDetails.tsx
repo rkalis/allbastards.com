@@ -20,10 +20,11 @@ interface Props {
 function BastardDetails({ tokenId, settings }: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
   const { result: metadata } = useAsync(getMetadata, [tokenId]);
-  const { result: marketData, execute: updateMarketData } =
-    useAsync(getMarketData, [tokenId, account ?? ZERO_ADDRESS, library], {
-      setLoading: (state) => ({ ...state, loading: true }),
-    });
+  const { result: marketData, execute: updateMarketData } = useAsync(
+    getMarketData,
+    [tokenId, account ?? ZERO_ADDRESS, library],
+    { setLoading: (state) => ({ ...state, loading: true }) },
+  );
 
   if (!metadata) return null;
 
