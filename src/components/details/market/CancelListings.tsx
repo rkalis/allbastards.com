@@ -18,7 +18,7 @@ function CancelListings({ marketData, refresh }: Props) {
 
     try {
       const unconfirmedTransactions = await Promise.all(
-        marketData.listings.map((listing) => cancel(listing, library!)),
+        marketData.activeAccountListings.map((listing) => cancel(listing, library!)),
       );
       emitAnalyticsEvent('marketplace_listing_cancel');
 
@@ -47,7 +47,7 @@ function CancelListings({ marketData, refresh }: Props) {
   };
 
   if (!account || !library) return null;
-  if (marketData.listings.length === 0) return null;
+  if (marketData.activeAccountListings.length === 0) return null;
 
   return (
     <div>

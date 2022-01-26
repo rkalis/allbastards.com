@@ -23,6 +23,8 @@ function MarketDetails({ marketData, refresh }: Props) {
 
   const bidsOwnerRemoved = marketData.bids.filter((bid) => bid.maker !== toAddress(marketData.owner ?? ZERO_ADDRESS));
 
+  const activeAccountHasListings = marketData.activeAccountListings.length > 0;
+
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
 
   const bidPriceDisplay = getBidPriceDisplay(bidsOwnerRemoved);
@@ -64,11 +66,19 @@ function MarketDetails({ marketData, refresh }: Props) {
           }
           {!hasBidsFromUser && <div>You have no bids on this bastard.</div>}
 
+          {
+            activeAccountHasListings &&
+              <div>
+                You have {marketData.activeAccountListings.length} listing(s) of this bastard
+                for {marketData.activeAccountListings.map((listing) => displayPrice(listing, 'take')).join(', ')}.
+              </div>
+          }
+
         </div>
         <div className="flex justify-center gap-2">
           {canSell && !isForSale && <Sell marketData={marketData} refresh={refresh} />}
           {canSell && isForSale && <UpdateListing marketData={marketData} refresh={refresh} />}
-          {canSell && isForSale && <CancelListings marketData={marketData} refresh={refresh} />}
+          {activeAccountHasListings && <CancelListings marketData={marketData} refresh={refresh} />}
           {canBuy && <Buy marketData={marketData} refresh={refresh} />}
           {canBid && !hasBidsFromUser && <Bid marketData={marketData} refresh={refresh} />}
           {canUpdateBid && <UpdateBid bids={bidsFromUser} refresh={refresh} />}

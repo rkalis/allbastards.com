@@ -15,14 +15,19 @@ export const createRaribleSdk = (provider?: providers.Web3Provider) => {
   return sdk;
 };
 
-export const getMarketData = async (tokenId: number, provider?: providers.Web3Provider): Promise<MarketData> => {
+export const getMarketData = async (
+  tokenId: number,
+  address: string,
+  provider?: providers.Web3Provider,
+): Promise<MarketData> => {
   const { owner, ownerDisplay } = await getOwner(tokenId, provider);
   const listings = await getListings(tokenId, provider);
+  const activeAccountListings = await getListingsFromAccount(tokenId, address, provider);
   const bids = await getBids(tokenId, OrderStatus.ACTIVE, provider);
   const inactiveBids = await getBids(tokenId, OrderStatus.INACTIVE, provider);
   const activity = await getActivity(tokenId, provider);
 
-  return { tokenId, owner, ownerDisplay, listings, bids, inactiveBids, activity };
+  return { tokenId, owner, ownerDisplay, listings, activeAccountListings, bids, inactiveBids, activity };
 };
 
 export const getOwner = async (tokenId: number, provider?: providers.Web3Provider) => {
@@ -68,6 +73,29 @@ export const getListings = async (tokenId: number, provider?: providers.Web3Prov
 
   // Only Rarible ETH listings are supported
   const filteredListings = listings
+    .filter((listing) => listing.take.assetType.assetClass === 'ETH')
+    .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
+
+  return filteredListings;
+};
+
+export const getListingsFromAccount = async (tokenId: number, address: string, provider?: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const filter = {
+    contract: BASTARD_CONTRACT_ADDRESS,
+    tokenId: String(tokenId),
+    platform: Platform.RARIBLE,
+    status: [OrderStatus.ACTIVE, OrderStatus.INACTIVE],
+    maker: toAddress(address),
+  };
+
+  // Listings from the Rarible API are returned sorted (TODO: local sorting)
+  const { orders: listings } = await sdk.apis.order.getSellOrdersByItemAndByStatus(filter);
+
+  // Only Rarible ETH listings are supported
+  const filteredListings = listings
+    .filter((listing) => listing.cancelled === false)
     .filter((listing) => listing.take.assetType.assetClass === 'ETH')
     .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
 
@@ -166,6 +194,27 @@ export const getActivity = async (tokenId: number, provider?: providers.Web3Prov
   });
 
   return activity;
+};
+
+export const getSellOrdersByMaker = async (address: string, provider?: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const { orders: listings } = await sdk.apis.order.getSellOrdersByMakerAndByStatus({
+    maker: address,
+    platform: Platform.RARIBLE,
+    status: [
+      OrderStatus.ACTIVE,
+      OrderStatus.INACTIVE,
+    ],
+  });
+
+  const filteredListings = listings
+    .filter((listing) => listing.make.assetType.assetClass === 'ERC721')
+    .filter((listing) => ((listing.make.assetType) as Erc721AssetType)
+      .contract === toAddress(BASTARD_CONTRACT_ADDRESS))
+    .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
+
+  return filteredListings;
 };
 
 export const getListingPriceDisplay = (listings: Order[]) => {
