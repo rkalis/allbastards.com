@@ -41,6 +41,7 @@ export interface MarketData {
   ownerDisplay: string;
   listings: RaribleV2Order[];
   activeAccountListings: RaribleV2Order[];
+  activeAccountBids: RaribleV2Order[];
   bids: RaribleV2Order[];
   inactiveBids: RaribleV2Order[];
   activity: Activity[];

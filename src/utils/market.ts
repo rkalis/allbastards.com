@@ -23,11 +23,22 @@ export const getMarketData = async (
   const { owner, ownerDisplay } = await getOwner(tokenId, provider);
   const listings = await getListings(tokenId, provider);
   const activeAccountListings = await getListingsFromAccount(tokenId, address, provider);
+  const activeAccountBids = await getBidsFromAccount(tokenId, address, provider);
   const bids = await getBids(tokenId, OrderStatus.ACTIVE, provider);
   const inactiveBids = await getBids(tokenId, OrderStatus.INACTIVE, provider);
   const activity = await getActivity(tokenId, provider);
 
-  return { tokenId, owner, ownerDisplay, listings, activeAccountListings, bids, inactiveBids, activity };
+  return {
+    tokenId,
+    owner,
+    ownerDisplay,
+    listings,
+    activeAccountListings,
+    activeAccountBids,
+    bids,
+    inactiveBids,
+    activity,
+  };
 };
 
 export const getOwner = async (tokenId: number, provider?: providers.Web3Provider) => {
@@ -175,6 +186,33 @@ export const getBids = async (tokenId: number, status: OrderStatus, provider?: p
   return deduplicatedBids;
 };
 
+export const getBidsFromAccount = async (tokenId: number, address: string, provider?: providers.Web3Provider) => {
+  const sdk = createRaribleSdk(provider);
+
+  const filter = {
+    contract: BASTARD_CONTRACT_ADDRESS,
+    tokenId: String(tokenId),
+    platform: Platform.RARIBLE,
+    status: [OrderStatus.ACTIVE, OrderStatus.INACTIVE],
+    maker: toAddress(address),
+  };
+
+  // Bids from the Rarible API are returned sorted (TODO: local sorting)
+  const { orders: bids } = await sdk.apis.order.getOrderBidsByItemAndByStatus(filter);
+
+  // Only Rarible WETH bids are supported
+  const filteredBids = bids
+    .filter((bid) => bid.make.assetType.assetClass === 'ERC20')
+    .filter((bid) => getAddress((bid.make.assetType as Erc20AssetType).contract) === WETH_ADDRESS)
+    .filter((bid) => bid.type === 'RARIBLE_V2') as RaribleV2Order[];
+
+  // Remove bids with a duplicate hash
+  const deduplicatedBids = filteredBids
+    .filter((bid, index) => filteredBids.findIndex((other) => other.hash === bid.hash) === index);
+
+  return deduplicatedBids;
+};
+
 export const getActivity = async (tokenId: number, provider?: providers.Web3Provider) => {
   const sdk = createRaribleSdk(provider);
 
@@ -227,9 +265,9 @@ export const getBidPriceDisplay = (bids: Order[]) => {
   return displayPrice(bids[0], 'make');
 };
 
-export const getBidsFromAccount = <T extends Order>(bids: T[], account: string) => (
-  bids.filter((bid) => bid.maker === toAddress(account))
-);
+// export const getBidsFromAccount = <T extends Order>(bids: T[], account: string) => (
+//   bids.filter((bid) => bid.maker === toAddress(account))
+// );
 
 export const displayPrice = (listing: Order, side: 'make' | 'take') => {
   // TODO: Support non-ETH orders
