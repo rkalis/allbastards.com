@@ -23,9 +23,8 @@ export const getMarketData = async (
   const { owner, ownerDisplay } = await getOwner(tokenId, provider);
   const listings = await getListings(tokenId, provider);
   const activeAccountListings = await getListingsFromAccount(tokenId, address, provider);
-  const activeAccountBids = await getBidsFromAccount(tokenId, address, provider);
   const bids = await getBids(tokenId, OrderStatus.ACTIVE, provider);
-  const inactiveBids = await getBids(tokenId, OrderStatus.INACTIVE, provider);
+  const activeAccountBids = await getBidsFromAccount(tokenId, address, provider);
   const activity = await getActivity(tokenId, provider);
 
   return {
@@ -34,9 +33,8 @@ export const getMarketData = async (
     ownerDisplay,
     listings,
     activeAccountListings,
-    activeAccountBids,
     bids,
-    inactiveBids,
+    activeAccountBids,
     activity,
   };
 };
