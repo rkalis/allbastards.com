@@ -21,11 +21,11 @@ export const getMarketData = async (
   provider?: providers.Web3Provider,
 ): Promise<MarketData> => {
   const { owner, ownerDisplay } = await getOwner(tokenId, provider);
-  const listings = await getListings(tokenId, provider);
-  const activeAccountListings = await getListingsFromAccount(tokenId, address, provider);
-  const bids = await getBids(tokenId, '', provider);
-  const activeAccountBids = await getBids(tokenId, address, provider);
-  const activity = await getActivity(tokenId, provider);
+  const listings = await getListings(tokenId);
+  const activeAccountListings = await getListings(tokenId, address);
+  const bids = await getBids(tokenId);
+  const activeAccountBids = await getBids(tokenId, address);
+  const activity = await getActivity(tokenId);
 
   return {
     tokenId,
@@ -67,36 +67,15 @@ export const getOwnerFromRarible = async (tokenId: number, provider?: providers.
   return owner;
 };
 
-export const getListings = async (tokenId: number, provider?: providers.Web3Provider) => {
-  const sdk = createRaribleSdk(provider);
+export const getListings = async (tokenId: number, address?: string) => {
+  const sdk = createRaribleSdk();
 
   const filter = {
     contract: BASTARD_CONTRACT_ADDRESS,
     tokenId: String(tokenId),
     platform: Platform.RARIBLE,
-    status: [OrderStatus.ACTIVE],
-  };
-
-  // Listings from the Rarible API are returned sorted (TODO: local sorting)
-  const { orders: listings } = await sdk.apis.order.getSellOrdersByItemAndByStatus(filter);
-
-  // Only Rarible ETH listings are supported
-  const filteredListings = listings
-    .filter((listing) => listing.take.assetType.assetClass === 'ETH')
-    .filter((listing) => listing.type === 'RARIBLE_V2') as RaribleV2Order[];
-
-  return filteredListings;
-};
-
-export const getListingsFromAccount = async (tokenId: number, address: string, provider?: providers.Web3Provider) => {
-  const sdk = createRaribleSdk(provider);
-
-  const filter = {
-    contract: BASTARD_CONTRACT_ADDRESS,
-    tokenId: String(tokenId),
-    platform: Platform.RARIBLE,
-    status: [OrderStatus.ACTIVE, OrderStatus.INACTIVE],
-    maker: toAddress(address),
+    status: (address ? [OrderStatus.ACTIVE, OrderStatus.INACTIVE] : [OrderStatus.ACTIVE]),
+    maker: address && toAddress(address),
   };
 
   // Listings from the Rarible API are returned sorted (TODO: local sorting)
@@ -158,15 +137,15 @@ export const getIndicesNotForSale = (forSale: number[]) => {
   return indices;
 };
 
-export const getBids = async (tokenId: number, address?: string, provider?: providers.Web3Provider) => {
-  const sdk = createRaribleSdk(provider);
+export const getBids = async (tokenId: number, address?: string) => {
+  const sdk = createRaribleSdk();
 
   const filter = {
     contract: BASTARD_CONTRACT_ADDRESS,
     tokenId: String(tokenId),
     platform: Platform.RARIBLE,
     status: (address ? [OrderStatus.ACTIVE, OrderStatus.INACTIVE] : [OrderStatus.ACTIVE]),
-    maker: (address ? toAddress(address) : undefined),
+    maker: address && toAddress(address),
   };
 
   // Bids from the Rarible API are returned sorted (TODO: local sorting)
@@ -185,8 +164,8 @@ export const getBids = async (tokenId: number, address?: string, provider?: prov
   return deduplicatedBids;
 };
 
-export const getActivity = async (tokenId: number, provider?: providers.Web3Provider) => {
-  const sdk = createRaribleSdk(provider);
+export const getActivity = async (tokenId: number) => {
+  const sdk = createRaribleSdk();
 
   const { items: activity } = await sdk.apis.orderActivity.getOrderActivities({
     orderActivityFilter: {
