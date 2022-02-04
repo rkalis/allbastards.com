@@ -225,7 +225,7 @@ function Filters({ settings, indices, setIndices }: Props) {
           Total: {indices.length}
         </div>
         {
-          settings.enableMarketplace &&
+          settings.enableMarketplace && marketplaceFilters &&
             <div className="border-2 p-2 my-2">
               <div className="grid grid-cols-3 items-center px-4 text-lg font-bold">
                 <span className="inline-flex justify-start">{Marketplace.FORSALE}</span>

@@ -3,7 +3,7 @@ import { providers } from 'ethers';
 import { toAddress } from '@rarible/types';
 import { ZERO_ADDRESS } from '../../../utils/constants';
 import { MarketData } from '../../../utils/interfaces';
-import { displayPrice, getBidPriceDisplay, getBidsFromAccount, getListingPriceDisplay } from '../../../utils/market';
+import { displayPrice, getBidPriceDisplay, getListingPriceDisplay } from '../../../utils/market';
 import AcceptBid from './AcceptBid';
 import Bid from './Bid';
 import Buy from './Buy';
@@ -28,9 +28,7 @@ function MarketDetails({ marketData, refresh }: Props) {
   const listingPriceDisplay = getListingPriceDisplay(marketData.listings);
 
   const bidPriceDisplay = getBidPriceDisplay(bidsOwnerRemoved);
-  const activeBidsFromUser = getBidsFromAccount(marketData.bids, account ?? ZERO_ADDRESS);
-  const inactiveBidsFromUser = getBidsFromAccount(marketData.inactiveBids, account ?? ZERO_ADDRESS);
-  const bidsFromUser = [...activeBidsFromUser, ...inactiveBidsFromUser];
+  const bidsFromUser = marketData.activeAccountBids;
 
   const isConnected = library !== undefined && account !== undefined;
   const activeAccountIsOwner = marketData.owner === account;
