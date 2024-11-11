@@ -25,6 +25,7 @@ export const GENERAL_ATTRIBUTES = [
 ];
 
 export const HYPED_ATTRIBUTES = [
+  'HYPE MASK',
   'SPEEDOMETER',
   'NUM OF FRAMES',
   'HEAD TURNS',
