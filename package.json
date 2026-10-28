@@ -31,8 +31,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true craco start",
-    "build": "craco build",
+    "start": "DISABLE_ESLINT_PLUGIN=true NODE_OPTIONS=--openssl-legacy-provider craco start",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider craco build",
     "test": "craco test",
     "lint": "eslint ."
   },
